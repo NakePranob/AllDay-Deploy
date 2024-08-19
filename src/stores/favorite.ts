@@ -33,7 +33,7 @@ class favorite {
 
     async delete(id: number) {
         try {
-            await axios.delete(`http://localhost/api/favorite/${id}`);
+            await axios.delete(`https://all-day-deploy.vercel.app/api/favorite/${id}`);
             this.data = this.data.filter(favorite => favorite.id !== id);
             this.setAlert({
                 open: true,

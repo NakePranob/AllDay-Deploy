@@ -57,7 +57,7 @@ class dormitoryOnly {
             }
             try {
                 console.log(formData);
-                const result = await axios.post(`http://localhost/api/reserve`, formData);
+                const result = await axios.post(`https://all-day-deploy.vercel.app/api/reserve`, formData);
                 this.setAlert({
                     open: true,
                     state: 'success',
@@ -190,7 +190,7 @@ class dormitoryOnly {
                 if (!existingFavorite) {
                     // เพิ่ม favorite
                     const formData = { dmtId, userId };
-                    const result = await axios.post(`http://localhost/api/favorite`, formData);
+                    const result = await axios.post(`https://all-day-deploy.vercel.app/api/favorite`, formData);
 
                     runInAction(() => {
                         console.log(result.data);
@@ -206,7 +206,7 @@ class dormitoryOnly {
                     });
                 } else {
                     // ลบ favorite
-                    const result = await axios.delete(`http://localhost/api/favorite/${existingFavorite.id}`);
+                    const result = await axios.delete(`https://all-day-deploy.vercel.app/api/favorite/${existingFavorite.id}`);
 
                     runInAction(() => {
                         console.log(result.data);
@@ -245,8 +245,8 @@ class dormitoryOnly {
     async getUserState(id: number | null | undefined) {
         try {
             if (id) {
-                const resultLiveat = await axios.get(`http://localhost/api/liveat/${id}`);
-                const resultFavorite = await axios.get(`http://localhost/api/favorite/${id}`);
+                const resultLiveat = await axios.get(`https://all-day-deploy.vercel.app/api/liveat/${id}`);
+                const resultFavorite = await axios.get(`https://all-day-deploy.vercel.app/api/favorite/${id}`);
                 runInAction(() => {
                     this.setFavoriteList(resultFavorite.data);
                 });
@@ -266,7 +266,7 @@ class dormitoryOnly {
                 formData.dmtId = this.data.id.toString();
                 formData.userId = id.toString();
                 if (formData.rating !== '') {
-                    const result = await axios.post(`http://localhost/api/dormitory/review`, formData);
+                    const result = await axios.post(`https://all-day-deploy.vercel.app/api/dormitory/review`, formData);
                     runInAction(() => {
                         this.data.review.push(result.data.review);
                         this.data.reviewScore = result.data.totalScore;

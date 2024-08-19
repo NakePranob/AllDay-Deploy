@@ -119,7 +119,7 @@ class account {
                 password: this.password,
             }
             try {
-                await axios.post('http://localhost/api/auth/sigup', formData);
+                await axios.post('https://all-day-deploy.vercel.app/api/auth/sigup', formData);
                 this.setAlert({
                     open: true,
                     state: 'success',

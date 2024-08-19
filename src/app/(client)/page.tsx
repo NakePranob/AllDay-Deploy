@@ -7,7 +7,7 @@ import Filter from '@/components/index/Filter'
 
 async function getData() {
     try {
-        const result = await axios.get('http://localhost/api/getDormitory', {
+        const result = await axios.get('https://all-day-deploy.vercel.app/api/getDormitory', {
             headers: {
                 'getType': 'get',
             },

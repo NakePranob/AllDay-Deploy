@@ -6,7 +6,7 @@ import { headers } from "next/headers"
 async function getData(id: string | null) {
     if (id) {
       try {
-        const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/favorite/${id}`);
+        const result = await axios.get(`/api/favorite/${id}`);
         return result.data;
       } catch (error) {
         console.error("Error fetching data:", error);

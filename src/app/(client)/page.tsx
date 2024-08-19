@@ -7,7 +7,7 @@ import Filter from '@/components/index/Filter'
 
 async function getData() {
     try {
-        const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/getDormitory`, {
+        const result = await axios.get(`/api/getDormitory`, {
             headers: {
                 'getType': 'get',
             },

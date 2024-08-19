@@ -119,7 +119,7 @@ class account {
                 password: this.password,
             }
             try {
-                await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/sigup`, formData);
+                await axios.post(`/api/auth/sigup`, formData);
                 this.setAlert({
                     open: true,
                     state: 'success',

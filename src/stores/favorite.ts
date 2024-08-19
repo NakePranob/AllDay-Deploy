@@ -33,7 +33,7 @@ class favorite {
 
     async delete(id: number) {
         try {
-            await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/favorite/${id}`);
+            await axios.delete(`/api/favorite/${id}`);
             this.data = this.data.filter(favorite => favorite.id !== id);
             this.setAlert({
                 open: true,

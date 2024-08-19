@@ -33,7 +33,7 @@ const Delete = ({id}: {id: number}) => {
 
     const handleDelete = async (id: number) => {
         try {
-            await axios.delete(`https://all-day-deploy.vercel.app/api/reserve/${id}`);
+            await axios.delete(`https://localhost/api/reserve/${id}`);
             setAlert({
                 open: true,
                 state: 'success',

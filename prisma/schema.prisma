@@ -1,0 +1,197 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        Int         @id @default(autoincrement())
+  email     String      @unique @db.VarChar(30)
+  profile   String      @default("https://kowbzvvtazxyxyzbfils.supabase.co/storage/v1/object/public/profire/profile.webp")
+  birthday  String?     @default("2000-01-01") @db.VarChar(10)
+  createdAt DateTime    @default(now())
+  firstname String?     @db.VarChar(50)
+  lastname  String?     @db.VarChar(50)
+  password  String?     @db.VarChar(255)
+  phone     Int?
+  roleId    Int         @default(1)
+  sex       Boolean?    @default(true)
+  liveAt    Live_At?
+  chat      Chat[]
+  dormitory Dormitory[]
+  favorite  Favorite[]
+  reserve   Reserve[]
+  review    Review[]
+  role      Role        @relation(fields: [roleId], references: [id])
+}
+
+model Live_At {
+  id        Int         @id @default(autoincrement())
+  user      User        @relation(fields: [userId], references: [id])
+  userId    Int         @unique
+  dormitory Dormitory @relation(fields: [dmtId], references: [id])
+  dmtId     Int
+}
+
+model Role {
+  id   Int    @id @default(autoincrement())
+  role String @default("member") @db.VarChar(12)
+  user User[]
+}
+
+model Favorite {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  dmtId     Int
+  dormitory Dormitory @relation(fields: [dmtId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
+}
+
+model Reserve {
+  id        Int       @id @default(autoincrement())
+  code      String    @unique
+  userId    Int       @unique
+  dmt_typeId     Int
+  dormitory_type Dormitory_type @relation(fields: [dmt_typeId], references: [id])
+  date      String    
+  user      User      @relation(fields: [userId], references: [id])
+}
+
+model Review {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  dmtId     Int
+  content   String?   @db.VarChar(255)
+  score     Int
+  createdAt DateTime  @default(now())
+  dormitory Dormitory @relation(fields: [dmtId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
+}
+
+model Chat {
+  id        Int        @id @default(autoincrement())
+  userId    Int
+  dmtId     Int
+  dormitory Dormitory  @relation(fields: [dmtId], references: [id])
+  user      User       @relation(fields: [userId], references: [id])
+  chat_msg  Chat_msg[]
+}
+
+model Chat_msg {
+  id         Int      @id @default(autoincrement())
+  chatId     Int
+  content    String   @db.VarChar(255)
+  state_chat Boolean
+  read_user  Boolean  @default(false)
+  read_dmt   Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  chat       Chat     @relation(fields: [chatId], references: [id])
+}
+
+model Dormitory {
+  id                Int                 @id @default(autoincrement())
+  name              String              @db.VarChar(30)
+  engname           String
+  userId            Int
+  address           String?
+  location          String?             @db.VarChar(50)
+  price             Int
+  doc               String?             @db.VarChar(100)
+  facebook          String?             @db.VarChar(70)
+  line              String?             @db.VarChar(40)
+  phone             Int?             
+  state             Boolean             @default(false)
+  occupied          Boolean             @default(false)
+  view              Int                 @default(0)
+  reviewScore       Float               @default(0.0)
+  createdAt         DateTime            @default(now())
+  chat              Chat[]
+  user              User                @relation(fields: [userId], references: [id])
+  dormitory_img     Dormitory_img[]
+  dormitory_state   Dormitory_state?
+  dormitory_type    Dormitory_type[]
+  favorite          Favorite[]
+  location_distance Location_distance[]
+  review            Review[]
+  liveAt            Live_At[]
+}
+
+model Location_distance {
+  id        Int       @id @default(autoincrement())
+  dmtId     Int
+  location  String    @db.VarChar(50)
+  distance  Float     @default(0.0)
+  dormitory Dormitory @relation(fields: [dmtId], references: [id])
+}
+
+model Dormitory_img {
+  id        Int       @id @default(autoincrement())
+  dmtId     Int
+  url       String    @db.VarChar(200)
+  dormitory Dormitory @relation(fields: [dmtId], references: [id])
+}
+
+model Dormitory_type {
+  id                   Int                   @id @default(autoincrement())
+  dmtId                Int
+  name                 String                @db.VarChar(50)
+  price                Int                   @default(0)
+  quantity             Int                   @default(0)
+  occupied             Int                   @default(0)
+  width                Int?
+  length               Int?
+  dormitory_facilitate Dormitory_facilitate?
+  dormitory            Dormitory             @relation(fields: [dmtId], references: [id])
+  dormitory_typeimg    Dormitory_typeimg[]
+  reserve              Reserve[]
+}
+
+model Dormitory_typeimg {
+  id             Int            @id @default(autoincrement())
+  dmt_typeId     Int
+  url            String         @db.VarChar(50)
+  dormitory_type Dormitory_type @relation(fields: [dmt_typeId], references: [id])
+}
+
+model Dormitory_state {
+  id              Int       @id @default(autoincrement())
+  dmtId           Int       @unique
+  park_car        Boolean   @default(false)
+  park_motorcycle Boolean   @default(false)
+  lift            Boolean   @default(false)
+  security_door   Boolean   @default(false)
+  fingerprint     Boolean   @default(false)
+  keycard         Boolean   @default(false)
+  man             Boolean   @default(false)
+  female          Boolean   @default(false)
+  animal          Boolean   @default(false)
+  fitness         Boolean   @default(false)
+  wifi            Boolean   @default(false)
+  cctv            Boolean   @default(false)
+  security_guard  Boolean   @default(false)
+  smoke           Boolean   @default(false)
+  restaurant      Boolean   @default(false)
+  store           Boolean   @default(false)
+  washing         Boolean   @default(false)
+  home            Boolean   @default(true)
+  dormitory       Dormitory @relation(fields: [dmtId], references: [id])
+}
+
+model Dormitory_facilitate {
+  id             Int            @id @default(autoincrement())
+  dmt_typeId     Int            @unique
+  fan            Boolean        @default(false)
+  air            Boolean        @default(false)
+  closet         Boolean        @default(false)
+  water_heater   Boolean        @default(false)
+  table          Boolean        @default(false)
+  dressing_table Boolean        @default(false)
+  fridge         Boolean        @default(false)
+  bed            Boolean        @default(false)
+  tv             Boolean        @default(false)
+  dormitory_type Dormitory_type @relation(fields: [dmt_typeId], references: [id])
+}

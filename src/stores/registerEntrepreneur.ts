@@ -292,7 +292,7 @@ class RegisterEntrepreneur {
             }
             try {
                 const self = this;
-                const response = await axios.post('http://localhost:3000/api/entrepreneur/register', formData, {
+                const response = await axios.post('http://localhost/api/entrepreneur/register', formData, {
                     onUploadProgress(progressEvent) {
                         if (progressEvent.progress) {
                             const percentCompleted = (progressEvent.progress)*100;

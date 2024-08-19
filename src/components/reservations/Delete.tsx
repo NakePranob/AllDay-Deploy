@@ -33,7 +33,7 @@ const Delete = ({id}: {id: number}) => {
 
     const handleDelete = async (id: number) => {
         try {
-            await axios.delete(`http://localhost:3000/api/reserve/${id}`);
+            await axios.delete(`http://localhost/api/reserve/${id}`);
             setAlert({
                 open: true,
                 state: 'success',

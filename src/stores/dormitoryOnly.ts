@@ -57,7 +57,7 @@ class dormitoryOnly {
             }
             try {
                 console.log(formData);
-                const result = await axios.post(`http://localhost:3000/api/reserve`, formData);
+                const result = await axios.post(`http://localhost/api/reserve`, formData);
                 this.setAlert({
                     open: true,
                     state: 'success',
@@ -190,7 +190,7 @@ class dormitoryOnly {
                 if (!existingFavorite) {
                     // เพิ่ม favorite
                     const formData = { dmtId, userId };
-                    const result = await axios.post(`http://localhost:3000/api/favorite`, formData);
+                    const result = await axios.post(`http://localhost/api/favorite`, formData);
 
                     runInAction(() => {
                         console.log(result.data);
@@ -206,7 +206,7 @@ class dormitoryOnly {
                     });
                 } else {
                     // ลบ favorite
-                    const result = await axios.delete(`http://localhost:3000/api/favorite/${existingFavorite.id}`);
+                    const result = await axios.delete(`http://localhost/api/favorite/${existingFavorite.id}`);
 
                     runInAction(() => {
                         console.log(result.data);
@@ -245,8 +245,8 @@ class dormitoryOnly {
     async getUserState(id: number | null | undefined) {
         try {
             if (id) {
-                const resultLiveat = await axios.get(`http://localhost:3000/api/liveat/${id}`);
-                const resultFavorite = await axios.get(`http://localhost:3000/api/favorite/${id}`);
+                const resultLiveat = await axios.get(`http://localhost/api/liveat/${id}`);
+                const resultFavorite = await axios.get(`http://localhost/api/favorite/${id}`);
                 runInAction(() => {
                     this.setFavoriteList(resultFavorite.data);
                 });
@@ -266,7 +266,7 @@ class dormitoryOnly {
                 formData.dmtId = this.data.id.toString();
                 formData.userId = id.toString();
                 if (formData.rating !== '') {
-                    const result = await axios.post(`http://localhost:3000/api/dormitory/review`, formData);
+                    const result = await axios.post(`http://localhost/api/dormitory/review`, formData);
                     runInAction(() => {
                         this.data.review.push(result.data.review);
                         this.data.reviewScore = result.data.totalScore;

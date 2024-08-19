@@ -27,5 +27,7 @@ export async function POST(req: Request, res: Response) {
         return new Response(`error: ${error}`, {
             status: 400,
         })
+    } finally {
+        await prisma.$disconnect();
     }
 }

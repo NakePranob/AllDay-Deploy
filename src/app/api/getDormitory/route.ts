@@ -70,6 +70,8 @@ export async function GET(req: Request, res: Response) {
         return new Response(`error: ${error}`, {
             status: 400,
         })
+    } finally {
+        await prisma.$disconnect();
     }
 }
 
@@ -127,5 +129,7 @@ export async function POST(req: Request, res: Response) {
         return new Response(`error: ${error}`, {
             status: 400,
         })
+    } finally {
+        await prisma.$disconnect();
     }
 }

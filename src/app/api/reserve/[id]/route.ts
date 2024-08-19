@@ -30,6 +30,8 @@ export async function GET(
         return new Response(`error: ${error}`, {
             status: 400,
         })
+    } finally {
+        await prisma.$disconnect();
     }
 }
 
@@ -49,5 +51,7 @@ export async function DELETE(
         return new Response(`error: ${error}`, {
             status: 400,
         })
+    } finally {
+        await prisma.$disconnect();
     }
 }

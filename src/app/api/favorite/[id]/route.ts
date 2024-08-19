@@ -39,6 +39,8 @@ export async function GET(
     } catch (error) {
         // console.error('Error fetching dormitory:', error);
         return new Response('Internal server error', { status: 500 });
+    } finally {
+        await prisma.$disconnect();
     }
 }
 
@@ -56,5 +58,7 @@ export async function DELETE(
         return Response.json(result);
     } catch (error) {
         return new Response('Internal server error', { status: 500 });
+    } finally {
+        await prisma.$disconnect();
     }
 }

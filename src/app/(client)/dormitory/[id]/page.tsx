@@ -17,7 +17,7 @@ import Review from "@/components/dormitory/Review";
 // Fetch data function
 async function getData(id: string) {
     try {
-        const result = await axios.get(`https://localhost/api/getDormitory/${id}`);
+        const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/getDormitory/${id}`);
         return result.data;
     } catch (error) {
         // console.error("Error fetching data:", error);

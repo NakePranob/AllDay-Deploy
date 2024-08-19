@@ -26,7 +26,7 @@ import { IoBed } from "react-icons/io5";
 async function getData(id: string | null) {
     if (id) {
       try {
-        const result = await axios.get(`https://localhost/api/reserve/${id}`);
+        const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/reserve/${id}`);
         return result.data;
       } catch (error) {
         console.error("Error fetching data:", error);

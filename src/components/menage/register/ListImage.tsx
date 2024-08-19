@@ -20,9 +20,8 @@ const ListImage = observer((props: Props) => {
         { registerEntrepreneur.imageList.length !== 0 && registerEntrepreneur.imageList.map((item:any, i:number) => {
           const cols = i === 0 || i === 5 || i === 10 || i === 15 || i === 20 ? 2 : 1;
           return (
-            <div className={`aspect-video col-span-${cols} rounded-sm w-full overflow-hidden relative`}>
+            <div key={i} className={`aspect-video col-span-${cols} rounded-sm w-full overflow-hidden relative`}>
               <img
-                key={i}
                 src={URL.createObjectURL(item.imgFile)}
                 alt={item.imgFile.name}
                 loading="lazy"

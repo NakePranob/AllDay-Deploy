@@ -17,7 +17,7 @@ import { FaArrowUpWideShort } from "react-icons/fa6";
 const MenuHeader = observer((props: any) => {
     useEffect(() => {
         dormitoryOnly.setData(props.data);
-    }, [])
+    }, [props.data]);
     const [value, setValue] = useState(0);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {

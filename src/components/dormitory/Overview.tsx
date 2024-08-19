@@ -51,7 +51,7 @@ const Overview = observer(({dmtId}: {dmtId: string}) => {
     useEffect(() => {
         dormitoryOnly.targetOverview = dormitoryOnly.targetOverview || createRef<HTMLElement>();
         dormitoryOnly.setDmtId(dmtId);
-    }, []);
+    }, [dmtId]);
 
     return (
         <>

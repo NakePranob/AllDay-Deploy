@@ -42,7 +42,7 @@ const Review = observer(({ dormitoryId }: { dormitoryId: string }) => {
         console.log("session", session);
 
         fetchUserDormitory();
-    }, [session?.user?.id]);
+    }, [session]);
 
 
     const reviewData = dormitoryOnly.data?.review ?? [];

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Noto_Sans_Thai } from "next/font/google";
 import "./globals.css";
 import { getServerSession } from "next-auth";
@@ -28,6 +29,7 @@ export default async function RootLayout({
           <MuiThemeProvider>
             <SessionProvider session={session}>
               {children}
+              <SpeedInsights />
             </SessionProvider>
           </MuiThemeProvider>
         </ThemeProvider>

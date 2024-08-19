@@ -26,7 +26,7 @@ import { IoBed } from "react-icons/io5";
 async function getData(id: string | null) {
     if (id) {
       try {
-        const result = await axios.get(`/api/reserve/${id}`);
+        const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/reserve/${id}`);
         return result.data;
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -42,10 +42,10 @@ const page = async () => {
     const userId = headerRequest.get('userId')
     const data = await getData(userId);
 
-    if (!data) {
+    if (!data || data.length === 0) {
         return (
             <div className="flex-center h-screen">
-                <h1>ไม่มีข้อมูลการจอง{data}</h1>
+                <h1>ไม่มีข้อมูลการจอง</h1>
             </div>
         );
     }
@@ -53,7 +53,7 @@ const page = async () => {
     return (
         <div className='pt-20 md:pt-28 pb-10 container'>
             <h1 className="text-2xl font-semibold">
-                รายละเอียดการจองของฉัน{data}
+                รายละเอียดการจองของฉัน
             </h1>
             <div className="bg-blue-400/30 rounded-2xl px-4 py-2 mt-2 sm:flex justify-between">
                 <div className="sm:flex gap-2 items-end">

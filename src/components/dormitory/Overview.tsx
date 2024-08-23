@@ -55,7 +55,7 @@ const Overview = observer(({dmtId}: {dmtId: string}) => {
 
     return (
         <>
-            <section ref={dormitoryOnly.targetOverview} className="card overflow-hidden shadow-md p-4 pt-6 relative">
+            <section ref={dormitoryOnly.targetOverview} className="card overflow-hidden shadow-md p-4 pt-6 relative -mt-3 z-50 rounded-t-2xl rounded-b-none sm:rounded-2xl">
                 <div className="flex sm:items-center flex-col sm:flex-row justify-between">
                     <div className="max-w-[60%] sm:max-w-[50%] md:max-w-[60%]">
                         <h1 className="text-2xl font-semibold -mb-1 overflow-hidden

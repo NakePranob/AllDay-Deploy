@@ -28,7 +28,7 @@ const Carousel = observer(({data}: any) => {
         }
     };
     return (
-        <section className="card border-0 h-52 sm:h-72 md:h-96 rounded-b-none overflow-hidden mx-5 shadow-md">
+        <section className="sm:card border-0 h-56 sm:h-72 md:h-96 rounded-b-none overflow-hidden sm:mx-5 shadow-md">
             <Swiper
                 spaceBetween={30}
                 centeredSlides={true}
@@ -55,7 +55,7 @@ const Carousel = observer(({data}: any) => {
                         />
                     </SwiperSlide>
                 ))}
-                <div className="autoplay-progress scale-75 -mb-2 -me-2" slot="container-end">
+                <div className="autoplay-progress scale-75 -mb-2 -me-2 hidden sm:block" slot="container-end">
                     <svg viewBox="0 0 48 48" ref={progressCircle}>
                         <circle cx="24" cy="24" r="20"></circle>
                     </svg>

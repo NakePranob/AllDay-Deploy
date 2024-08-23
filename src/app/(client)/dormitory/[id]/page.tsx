@@ -36,7 +36,7 @@ async function Page({ params }: { params: { id: string } }) {
                     ลงทะเบียนเป็นสมาชิคกับเราได้ที่ <Link href="/register" className="font-bold cursor-pointer">สมัครสมาชิก</Link>
                 </div>
                 <MenuHeader data={data}/>
-                <div className="container pt-6 xl:px-16 z-10">
+                <div className="sm:container sm:pt-6 xl:px-16 z-10">
                     <Carousel/>
                     <Overview dmtId={params.id}/>
                     <h1 className='text-xl font-semibold mt-6 mb-2'>สิ่งอำนวยความสะดวก</h1>

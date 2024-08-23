@@ -161,7 +161,7 @@ const RoomList = observer(() => {
             </Modal>
             <section ref={dormitoryOnly.targetRoom}>
                 {dormitoryOnly.data?.dormitory_type?.map((item, i) => (
-                    <section key={i} className='card mb-4 shadow-md p-4 relative overflow-hidden'>
+                    <section key={i} className='card rounded-none sm:rounded-2xl mb-4 shadow-md p-4 relative overflow-hidden'>
                         <span className="absolute w-80 h-80 bg-blue-400/20 -top-20 -left-44 rotate-[50deg] rounded-[3rem]"></span>
                         <span className="absolute h-[35rem] w-80 bg-blue-400/10 -top-20 -left-40 rotate-[50deg] rounded-[2rem]"></span>
                         <h1 className='font-semibold text-lg mb-2 flex justify-between'>

@@ -91,7 +91,7 @@ const Review = observer(({ dormitoryId }: { dormitoryId: string }) => {
             </Modal>
             <Alert open={dormitoryOnly.alert.open} state={dormitoryOnly.alert.state} 
             text={dormitoryOnly.alert.text} link={dormitoryOnly.alert.link} close={()=>dormitoryOnly.resetAlert()}/>
-            <section ref={dormitoryOnly.targetReview} className="card p-4 mt-2 relative overflow-hidden">
+            <section ref={dormitoryOnly.targetReview} className="card rounded-none sm:rounded-2xl p-4 mt-2 relative overflow-hidden">
                 <span className="absolute w-80 h-80 bg-blue-400/20 -top-24 -left-44 rotate-[50deg] rounded-[2rem]"></span>
                 <span className="absolute w-52 h-52 bg-blue-400/20 -top-10 -left-32 rotate-[50deg] rounded-[1rem]"></span>
                 <h1 className="font-semibold text-lg mb-4 relative">

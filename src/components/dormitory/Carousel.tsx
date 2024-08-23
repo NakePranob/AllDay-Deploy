@@ -37,7 +37,7 @@ const Carousel = observer(({data}: any) => {
                     disableOnInteraction: false,
                 }}
                 pagination={{
-                    clickable: true,
+                    clickable: false,
                 }}
                 navigation={false}
                 modules={[Autoplay, Pagination, Navigation]}
@@ -55,12 +55,6 @@ const Carousel = observer(({data}: any) => {
                         />
                     </SwiperSlide>
                 ))}
-                <div className="autoplay-progress scale-75 -mb-2 -me-2 hidden sm:block" slot="container-end">
-                    <svg viewBox="0 0 48 48" ref={progressCircle}>
-                        <circle cx="24" cy="24" r="20"></circle>
-                    </svg>
-                    <span ref={progressContent}></span>
-                </div>
             </Swiper>
         </section>
     )

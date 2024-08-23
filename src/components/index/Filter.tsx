@@ -57,7 +57,7 @@ const Filter = observer(() => {
                         className='h-10 mt-2 mx-2 mb-2 xl:mb-0 xl:mx-0'>
                         ค้นหาหอพักตรงใจคุณ
                     </Button>
-                    <section className={`w-full card rounded-none ${!dormitory.priceState ? "h-11 xl:rounded-3xl" : "h-40 xl:rounded-2xl"}
+                    <section className={`w-full lg:card rounded-none ${!dormitory.priceState ? "h-11 xl:rounded-3xl" : "h-40 xl:rounded-2xl"}
                     p-4 pt-2 overflow-hidden transition-all transition-500`}>
                         <span onClick={()=>dormitory.setPriceState(!dormitory.priceState)} className="w-full relative flex-y-center font-bold transition-300">
                             <span className="opacity-70">ช่วงราคาที่คุณต้องการ</span>
@@ -85,7 +85,7 @@ const Filter = observer(() => {
                             />
                         </div>
                     </section>
-                    <section className={`w-full card rounded-none ${!dormitory.reviewState ? "h-11 xl:rounded-3xl" : "h-28 xl:rounded-2xl"}
+                    <section className={`w-full lg:card rounded-none ${!dormitory.reviewState ? "h-11 xl:rounded-3xl" : "h-28 xl:rounded-2xl"}
                     p-4 pt-2 overflow-hidden transition-all transition-500`}>
                         <span onClick={()=>dormitory.setReviewState(!dormitory.reviewState)} className="w-full relative flex-y-center font-bold transition-300">
                             <span className="opacity-70">คะแนนรีวิวที่คุณคาดหวัง</span>
@@ -102,7 +102,7 @@ const Filter = observer(() => {
                         />
                         </div>
                     </section>
-                    <section className={`w-full card rounded-none ${!dormitory.typeState ? "h-11  xl:rounded-3xl" : "h-48  xl:rounded-2xl"}
+                    <section className={`w-full lg:card rounded-none ${!dormitory.typeState ? "h-11  xl:rounded-3xl" : "h-48  xl:rounded-2xl"}
                     p-4 pt-2 overflow-hidden transition-all transition-500`}>
                         <span onClick={()=>dormitory.setTypeState(!dormitory.typeState)} className="w-full relative flex-y-center font-bold transition-300">
                             <span className="opacity-70">ประเภทหอพักที่คุณต้องการ</span>
@@ -126,7 +126,7 @@ const Filter = observer(() => {
                             </Box>
                         </div>
                     </section>
-                    <section className={`w-full card rounded-none ${!dormitory.handyState ? "h-11 xl:rounded-3xl" : "h-[67rem] xl:rounded-2xl"}
+                    <section className={`w-full lg:card rounded-none ${!dormitory.handyState ? "h-11 xl:rounded-3xl" : "h-[67rem] xl:rounded-2xl"}
                     p-4 pt-2 overflow-hidden transition-all transition-500`}>
                         <span onClick={()=>dormitory.setHandyState(!dormitory.handyState)} className="w-full relative flex-y-center font-bold transition-300">
                             <span className="opacity-70">สิ่งอำนวยความสะดวก</span>
@@ -201,7 +201,7 @@ const Filter = observer(() => {
                                 </div>
                                 <div className="flex-y-center">
                                     <Checkbox checked={dormitory.keycardValue}
-                                    onChange={(event) => dormitory.setKeycardValue(event.target.checked)} /> ระบบ keycard 
+                                    onChange={(event) => dormitory.setKeycardValue(event.target.checked)} /> ระบบ keylg:card 
                                 </div>
                                 <div className="flex-y-center">
                                     <Checkbox checked={dormitory.animalValue}

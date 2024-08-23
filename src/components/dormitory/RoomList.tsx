@@ -162,8 +162,8 @@ const RoomList = observer(() => {
             <section ref={dormitoryOnly.targetRoom}>
                 {dormitoryOnly.data?.dormitory_type?.map((item, i) => (
                     <section key={i} className='card mb-4 shadow-md p-4 relative overflow-hidden'>
-                        <span className="absolute w-80 h-80 bg-sky-400/10 dark:bg-sky-900/10 -top-20 -left-44 rotate-[50deg] rounded-[3rem]"></span>
-                        <span className="absolute w-[35rem] h-72 bg-blue-300/[.05] dark:bg-blue-950/10 -top-10 -left-40 -rotate-[30deg] rounded-[2rem]"></span>
+                        <span className="absolute w-80 h-80 bg-blue-400/20 -top-20 -left-44 rotate-[50deg] rounded-[3rem]"></span>
+                        <span className="absolute h-[35rem] w-80 bg-blue-400/10 -top-20 -left-40 rotate-[50deg] rounded-[2rem]"></span>
                         <h1 className='font-semibold text-lg mb-2 flex justify-between'>
                             {item.name}
                             <span className={`py-2 px-3 text-white rounded-md text-sm font-medium

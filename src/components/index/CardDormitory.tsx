@@ -47,7 +47,7 @@ const CardDormitory = observer(({data}: any) => {
 
     return (
         <>
-            <section className='card h-12 flex-y-center justify-end px-2 relative overflow-hidden'>
+            <section className='card rounded-full lg:rounded-2xl h-12 flex-y-center justify-end px-2 relative overflow-hidden'>
                 <p className='text-sm opacity-70 me-2'>แสดง {dormitory.dormitoryList?.length} รายการ</p>
                 <span className='h-6 border-r border-gray-300 dark:border-gray-700 mx-2'></span>
                 <Tooltip 

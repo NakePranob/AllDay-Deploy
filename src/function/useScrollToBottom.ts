@@ -4,15 +4,20 @@ const useScrollToBottom = () => {
     const [isBottom, setIsBottom] = useState(false);
 
     const handleScroll = () => {
-        const scrollTop = window.scrollY;
-        const windowHeight = window.innerHeight;
-        const docHeight = document.documentElement.offsetHeight;
+        requestAnimationFrame(() => {
+            const scrollTop = window.scrollY;
+            const windowHeight = window.innerHeight;
+            const docHeight = document.documentElement.offsetHeight-5;
+            console.log(scrollTop, windowHeight, docHeight);
 
-        if (windowHeight + scrollTop >= docHeight) {
-        setIsBottom(true);
-        } else {
-        setIsBottom(false);
-        }
+            if (windowHeight + scrollTop >= docHeight) {
+                console.log('Bottom reached');
+                setIsBottom(true);
+            } else {
+                console.log('Bottom not reached');
+                setIsBottom(false);
+            }
+        });
     };
 
     useEffect(() => {

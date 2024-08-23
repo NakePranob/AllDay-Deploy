@@ -6,6 +6,7 @@ import type { Dormitory } from "@/Types/dormitory"
 class dormitory {
     dormitoryList: Dormitory[] = [];
     dormitoryListUse: Dormitory[] = [];
+    addDataState: boolean = true;
 
     layoutList: boolean = false;
     filterDrawer: boolean = false;
@@ -104,15 +105,20 @@ class dormitory {
 
     async addData() {
         try {
-            const ids = this.dormitoryList.map(dormitory => dormitory.id);
-            const maxId = Math.max(...ids);
-            const result = await axios.get(`/api/getDormitory`, {
-                headers: {
-                    'getType': 'add',
-                    'lastFields': maxId.toString()
-                },
-            });
-            this.setDormitoryList([...this.dormitoryList, ...result.data.data]);
+            console.log('addData');
+            if (this.addDataState) {
+                this.addDataState = false;
+                const ids = this.dormitoryList.map(dormitory => dormitory.id);
+                const maxId = Math.max(...ids);
+                const result = await axios.get(`/api/getDormitory`, {
+                    headers: {
+                        'getType': 'add',
+                        'lastFields': maxId.toString()
+                    },
+                });
+                this.addDataState = true;
+                this.setDormitoryList([...this.dormitoryList, ...result.data.data]);
+            }
         } catch (error) {
             console.log(error);
         }

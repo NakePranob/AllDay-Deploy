@@ -52,7 +52,7 @@ const page = async () => {
 
     return (
         <div className='pt-20 md:pt-28 pb-10 container'>
-            <h1 className="text-2xl font-semibold">
+            <h1 className="text-xl sm:text-2xl font-semibold">
                 รายละเอียดการจองของฉัน
             </h1>
             <div className="bg-blue-400/30 rounded-2xl px-4 py-2 mt-2 sm:flex justify-between">

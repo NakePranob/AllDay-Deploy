@@ -27,9 +27,9 @@ const Card = observer(({ data }: { data: Favorites[] }) => {
     return (
         <>
             {favorite.data.length > 0 ? favorite.data.map((item, i) => (
-                <Link href={`/dormitory/${item.dormitory.id}`} key={i} className="card col-span-6 md:col-span-4 lg:col-span-3 relative transition-300
+                <Link href={`/dormitory/${item.dormitory.id}`} key={i} className="card rounded-md sm:rounded-2xl col-span-6 md:col-span-4 lg:col-span-3 relative transition-300
                 hover:shadow-2xl dark:hover:shadow-xl hover:shadow-blue-300/60 dark:hover:shadow-blue-950/60">
-                    <div className="w-full aspect-square rounded-t-2xl overflow-hidden">
+                    <div className="w-full aspect-square rounded-t-md sm:rounded-t-2xl overflow-hidden">
                         <Image
                             src={item.dormitory.dormitory_img?.[0]?.url ? imageUrl(item.dormitory.dormitory_img?.[0]?.url) : '/404.png'}
                             alt={item.dormitory.dormitory_img?.[0]?.url || '404 Image'}
@@ -39,12 +39,12 @@ const Card = observer(({ data }: { data: Favorites[] }) => {
                             loading="lazy"
                         />
                     </div>
-                    <div className="px-4 py-2 flex">
+                    <div className="px-2 sm:px-4 py-2 flex">
                         <div className="w-4/5">
-                            <h1 className="text-lg font-medium text-ellipsis overflow-hidden whitespace-nowrap">
+                            <h1 className="text-base sm:text-lg font-medium text-ellipsis overflow-hidden whitespace-nowrap">
                                 {item.dormitory.name}
                             </h1>
-                            <p className="text-sm -mt-1 opacity-70">
+                            <p className="text-xs sm:text-sm -mt-1 opacity-70">
                                 {item.dormitory.engname ? item.dormitory.engname : 'หอพักดีๆ รอท่านอยู่'}
                             </p>
                         </div>
@@ -58,26 +58,15 @@ const Card = observer(({ data }: { data: Favorites[] }) => {
                             </IconButton>
                         </div>
                     </div>
-                    <div className="px-4 text-sm text-yellow-400">
-                        <Starscore score={item.dormitory.reviewScore} />
-                    </div>
-                    <div className="px-4 py-2 flex justify-between border-t-2 border-dashed 
-                    border-slate-200 dark:border-slate-800 items-end mt-2">
-                        <p className="text-xl font-medium">
+                    <div className="px-2 sm:px-4 py-1 flex items-center justify-between border-t-2 border-dashed 
+                    border-slate-200/50 dark:border-slate-800">
+                        <div className="text-sm text-yellow-400">
+                            <Starscore score={item.dormitory.reviewScore} />
+                        </div>
+                        <p className="text-base font-medium opacity-80">
                             <span className="font-bold text-sm">฿</span>
                             {item.dormitory.price}
                         </p>
-                        <Link href={`/dormitory/${item.dormitory.id}`} passHref>
-                            <Button 
-                                variant="contained" 
-                                sx={{ 
-                                    borderRadius: '3rem', 
-                                    color: 'white',
-                                    marginRight: '-0.25rem'
-                                }}>
-                                ดูหอพัก
-                            </Button>
-                        </Link>
                     </div>
                 </Link>
             )) : (

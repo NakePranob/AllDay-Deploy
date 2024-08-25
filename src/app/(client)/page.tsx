@@ -9,7 +9,7 @@ async function getData() {
     try {
         const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/getDormitory`, {
             headers: {
-                'getType': 'get',
+                'lastFields': '-1'
             },
         });
         return result.data.data

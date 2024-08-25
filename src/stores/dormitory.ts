@@ -94,7 +94,7 @@ class dormitory {
         try {
             const result = await axios.get(`/api/getDormitory`, {
                 headers: {
-                    'getType': 'get',
+                    'lastFields': '-1'
                 },
             });
             this.setDormitoryList(result.data.data);
@@ -105,14 +105,12 @@ class dormitory {
 
     async addData() {
         try {
-            console.log('addData');
             if (this.addDataState) {
                 this.addDataState = false;
                 const ids = this.dormitoryList.map(dormitory => dormitory.id);
                 const maxId = Math.max(...ids);
                 const result = await axios.get(`/api/getDormitory`, {
                     headers: {
-                        'getType': 'add',
                         'lastFields': maxId.toString()
                     },
                 });

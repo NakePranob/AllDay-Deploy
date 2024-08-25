@@ -26,7 +26,7 @@ async function Page() {
                 <div className="flex-center gap-2 h-9 bg-blue-400 text-white text-sm">
                     ลงทะเบียนเป็นสมาชิคกับเราได้ที่ <Link href="/register" className="font-bold cursor-pointer">สมัครสมาชิก</Link>
                 </div>
-                <div className='flex gap-4 container pt-6'>
+                <div className='flex gap-4 container sm:pt-6'>
                     <Filter/>
                     <div className='flex-1'>
                         <CardDormitory data={data}/>

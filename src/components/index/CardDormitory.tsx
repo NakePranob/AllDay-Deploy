@@ -47,8 +47,8 @@ const CardDormitory = observer(({data}: any) => {
 
     return (
         <>
-            <section className='card rounded-full lg:rounded-2xl h-12 flex-y-center justify-end px-2 relative overflow-hidden'>
-                <p className='text-sm opacity-70 me-2'>แสดง {dormitory.dormitoryList?.length} รายการ</p>
+            <section className='card -mx-2 sm:mx-0 rounded-none sm:rounded-2xl h-12 flex-y-center justify-end sm:px-2 relative overflow-hidden'>
+                <p className='text-sm opacity-70 me-2 absolute left-4 sm:static'>แสดง {dormitory.dormitoryList?.length} รายการ</p>
                 <span className='h-6 border-r border-gray-300 dark:border-gray-700 mx-2'></span>
                 <Tooltip 
                     onClick={()=>dormitory.setLayoutList(true)} 
@@ -87,7 +87,7 @@ const CardDormitory = observer(({data}: any) => {
                         <IoRefresh />
                     </IconButton>
                 </Tooltip>
-                <div className='p-8 bg-blue-600/10 rounded-full flex-center -left-20 -bottom-44 absolute'>
+                <div className='p-8 bg-blue-600/10 rounded-full hidden sm:flex-center -left-20 -bottom-44 absolute'>
                     <span className='w-52 h-52 bg-blue-400 rounded-full'></span>
                 </div>
             </section>

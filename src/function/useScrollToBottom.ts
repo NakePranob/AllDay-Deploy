@@ -7,7 +7,7 @@ const useScrollToBottom = () => {
         requestAnimationFrame(() => {
             const scrollTop = window.scrollY;
             const windowHeight = window.innerHeight;
-            const docHeight = document.documentElement.offsetHeight-5;
+            const docHeight = document.documentElement.offsetHeight-15;
             if (windowHeight + scrollTop >= docHeight) {
                 setIsBottom(true);
             } else {

@@ -25,7 +25,13 @@ export async function middleware(request: NextRequest) {
     // Management routes protection
     if (url.startsWith('/menage')) {
         if (userRoleId === '2' || userRoleId === '3') {
-            return NextResponse.next();
+            const requestHeaders = new Headers(request.headers);
+            requestHeaders.set('userId', userId as string);
+            return NextResponse.next({
+                request: {
+                    headers: requestHeaders,
+                },
+            });
         } else {
             return NextResponse.redirect(new URL('/registerEntrepreneur', request.url));
         }

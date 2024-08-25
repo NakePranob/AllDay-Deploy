@@ -94,10 +94,10 @@ class dormitory {
         try {
             const result = await axios.get(`/api/getDormitory`, {
                 headers: {
-                    'lastFields': '-1'
+                    'lastFields': '1'
                 },
             });
-            this.setDormitoryList(result.data.data);
+            this.setDormitoryList(result.data);
         } catch (error) {
             console.log(error);
         }
@@ -114,8 +114,9 @@ class dormitory {
                         'lastFields': maxId.toString()
                     },
                 });
+                console.log('test',result.data);
                 this.addDataState = true;
-                this.setDormitoryList([...this.dormitoryList, ...result.data.data]);
+                this.setDormitoryList([...this.dormitoryList, ...result.data]);
             }
         } catch (error) {
             console.log(error);

@@ -4,12 +4,12 @@ const prisma = new PrismaClient();
 export async function GET(req: Request, res: Response) {
     const lastFields = req.headers.get('lastFields')
     try {
-        const data = await prisma.dormitory.findMany({
+        const result = await prisma.dormitory.findMany({
             where: {
                 occupied: false,
             },
             take: 15,
-            skip: 1,
+            skip: Number(lastFields) === 1 ? 0 : 1,
             cursor: {
                 id: Number(lastFields),
             },
@@ -34,9 +34,7 @@ export async function GET(req: Request, res: Response) {
                 },  
             }
         })
-        return Response.json({
-            data,
-        })
+        return Response.json(result)
     } catch (error) {
         return new Response(`error: ${error}`, {
             status: 400,

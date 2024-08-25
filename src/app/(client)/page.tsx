@@ -9,10 +9,10 @@ async function getData() {
     try {
         const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/getDormitory`, {
             headers: {
-                'lastFields': '-1'
+                'lastFields': '1'
             },
         });
-        return result.data.data
+        return result.data
     } catch (error) {
         console.log(error);
     }

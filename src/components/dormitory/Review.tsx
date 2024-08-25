@@ -148,7 +148,7 @@ const Review = observer(({ dormitoryId }: { dormitoryId: string }) => {
 
                 <ul className="mt-8 flex flex-col gap-2">
                     {reviewData.map((item, i) => (
-                        item.score && (
+                        item.score && item.content && (
                             <li className="p-4 border-items rounded-xl" key={i}>
                                 <div className="flex relative gap-2">
                                     <div className="flex gap-2">

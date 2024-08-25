@@ -17,7 +17,6 @@ const Facilitate = observer(() => {
     }, []);
     return (
         <section ref={dormitoryOnly.targetState} className='card rounded-none sm:rounded-2xl shadow-md p-4 ps-8 sm:ps-4 grid grid-cols-4 md:grid-cols-8 lg:grid-cols-10 xl:grid-cols-12 gap-4 relative overflow-hidden'>
-            <span className="absolute w-40 h-56 bg-sky-400/[.05] dark:bg-sky-900/10 blur-xl -top-12 -left-14 rotate-[65deg] rounded-[1.5rem]"></span>
             <span className={`col-span-2 flex-y-center gap-4 text-sm
                 ${dormitoryOnly.data.dormitory_state?.wifi ? '' : 'opacity-50 grayscale'}`}>
                 <FaWifi className="text-xl text-blue-500"/> วายฟาย

@@ -56,31 +56,32 @@ const Overview = observer(({dmtId}: {dmtId: string}) => {
     return (
         <>
             <section ref={dormitoryOnly.targetOverview} className="card overflow-hidden shadow-md p-4 pt-6 relative -mt-3 z-50 rounded-t-2xl rounded-b-none sm:rounded-2xl">
-                <div className="flex sm:items-center flex-col sm:flex-row justify-between">
-                    <div className="max-w-[60%] sm:max-w-[50%] md:max-w-[60%]">
-                        <h1 className="text-2xl font-semibold -mb-1 overflow-hidden
-                        text-ellipsis whitespace-nowrap">
-                            {dormitoryOnly.data?.name}
-                        </h1>
-                        <p className="opacity-70">{dormitoryOnly.data?.engname}</p>
+                <div className="w-full">
+                    <h1 className="text-xl lg:text-2xl font-semibold -mb-1 overflow-hidden
+                    text-ellipsis whitespace-nowrap">
+                        {dormitoryOnly.data?.name}
+                    </h1>
+                    <p className="opacity-70 text-xs lg:text-base">{dormitoryOnly.data?.engname}</p>
+                </div>
+                <div className="flex justify-between w-full sm:w-auto mt-3">
+                    <div className='sm:flex-y-center flex-col sm:flex-row gap-2 text-yellow-300'>
+                        <span className='flex-center w-20 rounded-full gap-2 py-1 mb-2 sm:mb-0
+                        bg-blue-200/50 dark:bg-blue-900/30 text-xs text-blue-500'>
+                            <FaDoorOpen/> {dormitoryOnly.data?.dormitory_state?.home ? 'บ้านพัก' : 'ห้องพัก'}
+                        </span>
+                        <Starscore score={dormitoryOnly.data?.reviewScore}/>
                     </div>
-                    <div className="flex-y-center justify-end w-full sm:w-auto gap-4 relative mt-3">
-                        <div className="flex flex-col items-center sm:items-end gap-x-2">
-                            <span className="text-xs opacity-70 hidden sm:block">ราคา/ห้องพัก/เดือน เริ่มต้นที่</span>
+                    <div className="flex gap-4">
+                        <div className="flex flex-col items-end gap-x-2">
+                            <span className="text-xs opacity-70 text-ellipsis text-nowrap overflow-hidden flex">
+                                ราคาห้องพัก<span className="hidden sm:block">/เดือน</span>&nbsp; เริ่มต้นที่
+                            </span>
                             <h1 className="text-xl font-bold text-rose-500">THB {dormitoryOnly.data?.price}</h1>
                         </div>
-                        <Button onClick={()=>dormitoryOnly.scrollToRoom()} variant="contained" className="text-white rounded-lg h-10
-                        absolute sm:static right-0 bottom-8">
+                        <Button onClick={()=>dormitoryOnly.scrollToRoom()} variant="contained" sx={{width: '104px'}} className="text-white rounded-full h-10">
                             เลือกห้องพัก
                         </Button>
                     </div>
-                </div>
-                <div className='flex-y-center gap-2 mt-2 text-yellow-300 absolute sm:static left-4 top-[4.5rem]'>
-                    <span className='flex-center w-20 rounded-full gap-2 py-1
-                    bg-blue-200/50 dark:bg-blue-900/30 text-xs text-blue-500'>
-                        <FaDoorOpen/> {dormitoryOnly.data?.dormitory_state?.home ? 'บ้านพัก' : 'ห้องพัก'}
-                    </span>
-                    <Starscore score={dormitoryOnly.data?.reviewScore}/>
                 </div>
                 <div className="h-10 bg-sky-100 dark:bg-sky-900/30 mt-6 rounded-full flex-y-center">
                     <span className="h-10 w-10 ms-1 rounded-full scale-125 bg-gradient flex-center shadow-lg">
@@ -143,7 +144,7 @@ const Overview = observer(({dmtId}: {dmtId: string}) => {
                                 <IoIosArrowForward/>
                             </Link>
                         </div>
-                        <Link href={'/'} className="flex-y-center mt-4 gap-4 text-2xl 
+                        <Link href={dormitoryOnly.data.location ? dormitoryOnly.data.location : '#'} className="flex-y-center mt-4 gap-4 text-2xl 
                         hover:text-blue-400 transition-300">
                             <HiLocationMarker className="min-w-6"/>
                             <p className="text-sm">

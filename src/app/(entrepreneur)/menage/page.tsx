@@ -22,7 +22,7 @@ const Page = async () => {
     const data = await getData(userId);
     
     return (
-        <div className='container pt-24 md:pt-28 pb-8'>
+        <div className='container pt-20 md:pt-28 pb-8'>
             <h1 className='text-xl font-semibold mb-4 border-b-base'>
                 รายการหอพักที่คุณเป็นเจ้าของ
             </h1>

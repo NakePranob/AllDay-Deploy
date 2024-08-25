@@ -89,7 +89,7 @@ const page = async () => {
                         <SiGooglemaps/>ดูแผนที่
                     </Link>
                </div>
-                <div className="card p-4 relative pb-14 overflow-hidden mt-6">
+                <div className="card p-4 relative pb-16 overflow-hidden mt-6">
                     <span className="absolute -bottom-16 -right-32 w-56 h-56 rotate-45 bg-blue-400/20 rounded-2xl"></span>
                     <span className="absolute -bottom-28 -right-40 w-72 h-96 rotate-45 bg-blue-400/20 rounded-2xl"></span>
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 relative">
@@ -188,7 +188,7 @@ const page = async () => {
                     </div>
                     <div className="px-4 py-2 mt-4 flex items-end justify-between gap-2
                     absolute left-0 bottom-0 w-full">
-                        <div className="flex items-end gap-2">
+                        <div className="flex flex-col sm:flex-row sm:items-end sm:gap-2">
                             <b>วันที่เข้าดูห้องพัก</b>
                             <p className="text-sm">2024-07-30</p>
                         </div>

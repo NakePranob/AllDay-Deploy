@@ -46,7 +46,7 @@ const Page = async () => {
                                     </p>
                                 </div>
                                 <span className='opacity-70 text-xs'>
-                                    {item.createdAt || 'ไม่มีวันที่สร้างหอพัก'}
+                                    {item.createdAt.substring(0, 10) || 'ไม่มีวันที่สร้างหอพัก'}
                                 </span>
                             </div>
                             <span className='absolute left-4 bottom-2 opacity-70 text-sm'>

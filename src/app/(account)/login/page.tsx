@@ -78,14 +78,17 @@ const page = observer(() => {
                             {account.helperText && <FormHelperText>{account.helperText.password}</FormHelperText>}
                         </FormControl>
                         <hr className={`hr-w`}/>
-                        <Button type='submit' variant='contained' className='w-full text-white h-10'
+                        <Button type='submit' variant='contained' className='w-full text-white h-12'
                             disabled={account.email.length === 0 || account.password.length === 0 || 
                             Object.keys(account.helperText).length !== 0}
                         >
                             ยืนยัน
                         </Button>
                     </Box>
-                    <div className='flex-y-center gap-4 text-sm mt-14 mb-4'>
+                    <div className='w-full mt-4 text-sm'>
+                        <Link href={'#'}>คุณลืมรหัสผ่าน?</Link>
+                    </div>
+                    <div className='flex-y-center gap-4 text-sm mt-24 sm:mt-14 mb-4'>
                         <Link href={'/'}>กลับสู่หน้าหลัก</Link>
                         <hr className='hr-h h-4'/>
                         <Link href={'/register'}>สมัครสมาชิก</Link>

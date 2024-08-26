@@ -79,6 +79,9 @@ const RoomList = observer(() => {
                 >
                 <Box sx={style} className='card w-full rounded-b-none sm:rounded-b-2xl sm:w-[32rem] alert sm:top-1/2 sm:left-1/2 
                 sm:translate-x-[-50%] sm:translate-y-[-50%] bottom-0 sm:bottom-auto left-0 p-4'>
+                    <div className="w-full flex-center sm:hidden">
+                        <span onClick={() => dormitoryOnly.setReserveState(false)} className="w-12 h-1 mb-4 rounded-full bg-blue-300/30"></span>
+                    </div>
                     <Typography id="modal-formReserve-title" variant="h6" component="h2" className='flex justify-between'>
                         <p className='text-ellipsis max-w-[70%] overflow-hidden whitespace-nowrap'>
                             {dormitoryOnly?.data?.dormitory_type?.length > 0 && dormitoryOnly?.formReserve?.id !== undefined && dormitoryOnly?.data?.dormitory_type[dormitoryOnly.formReserve.id]?.name
@@ -151,7 +154,7 @@ const RoomList = observer(() => {
                                 ))}
                             </TextField>
                         </div>
-                        <Button type='submit' variant="contained" className='text-white w-full rounded-full mt-4'>
+                        <Button type='submit' variant="contained" className='text-white w-full rounded-full h-10 mt-4'>
                             ทำการจอง
                         </Button>
                     </form>

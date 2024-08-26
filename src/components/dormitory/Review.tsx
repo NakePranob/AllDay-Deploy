@@ -68,7 +68,7 @@ const Review = observer(({ dormitoryId }: { dormitoryId: string }) => {
             >
                 <Box className="card rounded-b-none sm:rounded-b-2xl alert w-full sm:w-[26rem] sm:top-1/2 sm:left-1/2 
                 sm:translate-x-[-50%] sm:translate-y-[-50%] bottom-0 sm:bottom-auto left-0 p-4" sx={style}>
-                    <div className="w-full flex-center">
+                    <div className="w-full flex-center sm:hidden">
                         <span onClick={() => dormitoryOnly.setOpen(false)} className="w-12 h-1 mb-4 rounded-full bg-blue-300/30"></span>
                     </div>
                     <Typography id="review-modal-title" variant="h6" component="h2">

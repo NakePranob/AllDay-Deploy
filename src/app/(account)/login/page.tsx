@@ -29,7 +29,7 @@ import account from '@/stores/account';
 const page = observer(() => {
     return (
         <>
-            <section className="card w-[90%] sm:w-auto backdrop-blur-lg flex border-0 rounded-md shadow-2xl relative
+            <section className="card rounded-t-3xl sm:rounded-t-md w-full h-4/5 sm:h-auto sm:w-auto backdrop-blur-lg flex border-0 rounded-md shadow-2xl relative
             transition-all duration-300 ease-in-out">
                 <div className="w-[22rem] overflow-hidden rounded-l-md hidden md:block">
                     <Image

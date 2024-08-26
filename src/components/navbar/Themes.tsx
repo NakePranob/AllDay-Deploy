@@ -10,7 +10,7 @@ import { IoMoon } from "react-icons/io5";
 import { TfiLayoutMediaCenterAlt } from "react-icons/tfi";
 
 type Props = {
-
+    
 }
 
 const Themes = observer(({}: Props) => {
@@ -34,8 +34,8 @@ const Themes = observer(({}: Props) => {
     }
 
     return (
-        <button onClick={changmode} className="px-2 py-1 rounded-md hover:bg-blue-500/10
-         transition-300 font-bold">
+        <button onClick={changmode} className={`px-2 py-1 rounded-md hover:bg-blue-500/10
+         transition-300 font-bold`}>
             <span className={`${store.theme !== "light"   && "hidden"} flex-y-center gap-2`}>
                 <MdSunny/> <p className="hidden lg:block">ธีมสว่าง</p>
             </span>

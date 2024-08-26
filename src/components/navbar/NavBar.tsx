@@ -29,6 +29,7 @@ import { RiDoorOpenFill, RiDoorOpenLine,
     RiHotelFill, RiHotelLine,
     RiSettings3Fill, RiSettings3Line
 } from "react-icons/ri";
+import { IoChatbubblesOutline, IoChatbubbles } from "react-icons/io5";
 
 
 import Themes from "./Themes"
@@ -43,12 +44,15 @@ const NavBar = observer(() => {
     const DrawerList = (
         <Box sx={{ width: 280, height: '100vh' }} role="presentation"
         onClick={() => setOpen(false)} className='bg-base flex flex-col'>
-            <List className='flex px-4 pb-4 pt-4'>
+            <List className='flex px-4 pb-4 pt-4 relative'>
                 <h1 className={`text-3xl font-bold text-black dark:text-white relative ${inter.className}`}>
                     <TbMapPinSearch className="absolute text-xl -right-4 -bottom-1 text-blue-400"/>
                     ALLDAY
                     <span className="h-[.2rem] w-20 bg-blue-400 rounded-full absolute right-2 -bottom-1"></span>
                 </h1>
+                <div className='block xl:hidden absolute top-[1.65rem] right-4 scale-110'>
+                    <Themes/>
+                </div>
             </List>
             <List className='pt-4 flex-1'>
                 <ListItem disablePadding sx={{ fontSize: '2rem' }}> 
@@ -90,7 +94,20 @@ const NavBar = observer(() => {
                         </ListItemButton>
                     </Link>
                 </ListItem>
-                <hr className='hr-11/12 mb-2 mt-4 mx-4'/>
+                <ListItem disablePadding sx={{ fontSize: '2rem' }}> 
+                    <Link href={'/chat'} className={`w-11/12 rounded-e-full
+                        ${pathname === '/chat' && 'text-blue-500 bg-blue-500/10'}`}>
+                        <ListItemButton className='rounded-e-full'>
+                            <ListItemIcon className={`text-2xl ${pathname === '/chat' && 'text-blue-500'}`}>
+                                {pathname === '/chat' ? <IoChatbubbles /> : <IoChatbubblesOutline />}
+                            </ListItemIcon>
+                            <h4 className='text-base font-medium opacity-75'>
+                                กล่องข้อความ
+                            </h4>
+                        </ListItemButton>
+                    </Link>
+                </ListItem>
+                <hr className='w-[90%] hr-w mb-2 mt-4 mx-4'/>
                 <ListItem disablePadding sx={{ fontSize: '2rem' }}> 
                     <Link href={'/menage'} className={`w-11/12 rounded-e-full
                         ${pathname.startsWith('/menage') && 'text-blue-500 bg-blue-500/10'}`}>
@@ -118,24 +135,26 @@ const NavBar = observer(() => {
                     </Link>
                 </ListItem>
             </List>
-            <List className='flex-y-center gap-4 px-4 pb-4 pt-4 border-t-items'>
-                <Avatar 
-                    alt={status === 'authenticated' && session.user 
-                        ? session.user.image 
-                        : 'profile.webp'
-                    }
-                    src={status === 'authenticated' && session.user 
-                        ? session.user.image 
-                        : '/images/profile/profile.webp'
-                    } 
-                />
-                <div>
-                    <p className='text-ellipsis text-nowrap overflow-hidden whitespace-nowrap font-medium max-w-52 -mb-2'>
-                        {status === 'authenticated' && session.user ? session.user.name : 'บัญชีนี้ยังไม่มีชื่อ'}
-                    </p>
-                    <span className='text-xs opacity-70'>
-                        {status === 'authenticated' && session.user ? session.user.email : 'มีบางอย่างผิดพลาด'}
-                    </span>
+            <List>
+                <div className='flex-y-center gap-4 px-4 py-2 border-t-items'>
+                    <Avatar 
+                        alt={status === 'authenticated' && session.user 
+                            ? session.user.image 
+                            : 'profile.webp'
+                        }
+                        src={status === 'authenticated' && session.user 
+                            ? session.user.image 
+                            : '/images/profile/profile.webp'
+                        } 
+                    />
+                    <div>
+                        <p className='text-ellipsis text-nowrap overflow-hidden whitespace-nowrap font-medium max-w-52 -mb-2'>
+                            {status === 'authenticated' && session.user ? session.user.name : 'บัญชีนี้ยังไม่มีชื่อ'}
+                        </p>
+                        <span className='text-xs opacity-70'>
+                            {status === 'authenticated' && session.user ? session.user.email : 'มีบางอย่างผิดพลาด'}
+                        </span>
+                    </div>
                 </div>
             </List>
         </Box>
@@ -162,7 +181,7 @@ const NavBar = observer(() => {
 
     return (
         <>
-            <nav className={`fixed w-screen h-16 md:h-20 card shadow-sm transition-300 rounded-none
+            <nav className={`fixed w-screen h-16 md:h-20 card border-b shadow-sm transition-300 rounded-none
             flex-center z-999 ${navStore.head ? 'translate-y-0' : '-translate-y-16 sm:-translate-y-20' }`}>
                 <div className="w-full mx-4 xl:w-[90%] flex-y-center justify-between">
                     <div className='w-12 min-w-12 lg:w-auto lg:min-w-auto lg:hidden'>

@@ -64,8 +64,8 @@ const page = async () => {
             </div>
             <div className="gap-4 mt-6">
                 <div className="flex justify-center">
-                    <div className="card w-full md:w-[92%] aspect-video sm:aspect-[16/7] rounded-3xl relative overflow-hidden hover:aspect-square lg:hover:aspect-video
-                    md:hover:w-full
+                    <div className="card w-full md:w-[92%] aspect-video sm:aspect-[16/7] rounded-3xl relative overflow-hidden hover:aspect-square xl:hover:aspect-[16/7]
+                    md:hover:w-full xl:hover:w-[92%]
                     transition-all duration-700 ease-in-out hover:shadow-2xl dark:hover:shadow-xl hover:shadow-blue-300/60 dark:hover:shadow-blue-950/60">
                         <Carousel data={data?.dormitory_type.dormitory_typeimg}/>
                         <p className="font-semibold text-white bg-blue-400 shadow-lg

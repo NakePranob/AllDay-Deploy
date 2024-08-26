@@ -46,9 +46,6 @@ const RoomList = observer(() => {
 
     const style = {
         position: 'absolute' as 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
         boxShadow: 24,
         p: 4,
     };
@@ -80,7 +77,8 @@ const RoomList = observer(() => {
                 aria-labelledby="modal-formReserve-title"
                 aria-describedby="modal-formReserve-description"
                 >
-                <Box sx={style} className='card w-[95%] sm:w-[32rem] alert'>
+                <Box sx={style} className='card w-full rounded-b-none sm:rounded-b-2xl sm:w-[32rem] alert sm:top-1/2 sm:left-1/2 
+                sm:translate-x-[-50%] sm:translate-y-[-50%] bottom-0 sm:bottom-auto left-0 p-4'>
                     <Typography id="modal-formReserve-title" variant="h6" component="h2" className='flex justify-between'>
                         <p className='text-ellipsis max-w-[70%] overflow-hidden whitespace-nowrap'>
                             {dormitoryOnly?.data?.dormitory_type?.length > 0 && dormitoryOnly?.formReserve?.id !== undefined && dormitoryOnly?.data?.dormitory_type[dormitoryOnly.formReserve.id]?.name
@@ -108,7 +106,7 @@ const RoomList = observer(() => {
                         id="modal-formReserve-description"
                         className='mt-6'
                     >
-                        <div className='border-items rounded-xl p-4 grid grid-cols-1 sm:grid-cols-3 gap-4'>
+                        <div className='sm:border-items rounded-xl pb-4 sm:p-4 grid grid-cols-1 sm:grid-cols-3 gap-4'>
                             <InputLabel className='col-span-1 sm:col-span-3 mb-2'>วันที่เข้าดูหอพัก</InputLabel>
                             <TextField
                                 id="day"

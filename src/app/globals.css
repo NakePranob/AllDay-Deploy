@@ -235,6 +235,7 @@
 }
 
 @keyframes exampleAnimation {
-  0% {opacity: 0; margin-top: -10rem;}
+  0% {opacity: 0; margin-bottom: -20rem;}
+  80% {margin-bottom: 0;}
   100% {opacity: 1;}
 }

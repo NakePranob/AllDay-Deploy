@@ -26,7 +26,7 @@ import account from '@/stores/account';
 const page = observer(() => {
     return (
         <>
-            <section className="card rounded-t-3xl sm:rounded-t-md w-full h-4/5 sm:h-auto sm:w-auto backdrop-blur-lg flex border-0 rounded-lg shadow-2xl relative
+            <section className="card rounded-t-3xl rounded-b-none sm:rounded-t-md sm:rounded-b-md w-full h-4/5 sm:h-auto sm:w-auto backdrop-blur-lg flex border-0 rounded-lg shadow-2xl relative
             transition-all duration-300 ease-in-out">
                 <div className="w-[22rem] overflow-hidden rounded-l-lg hidden md:block">
                     <Image
@@ -110,7 +110,7 @@ const page = observer(() => {
                     <div className='w-full mt-4 text-sm'>
                         <Link href={'#'}>คุณลืมรหัสผ่าน?</Link>
                     </div>
-                    <div className='flex-y-center gap-4 text-sm mt-24 sm:mt-5'>
+                    <div className='flex-y-center gap-4 text-sm mt-12 sm:mt-5'>
                         <Link href={'/'}>กลับสู่หน้าหลัก</Link>
                         <hr className='hr-h h-4'/>
                         <Link href={'/login'}>เข้าสู่ระบบ</Link>

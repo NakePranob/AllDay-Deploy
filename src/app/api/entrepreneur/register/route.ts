@@ -136,7 +136,7 @@ async function createDormitoryWithDetails(formData: FormData) {
 export async function POST(req: Request) {
     try {
         const formData = await req.formData();
-        // const dormitory = await createDormitoryWithDetails(formData);
+        const dormitory = await createDormitoryWithDetails(formData);
 
         return new Response(JSON.stringify({ message: 'success' }), { status: 200 });
     } catch (error) {

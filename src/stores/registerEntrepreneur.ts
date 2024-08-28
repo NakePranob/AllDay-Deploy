@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 import { ChangeEvent } from "react";
 import axios from "axios";
 import type { Image, TypeRoom, Dormitory_state, Location_distance } from "@/Types/registerEntrepreneur";
@@ -294,12 +294,12 @@ class RegisterEntrepreneur {
                 const self = this;
                 const response = await axios.post(`/api/entrepreneur/register`, formData, {
                     onUploadProgress(progressEvent) {
-                        if (progressEvent.progress) {
-                            const percentCompleted = (progressEvent.progress)*100;
-                            const diff = Math.random() * 10;
-                            const diff2 = Math.random() * 10;
-                            self.setProgress(percentCompleted + diff);
-                            self.setBuffer(percentCompleted + diff + diff2);
+                        if (progressEvent.total) {
+                            // const percentCompleted = (progressEvent.progress)*100;
+                            const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                            self.setProgress(percentCompleted);
+                            self.setBuffer(percentCompleted + 10);
+                            console.log(percentCompleted);
                         }
                     },
                     headers: {
@@ -314,16 +314,18 @@ class RegisterEntrepreneur {
                     text: 'ลงทะเบียนสำเร็จทางทีมงานจะเดินทางไปที่หอพักของทาน เพื่อตรวจสอบที่พักภายใน 7 วัน',
                     link: '/'
                 });
-                this.name = '';
-                this.price = '';
-                this.location = '';
-                this.facebook = '';
-                this.line = '';
-                this.doc = '';
-                this.phone = '';
-                this.state = {} as Dormitory_state;
-                this.imageList = [];
-                this.typeRoomList = [];
+                runInAction(() => {
+                    this.name = '';
+                    this.price = '';
+                    this.location = '';
+                    this.facebook = '';
+                    this.line = '';
+                    this.doc = '';
+                    this.phone = '';
+                    this.state = {} as Dormitory_state;
+                    this.imageList = [];
+                    this.typeRoomList = [];
+                });
             } catch (error) {
                 this.setAlert({
                     open: true,

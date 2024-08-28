@@ -60,7 +60,7 @@ const page = async ({ params }: { params: { id: string } }) => {
                 <div className='card rounded-3xl rounded-b-none sm:rounded-b-3xl mt-8 px-4 md:px-16 pt-8'>
                     <h1 className='text-xl font-semibold text-center'>{data.name}</h1>
                     <p className='text-center opacity-70'>{data.engname ? data.engname : ''}</p>
-                    <div className='h-96 bg-red-200 rounded-xl overflow-hidden relative mt-4'>
+                    <div className='h-96 rounded-xl overflow-hidden relative mt-4'>
                         <Carousel data={data.dormitory_img}/>
                         <h1 className='absolute top-0 right-0 py-2 px-4 font-bold bg-blue-400 text-white z-50 rounded-bl-3xl'>
                             THE {data.price}

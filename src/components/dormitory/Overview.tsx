@@ -251,7 +251,7 @@ const Overview = observer(({dmtId}: {dmtId: string}) => {
                         {dormitoryOnly.data.phone &&
                             <p className="text-lg flex-y-center">
                                 <PiPhoneCallFill className="hidden sm:block"/>
-                                <span className="ms-1 mt-1 text-sm opacity-70 font-medium">{dormitoryOnly.data.phone}</span>
+                                <span className="ms-1 mt-1 text-sm opacity-70 font-medium">0{dormitoryOnly.data.phone}</span>
                             </p>
                         }
                     </div>

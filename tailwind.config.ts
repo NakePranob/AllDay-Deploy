@@ -25,6 +25,7 @@ const config: Config = {
         '999': '999',
       },
       boxShadow: {
+        'sm': '0px 1px 4px rgb(0 0 0 / 0.12), 0px 1px 1px rgb(0 0 0 / 0.05)',
         'md': '0 2px 7px -3px rgba(0, 0, 0, 0.3)',
       }
     },

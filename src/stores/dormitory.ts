@@ -109,14 +109,15 @@ class dormitory {
                 this.addDataState = false;
                 const ids = this.dormitoryList.map(dormitory => dormitory.id);
                 const maxId = Math.max(...ids);
-                const result = await axios.get(`/api/getDormitory`, {
-                    headers: {
-                        'lastFields': maxId.toString()
-                    },
-                });
-                console.log('test',result.data);
-                this.addDataState = true;
-                this.setDormitoryList([...this.dormitoryList, ...result.data]);
+                if (maxId > 1) {
+                    const result = await axios.get(`/api/getDormitory`, {
+                        headers: {
+                            'lastFields': maxId.toString()
+                        },
+                    });
+                    this.addDataState = true;
+                    this.setDormitoryList([...this.dormitoryList, ...result.data]);
+                }
             }
         } catch (error) {
             console.log(error);

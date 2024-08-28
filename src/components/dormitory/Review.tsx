@@ -153,7 +153,7 @@ const Review = observer(({ dormitoryId }: { dormitoryId: string }) => {
                             <li className="p-4 border-items rounded-xl" key={i}>
                                 <div className="flex relative gap-2">
                                     <div className="flex gap-2">
-                                        <p className="text-base font-medium">{item.user.firstname ? item.user.firstname : "Not Name"} {item.user?.lastname}</p>
+                                        <p className="text-base font-medium">{item.user.firstname ? item.user.firstname : "ผู้ใช้งานไม่ระบุชื่อ"} {item.user?.lastname}</p>
                                         <p className="text-xs mt-[.35rem] opacity-70">{StringDatetimeToDate(item.createdAt)}</p>
                                     </div>
                                     <div className="absolute right-0 flex-center flex-col

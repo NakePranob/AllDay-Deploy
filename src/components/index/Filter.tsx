@@ -32,7 +32,7 @@ const Filter = observer(() => {
                 className={`h-screen w-screen bg-black/60 fixed z-999 left-0 top-0 ${!dormitory.filterDrawer && "hidden"}`}>
             </span>
             <aside className={`w-72 lg:w-80 fixed xl:static scrollreg border-e-items xl:border-0 ${dormitory.filterDrawer ? "left-0" : "-left-80"}
-            bg-base xl:bg-white/0 xl:dark:bg-dark/0 top-0 z-999 xl:z-0 xl:h-auto h-screen overflow-y-auto 
+            bg-base xl:bg-white/0 xl:dark:bg-dark/0 top-0 z-999 xl:z-0 xl:h-auto h-screen overflow-auto lg:px-[1px]
             transition-all duration-500 xl:duration-0 ease-in-out`}>
                 <div className='flex flex-col xl:gap-2'>
                     <section className='aspect-[16/7]  rounded-none xl:rounded-2xl overflow-hidden relative shadow-md'>

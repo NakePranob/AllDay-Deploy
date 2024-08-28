@@ -44,7 +44,7 @@ const MenuHeader = observer((props: any) => {
 
     return (
         <div className={`bg-base shadow-sm sticky z-[700] transition-all ease-in-out duration-300
-        ${navStore.head && navStore.lastScroll > 30 ? 'top-16 md:top-20' : 'top-0' } border-b-items hidden sm:block`}>
+        ${navStore.head && navStore.lastScroll > 30 ? 'top-[63px] md:top-[79px]' : 'top-[-1px]' } border-b-items hidden sm:block`}>
             <div className="hidden sm:flex justify-between container items-end h-14">
                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                     <Tab label="ภาพรวม" sx={{ fontWeight: "bold" }}/>

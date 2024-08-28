@@ -65,23 +65,23 @@
   }
 
   .border-items {
-    @apply border border-gray-400/30 dark:border-gray-700;
+    @apply border border-gray-400/30 dark:border-gray-700/50;
   }
 
   .border-s-items {
-    @apply border-s border-black/[0.04] dark:border-gray-700;
+    @apply border-s border-black/[0.04] dark:border-gray-700/50;
   }
 
   .border-e-items {
-    @apply border-e border-black/[0.04] dark:border-gray-700;
+    @apply border-e border-black/[0.04] dark:border-gray-700/50;
   }
 
   .border-t-items {
-    @apply border-t border-black/[0.04] dark:border-gray-700;
+    @apply border-t border-black/[0.04] dark:border-gray-700/50;
   }
 
   .border-b-items {
-    @apply border-b border-black/[0.04] dark:border-gray-700;
+    @apply border-b border-black/[0.04] dark:border-gray-700/50;
   }
 
   .bg-base {
@@ -129,11 +129,11 @@
   }
 
   .card {
-    @apply bg-white dark:bg-dark rounded-2xl shadow-sm border border-gray-400/30 dark:border-gray-700/20;
+    @apply bg-white dark:bg-dark rounded-2xl shadow-sm;
   }
 
   .hr-w {
-    @apply border-t border-slate-200 dark:border-gray-700 w-full;
+    @apply border-t border-slate-200 dark:border-gray-700/50 w-full;
   }
 
   .hr-h {

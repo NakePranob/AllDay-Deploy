@@ -55,7 +55,7 @@ const page = async () => {
             <h1 className="text-xl sm:text-2xl font-semibold">
                 รายละเอียดการจองของฉัน
             </h1>
-            <div className="bg-blue-400/30 rounded-2xl px-4 py-2 mt-2 sm:flex justify-between">
+            <div className="bg-blue-400/30 rounded-2xl sm:rounded-full px-4 py-2 mt-2 sm:flex justify-between">
                 <div className="sm:flex gap-2 items-end">
                     <p className="font-semibold">หมายเลขการจอง:</p>
                     <p className="text-sm">{data?.code}</p>

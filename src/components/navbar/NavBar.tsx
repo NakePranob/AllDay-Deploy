@@ -181,9 +181,9 @@ const NavBar = observer(() => {
 
     return (
         <>
-            <nav className={`fixed w-screen h-16 md:h-20 card border-b shadow-sm transition-300 rounded-none
+            <nav className={`fixed w-screen h-16 md:h-20 card transition-300 rounded-none
             flex-center z-999 ${navStore.head ? 'translate-y-0' : '-translate-y-16 sm:-translate-y-20' }`}>
-                <div className="w-full mx-4 xl:w-[90%] flex-y-center justify-between">
+                <div className={`w-full mx-4 ${pathname.startsWith('/menage/') ? "" : "xl:w-[90%]"} flex-y-center justify-between`}>
                     <div className='w-12 min-w-12 lg:w-auto lg:min-w-auto lg:hidden'>
                         <Tooltip 
                             onClick={()=>setOpen(true)}
@@ -210,22 +210,51 @@ const NavBar = observer(() => {
                             hover:bg-blue-500/10 transition-300`}>
                                 หน้าหลัก
                             </Link>
-                            <Link href={'/favorites'} className={`${pathname === '/favorites' && 'font-bold text-blue-400'} rounded-md py-1 px-2 mt-1 
-                            hover:bg-blue-500/10 transition-300`}>
-                                รายการโปรด
-                            </Link>
-                            <Link href={'/reservations'} className={`${pathname === '/reservations' && 'font-bold text-blue-400'} rounded-md py-1 px-2 mt-1 
-                            hover:bg-blue-500/10 transition-300`}>
-                                ห้องพักที่จอง
-                            </Link>
-                            <Link href={'/menage'} className={`${pathname === '/menage' && 'font-bold text-blue-400'} rounded-md py-1 px-2 mt-1 
-                            hover:bg-blue-500/10 transition-300`}>
-                                กล่องจดหมาย
-                            </Link>
-                            <Link href={'/menage'} className={`${pathname === '/menage' && 'font-bold text-blue-400'} rounded-md py-1 px-2 mt-1 
-                            hover:bg-blue-500/10 transition-300`}>
-                                จัดการหอพัก
-                            </Link>
+                            {
+                                pathname.startsWith('/menage') 
+                                ? 
+                                <>
+                                    <Link href={'/menage'} className={`${pathname === '/menage' && 'font-bold text-blue-400'} rounded-md py-1 px-2 mt-1 
+                                    hover:bg-blue-500/10 transition-300`}>
+                                        รายการหอพัก
+                                    </Link>
+                                    <Link href={'/registerEntrepreneur'} className={`${pathname === '/registerEntrepreneur' && 'font-bold text-blue-400'} rounded-md py-1 px-2 mt-1 
+                                    hover:bg-blue-500/10 transition-300`}>
+                                        เพิ่มหอพัก
+                                    </Link>
+                                    <Link href={'/5'} className={`${pathname === '/s' && 'font-bold text-blue-400'} rounded-md py-1 px-2 mt-1 
+                                    hover:bg-blue-500/10 transition-300`}>
+                                        กล่องข้อความ
+                                    </Link>
+                                    <Link href={'/5'} className={`${pathname === '/s' && 'font-bold text-blue-400'} rounded-md py-1 px-2 mt-1 
+                                    hover:bg-blue-500/10 transition-300`}>
+                                        ติดต่อผู้ดูแลระบบ
+                                    </Link>
+                                </>
+                                :
+                                pathname.startsWith('/admin') 
+                                ?
+                                <></>
+                                :
+                                <>
+                                    <Link href={'/favorites'} className={`${pathname === '/favorites' && 'font-bold text-blue-400'} rounded-md py-1 px-2 mt-1 
+                                    hover:bg-blue-500/10 transition-300`}>
+                                        รายการโปรด
+                                    </Link>
+                                    <Link href={'/reservations'} className={`${pathname === '/reservations' && 'font-bold text-blue-400'} rounded-md py-1 px-2 mt-1 
+                                    hover:bg-blue-500/10 transition-300`}>
+                                        ห้องพักที่จอง
+                                    </Link>
+                                    <Link href={'/menage'} className={`${pathname === '/menage' && 'font-bold text-blue-400'} rounded-md py-1 px-2 mt-1 
+                                    hover:bg-blue-500/10 transition-300`}>
+                                        กล่องจดหมาย
+                                    </Link>
+                                    <Link href={'/menage'} className={`${pathname === '/menage' && 'font-bold text-blue-400'} rounded-md py-1 px-2 mt-1 
+                                    hover:bg-blue-500/10 transition-300`}>
+                                        จัดการหอพัก
+                                    </Link>
+                                </> 
+                            }
                         </div>
                     </div>
                     <div className="flex-y-center justify-end gap-2 w-12 min-w-12 lg:w-auto lg:min-w-auto">

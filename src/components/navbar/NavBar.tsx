@@ -258,7 +258,7 @@ const NavBar = observer(() => {
                         </div>
                     </div>
                     <div className="flex-y-center justify-end gap-2 w-12 min-w-12 lg:w-auto lg:min-w-auto">
-                        <div className='hidden lg:block'>
+                        <div className='hidden lg:block me-3'>
                             <Themes/>
                         </div>
                         {status === 'authenticated' && session.user ? 

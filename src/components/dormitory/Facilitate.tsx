@@ -10,6 +10,7 @@ import { PiDogFill } from "react-icons/pi";
 import { GiLift, GiSecurityGate, GiKeyCard, GiWashingMachine } from "react-icons/gi";
 import { RiFingerprintFill, RiRestaurantLine } from "react-icons/ri";
 import { GrUserPolice } from "react-icons/gr";
+import { MdStorefront } from "react-icons/md";
 
 const Facilitate = observer(() => {
     useEffect(() => {
@@ -39,7 +40,7 @@ const Facilitate = observer(() => {
             </span>
             <span className={`col-span-2 flex-y-center gap-4 text-sm
                 ${dormitoryOnly.data.dormitory_state?.store ? '' : 'opacity-50 grayscale'}`}>
-                <BiCctv className="text-xl text-blue-500"/> ร้านสะดวกซื้อ
+                <MdStorefront className="text-xl text-blue-500"/> ร้านสะดวกซื้อ
             </span>
             <span className={`col-span-2 flex-y-center gap-4 text-sm
                 ${dormitoryOnly.data.dormitory_state?.lift ? '' : 'opacity-50 grayscale'}`}>

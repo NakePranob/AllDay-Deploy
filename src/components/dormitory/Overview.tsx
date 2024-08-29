@@ -138,13 +138,13 @@ const Overview = observer(({dmtId}: {dmtId: string}) => {
                     bg-map-gradient dark:bg-map-gradient-dark bg-contain bg-no-repeat bg-right-top">
                         <div className="flex-y-center justify-between">
                             <h1 className="text-xl font-medium">ที่ตั้งหอพัก</h1>
-                            <Link href={dormitoryOnly.data.location ? dormitoryOnly.data.location : '#'} className="flex-y-center gap-1 hover:gap-2 text-blue-500 font-bold
+                            <Link passHref href={dormitoryOnly.data.location ? dormitoryOnly.data.location : '#'} className="flex-y-center gap-1 hover:gap-2 text-blue-500 font-bold
                             hover:text-blue-700 dark:hover:text-blue-400 transition-all transition-300">
                                 <p>ดูแผนที่</p>
                                 <IoIosArrowForward/>
                             </Link>
                         </div>
-                        <Link href={dormitoryOnly.data.location ? dormitoryOnly.data.location : '#'} className="flex-y-center mt-4 gap-4 text-2xl 
+                        <Link passHref href={dormitoryOnly.data.location ? dormitoryOnly.data.location : '#'} className="flex-y-center mt-4 gap-4 text-2xl 
                         hover:text-blue-400 transition-300">
                             <HiLocationMarker className="min-w-6"/>
                             <p className="text-sm">

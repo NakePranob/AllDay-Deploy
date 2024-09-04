@@ -132,6 +132,10 @@
     @apply bg-white dark:bg-dark rounded-2xl shadow-sm;
   }
 
+  .card-body {
+    @apply p-4;
+  }
+
   .hr-w {
     @apply border-t border-slate-200 dark:border-gray-700/50 w-full;
   }

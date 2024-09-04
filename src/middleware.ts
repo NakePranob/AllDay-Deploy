@@ -10,7 +10,7 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL('/login', request.url));
     }
 
-    const { id: userId , roleId: userRoleId } = user;
+    const { id: userId, roleId: userRoleId, name: fullname } = user;
     const url = request.nextUrl.pathname;
 
     // Admin routes protection
@@ -27,6 +27,7 @@ export async function middleware(request: NextRequest) {
         if (userRoleId === '2' || userRoleId === '3') {
             const requestHeaders = new Headers(request.headers);
             requestHeaders.set('userId', userId as string);
+            requestHeaders.set('name', fullname as string);
             return NextResponse.next({
                 request: {
                     headers: requestHeaders,

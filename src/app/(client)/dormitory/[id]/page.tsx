@@ -33,7 +33,7 @@ async function Page({ params }: { params: { id: string } }) {
                 <MenuHeader data={data}/>
                 <div className="sm:container sm:pt-6 xl:px-16 z-10">
                     <section className="sm:card border-0 aspect-video sm:aspect-auto sm:h-72 md:h-96 sm:rounded-b-none overflow-hidden sm:mx-5 shadow-md">
-                        <Carousel data={data.dormitory_img}/>
+                        <Carousel data={data.dormitory_img} path='dormitoryImages'/>
                     </section>
                     <Overview dmtId={params.id}/>
                     <h1 className='text-lg lg:text-xl font-semibold mt-4 py-2 ps-4 sm:ps-0 border-t sm:border-none

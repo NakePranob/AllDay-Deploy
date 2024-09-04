@@ -1,3 +1,4 @@
+'use client'
 export function DayOption() {
     const array = Array.from({ length: 31 }, (_, i) => i + 1);
     return array;

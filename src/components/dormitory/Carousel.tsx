@@ -14,7 +14,7 @@ import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 
 import type { Dormitory_img } from '@/Types/dormitory';
 
-const Carousel = ({data}: any) => {
+const Carousel = ({data, path}: any) => {
     const progressCircle = useRef<SVGSVGElement>(null);
     const progressContent = useRef<HTMLSpanElement>(null);
 
@@ -37,13 +37,13 @@ const Carousel = ({data}: any) => {
                 dynamicBullets: true,
             }}
             navigation={false}
-            modules={[Autoplay, Pagination, Navigation]}
+            modules={path === 'dormitoryImages' ? [Autoplay, Pagination, Navigation] : [Autoplay]}
             onAutoplayTimeLeft={onAutoplayTimeLeft}
         >
             {data?.map((item: Dormitory_img, i: number) => (
                 <SwiperSlide key={i}>
                     <Image
-                        src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/dormitoryImages/${item.url}`}
+                        src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${path}/${item.url}`}
                         alt={item.url}
                         width={1920}
                         height={950}

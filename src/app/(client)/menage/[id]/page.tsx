@@ -1,25 +1,30 @@
 import Loader from '@/components/Loader'
 import Link from "next/link";
 import axios from "axios";
+import { headers } from "next/headers";
 
 // Components
 import MenageMenu from '@/components/dormitory/MenageMenu';
 import Carousel from "@/components/dormitory/Carousel";
-import MenuHeader from "@/components/dormitory/MenuHeader";
-import Overview from "@/components/dormitory/Overview";
-import RoomList from "@/components/dormitory/RoomList";
-import Facilitate from "@/components/dormitory/Facilitate";
-import Review from "@/components/dormitory/Review";
 
 // Icons
 import { IoIosFitness } from "react-icons/io";
 import { BiCctv } from "react-icons/bi";
-import { FaWifi, FaSmoking, FaCarSide, FaMotorcycle } from "react-icons/fa";
+import { FaWifi, FaSmoking, FaCarSide, FaMotorcycle, FaRegEdit } from "react-icons/fa";
 import { PiDogFill } from "react-icons/pi";
 import { GiLift, GiSecurityGate, GiKeyCard, GiWashingMachine } from "react-icons/gi";
 import { RiFingerprintFill, RiRestaurantLine } from "react-icons/ri";
 import { GrUserPolice } from "react-icons/gr";
 import { MdStorefront } from "react-icons/md";
+import { AiOutlinePlusCircle } from "react-icons/ai";
+
+// Mui
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+
 
 async function getData(id: string) {
     try {
@@ -32,6 +37,8 @@ async function getData(id: string) {
 }
 
 const page = async ({ params }: { params: { id: string } }) => {
+    const headerRequest = headers();
+    const name = headerRequest.get('name');
     const data = await getData(params.id);
     const totalQuantity = data.dormitory_type.reduce((sum:number, dormitory:any) => sum + dormitory.quantity, 0);
     const totalOccupied = data.dormitory_type.reduce((sum:number, dormitory:any) => sum + dormitory.occupied, 0);
@@ -41,27 +48,38 @@ const page = async ({ params }: { params: { id: string } }) => {
             <MenageMenu param={params.id}/>
             <div className='sm:container'>
                 <div className='flex-y-center flex-col lg:flex-row gap-4 pt-6'>
-                    <div className='flex-1'>
+                    <div className='flex-1 flex flex-col items-center lg:items-start'>
                         <h1 className='text-2xl md:text-4xl font-bold'>
-                            ยินดีต้อนรับคุณ, ชื่อ นามสกุล!
+                            ยินดีต้อนรับคุณ, {name?.startsWith('null') ? 'ยังไม่กำหนดชื่อ' : name}!
                         </h1>
                         <p className='opacity-80 text-sm md:text-base'>คุณสามารถจัดการหอพักของคุณได้ที่นี่ ได้ตามต้องการ</p>
                     </div>
                     <div className='flex-y-center gap-4 md:gap-8'>
                         <div className='flex flex-col items-end'>
                             <span>จำนวนผู้เช่าที่ได้รับการยืนยัน</span>
-                            <h1 className='text-5xl italic font-bold'>{totalOccupied}/{totalQuantity}</h1>
+                            <h1 className='text-5xl italic font-bold relative'>
+                                {totalOccupied}/{totalQuantity}
+                            </h1>
                         </div>
                         <div className='scale-75 md:scale-100'>
                             <Loader percentage={percentage}/>
                         </div>
                     </div>
                 </div>
-                <div className='card rounded-3xl rounded-b-none sm:rounded-b-3xl mt-8 px-4 md:px-16 pt-8'>
-                    <h1 className='text-xl font-semibold text-center'>{data.name}</h1>
-                    <p className='text-center opacity-70'>{data.engname ? data.engname : ''}</p>
+                <div className='card rounded-3xl rounded-b-none sm:rounded-b-3xl mt-8 px-4 md:px-16 pt-8 pb-8
+                relative overflow-hidden'>
+                    <Link href={`/menage/${params.id}/edit`} className='absolute ps-[0.65rem] pb-[0.65rem] p-2 
+                    md:right-8 md:top-8 top-4 right-4
+                    bg-black dark:bg-white flex-center rounded-full transition-300
+                    hover:bg-blue-400 hover:text-white text-white dark:text-black'>
+                        <FaRegEdit/>
+                    </Link>
+                    <div className='flex-y-center flex-col'>
+                        <h1 className='text-xl font-semibold text-center max-w-[90%]'>{data.name}</h1>
+                        <p className='text-center opacity-70 max-w-[90%]'>{data.engname ? data.engname : ''}</p>
+                    </div>
                     <div className='h-96 rounded-xl overflow-hidden relative mt-4'>
-                        <Carousel data={data.dormitory_img}/>
+                        <Carousel data={data.dormitory_img} path='dormitoryImages'/>
                         <h1 className='absolute top-0 right-0 py-2 px-4 font-bold bg-blue-400 text-white z-50 rounded-bl-3xl'>
                             THE {data.price}
                         </h1>
@@ -137,6 +155,50 @@ const page = async ({ params }: { params: { id: string } }) => {
                             <FaSmoking className="text-xl text-blue-500"/> พื้นที่สูบบุหรี่
                         </span>
                     </section>
+                    <h4 className='text-lg lg:text-xl font-semibold mt-6 mb-4'>ห้องพัก</h4>
+                    <div className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4'>
+                    {data.dormitory_type.map((v:any, k:number)=>(
+                        <Link href={`/menage/room/${v.id}`} key={k} className="flex gap-2 h-28 col-span-1">
+                            <div className="h-full aspect-square bg-slate-200 rounded-xl overflow-hidden">
+                                <Carousel data={v.dormitory_typeimg} path='dormitoryTypeImages'/>
+                            </div>
+                            <div className="py-2 text-left">
+                                <h1 className="font-medium">{v.name}</h1>
+                                <p className="font-semibold text-sm">THB{v.price}</p>
+                                <p className='text-xs opacity-70'>ขนาดห้อง {((v.width/100)*(v.length/100)).toFixed(1)} ตร.ม.</p>
+                                <p className='text-xs opacity-70'>จำนวณผู้เข้าพัก {v.occupied}/{v.quantity} คน</p>
+                            </div>
+                        </Link>
+                    ))}
+                        <div className='col-span-1'>
+                            <Link href={'#'} className='border-dashed border-2 border-slate-500/40 flex-center text-6xl
+                            bg-slate-500/30 rounded-xl aspect-square w-28 opacity-30 hover:opacity-60 transition-300'>
+                                <AiOutlinePlusCircle className='opacity-50'/>
+                            </Link>
+                        </div>
+                    </div>
+                    <h4 className='text-lg lg:text-xl font-semibold mt-6 mb-4'>สถานที่ใกล้กับหอพัก</h4>
+                    <Table sx={{ width: '100%' }} aria-label="simple table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>สถานที่</TableCell>
+                                <TableCell align="right">ห่างจากหอพัก</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {data.location_distance.map((v:any, k:number) => (
+                                <TableRow
+                                    key={k}
+                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                >
+                                    <TableCell component="th" scope="row">
+                                        {v.location}
+                                    </TableCell>
+                                    <TableCell align="right">{v.distance} กม.</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
                 </div>
             </div>
         </div>

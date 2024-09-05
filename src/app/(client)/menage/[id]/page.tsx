@@ -7,7 +7,6 @@ import Link from "next/link";
 import axios from "axios";
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
-import resize from '@/function/resize';
 // Components
 import Carousel from "@/components/dormitory/Carousel";
 
@@ -43,7 +42,6 @@ import TableRow from '@mui/material/TableRow';
 
 
 const page = observer(({ params }: { params: { id: string } }) => {
-    const width = resize()
     const { data: session, status } = useSession();
     const [imgModal, setImgModal] = useState(false);
     const [allImg, setAllImg] = useState(false);

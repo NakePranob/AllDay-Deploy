@@ -1,6 +1,6 @@
 import { makeAutoObservable, runInAction, action } from "mobx";
 import axios from "axios";
-import type { Dormitory, Favorites } from "@/Types/dormitory";
+import type { Dormitory, Favorites, Dormitory_img } from "@/Types/dormitory";
 import { AlertType } from "@/Types/alert";
 
 type OpjDate = {
@@ -9,6 +9,9 @@ type OpjDate = {
 
 class dormitoryOnly {
     data: Dormitory = {} as Dormitory;
+    lastImg: number = 0;
+    previewImg: Dormitory_img | null = null;
+    previewImgList: Dormitory_img[] = [];
     open: boolean = false;
     dmtId: number = 0;
     FavoriteState: boolean = false;
@@ -33,6 +36,19 @@ class dormitoryOnly {
         makeAutoObservable(this, {
             setFavoriteList: action.bound,  // Ensure favoriteList is updated through an action
         });
+    }
+
+    // Menage
+    setLastImg(count: number) {
+        this.lastImg = count;
+    }
+
+    setPreviewImg(data: Dormitory_img) {
+        this.previewImg = data;
+    }
+
+    setPreviewImgList(data: Dormitory_img[]) {
+        this.previewImgList = data;
     }
 
     setDmtId(id: string | null | undefined) {

@@ -1,7 +1,8 @@
-'use client'
+'use client';
 import { useState, useEffect } from 'react';
 
-const resize = () => {
+// Rename to follow React hook naming convention
+const useResize = () => {
     const [width, setWidth] = useState<number>(0);
 
     const handleResize = () => {
@@ -11,6 +12,8 @@ const resize = () => {
     };
 
     useEffect(() => {
+        // Set initial width
+        setWidth(window.innerWidth);
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
@@ -18,4 +21,4 @@ const resize = () => {
     return width;
 };
 
-export default resize;
+export default useResize;

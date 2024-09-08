@@ -71,6 +71,10 @@ const handler = NextAuth({
     adapter: PrismaAdapter(prisma),
     session: {
         strategy: "jwt",
+        maxAge: 30 * 24 * 60 * 60, // 30 days (set the session duration)
+    },
+    jwt: {
+        maxAge: 30 * 24 * 60 * 60, // 30 days (set the JWT token expiration)
     },
     callbacks: {
         jwt: async ({ token, user }) => {

@@ -24,7 +24,7 @@ model User {
   chat      Chat[]
   dormitory Dormitory[]
   favorite  Favorite[]
-  reserve   Reserve[]
+  reserve   Reserve?
   review    Review[]
   role      Role        @relation(fields: [roleId], references: [id])
 }
@@ -78,12 +78,12 @@ model Chat {
   dmtId     Int
   dormitory Dormitory  @relation(fields: [dmtId], references: [id])
   user      User       @relation(fields: [userId], references: [id])
-  chat_msg  Chat_msg[]
+  chat_msg  Chat_msg?
 }
 
 model Chat_msg {
   id         Int      @id @default(autoincrement())
-  chatId     Int
+  chatId     Int      @unique
   content    String   @db.VarChar(255)
   state_chat Boolean
   read_user  Boolean  @default(false)
@@ -94,8 +94,8 @@ model Chat_msg {
 
 model Dormitory {
   id                Int                 @id @default(autoincrement())
-  name              String              @db.VarChar(30)
-  engname           String
+  name              String              @db.VarChar(70)
+  engname           String              @db.VarChar(70)
   userId            Int
   address           String?
   location          String?             @db.VarChar(50)

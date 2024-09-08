@@ -1,13 +1,15 @@
 import { makeAutoObservable, runInAction, action } from "mobx";
 import axios from "axios";
-import type { Dormitory, Favorites, Dormitory_img } from "@/Types/dormitory";
+import type { Dormitory, Favorites, Dormitory_img, Dormitory_state } from "@/Types/dormitory";
 import { AlertType } from "@/Types/alert";
+import { format } from "path";
 
 type OpjDate = {
     date: string
 }
 
 class dormitoryOnly {
+    loadingState: string | number | null = null;
     data: Dormitory = {} as Dormitory;
     lastImg: number = 0;
     previewImg: Dormitory_img | null = null;
@@ -59,6 +61,257 @@ class dormitoryOnly {
         this.reserveState = state;
     }
 
+    async updateFacilities(key: number, where: string, state: boolean) {
+        try {
+            const result = await axios.put('/api/dormitory/facilities', {key, where, state})
+            return result.data;
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
+    }
+
+    async setFacilities(where: string) {
+        this.loadingState = where;  // Set loading state for the current facility
+        let result: boolean | null = null;
+    
+        switch(where) {
+            case "wifi":
+                result = await this.updateFacilities(this.data.dormitory_state.id, "wifi", !this.data.dormitory_state.wifi);
+                if (result) {
+                    this.data.dormitory_state.wifi = !this.data.dormitory_state.wifi;
+                }
+                break;
+            case "park_car":
+                result = await this.updateFacilities(this.data.dormitory_state.id, "park_car", !this.data.dormitory_state.park_car);
+                if (result) {
+                    this.data.dormitory_state.park_car = !this.data.dormitory_state.park_car;
+                }
+                break;
+            case "park_motorcycle":
+                result = await this.updateFacilities(this.data.dormitory_state.id, "park_motorcycle", !this.data.dormitory_state.park_motorcycle);
+                if (result) {
+                    this.data.dormitory_state.park_motorcycle = !this.data.dormitory_state.park_motorcycle;
+                }
+                break;
+            case "washing":
+                result = await this.updateFacilities(this.data.dormitory_state.id, "washing", !this.data.dormitory_state.washing);
+                if (result) {
+                    this.data.dormitory_state.washing = !this.data.dormitory_state.washing;
+                }
+                break;
+            case "restaurant":
+                result = await this.updateFacilities(this.data.dormitory_state.id, "restaurant", !this.data.dormitory_state.restaurant);
+                if (result) {
+                    this.data.dormitory_state.restaurant = !this.data.dormitory_state.restaurant;
+                }
+                break;
+            case "store":
+                result = await this.updateFacilities(this.data.dormitory_state.id, "store", !this.data.dormitory_state.store);
+                if (result) {
+                    this.data.dormitory_state.store = !this.data.dormitory_state.store;
+                }
+                break;
+            case "lift":
+                result = await this.updateFacilities(this.data.dormitory_state.id, "lift", !this.data.dormitory_state.lift);
+                if (result) {
+                    this.data.dormitory_state.lift = !this.data.dormitory_state.lift;
+                }
+                break;
+            case "security_door":
+                result = await this.updateFacilities(this.data.dormitory_state.id, "security_door", !this.data.dormitory_state.security_door);
+                if (result) {
+                    this.data.dormitory_state.security_door = !this.data.dormitory_state.security_door;
+                }
+                break;
+            case "keycard":
+                result = await this.updateFacilities(this.data.dormitory_state.id, "keycard", !this.data.dormitory_state.keycard);
+                if (result) {
+                    this.data.dormitory_state.keycard = !this.data.dormitory_state.keycard;
+                }
+                break;
+            case "animal":
+                result = await this.updateFacilities(this.data.dormitory_state.id, "animal", !this.data.dormitory_state.animal);
+                if (result) {
+                    this.data.dormitory_state.animal = !this.data.dormitory_state.animal;
+                }
+                break;
+            case "fitness":
+                result = await this.updateFacilities(this.data.dormitory_state.id, "fitness", !this.data.dormitory_state.fitness);
+                if (result) {
+                    this.data.dormitory_state.fitness = !this.data.dormitory_state.fitness;
+                }
+                break;
+            case "fingerprint":
+                result = await this.updateFacilities(this.data.dormitory_state.id, "fingerprint", !this.data.dormitory_state.fingerprint);
+                if (result) {
+                    this.data.dormitory_state.fingerprint = !this.data.dormitory_state.fingerprint;
+                }
+                break;
+            case "cctv":
+                result = await this.updateFacilities(this.data.dormitory_state.id, "cctv", !this.data.dormitory_state.cctv);
+                if (result) {
+                    this.data.dormitory_state.cctv = !this.data.dormitory_state.cctv;
+                }
+                break;
+            case "security_guard":
+                result = await this.updateFacilities(this.data.dormitory_state.id, "security_guard", !this.data.dormitory_state.security_guard);
+                if (result) {
+                    this.data.dormitory_state.security_guard = !this.data.dormitory_state.security_guard;
+                }
+                break;
+            case "smoke":
+                result = await this.updateFacilities(this.data.dormitory_state.id, "smoke", !this.data.dormitory_state.smoke);
+                if (result) {
+                    this.data.dormitory_state.smoke = !this.data.dormitory_state.smoke;
+                }
+                break;
+            default:
+                break;
+        }
+    
+        this.loadingState = null;  // Reset loading state after the operation completes
+    }
+
+    setEditName(value: string) {
+        if (value !== "" && value.length <= 70) {
+            this.data.name = value;
+        }
+    }
+
+    async updateName() {
+        try {
+            await axios.put('/api/dormitory', 
+                {
+                    id: this.data.id, 
+                    where:'name', 
+                    value: this.data.name
+                }
+            )
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    setEditEngName(value: string) {
+        this.data.engname = value;
+    }
+
+    async updateEngName() {
+        try {
+            await axios.put('/api/dormitory', 
+                {
+                    id: this.data.id,
+                    where:'engname', 
+                    value: this.data.engname
+                }
+            )
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    setEditPrice(value: string) {
+        const regex = /^[0-9]*\.?[0-9]+$/;
+        if (value === "") {
+            this.data.price = 0;
+            return false;
+        }
+        if (regex.test(value)) {
+            this.data.price = parseFloat(value);
+        }
+    }
+
+    async updatePrice() {
+        try {
+            await axios.put('/api/dormitory', 
+                {
+                    id: this.data.id,
+                    where:'price', 
+                    value: this.data.price
+                }
+            )
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    setEditLocation(value: string, id: number) {
+        this.data.location_distance[id].location = value;
+    }
+
+    async updateLocation(id: number, key: number) {
+        try {
+            await axios.put('/api/dormitory/location_distance', 
+                {
+                    key: id, 
+                    where:'location', 
+                    value: this.data.location_distance[key].location
+                }
+            )
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    setEditDistance(value: string, id: number) {
+        const regex = /^[0-9]*\.?[0-9]+$/;
+        if (value === "") {
+            this.data.location_distance[id].distance = 0;
+            return false;
+        }
+        
+        if (regex.test(value)) {
+            const newValue = parseFloat(value);
+    
+            // ใช้ toFixed(1) เพื่อให้มีทศนิยมไม่เกิน 1 ตำแหน่ง แล้วแปลงกลับเป็นตัวเลข
+            this.data.location_distance[id].distance = parseFloat(newValue.toFixed(1));
+        }
+    }
+
+    async updateDistance(id: number, key: number) {
+        try {
+            await axios.put('/api/dormitory/location_distance', 
+                {
+                    key: id, 
+                    where:'distance', 
+                    value: this.data.location_distance[key].distance
+                }
+            )
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async addLocation(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+        const getForm = new FormData(e.currentTarget);
+        const data = Object.fromEntries(getForm);
+        const formData = {
+            id: this.data.id,
+            location: data.location,
+            distance: Number(data.distance)
+        }
+        try {
+            const result = await axios.post(`/api/dormitory/location_distance`, formData);
+            this.data.location_distance.push(result.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async deleteLocation(id: number) {
+        try {
+            this.loadingState = id;
+            await axios.delete(`/api/dormitory/location_distance/${id}`);
+            this.data.location_distance = this.data.location_distance.filter(item => item.id !== id);
+            this.loadingState = null;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    
+    
     async addReserve(e: React.FormEvent<HTMLFormElement>, userId: number | null | undefined, roomId: number | null | undefined) {
         e.preventDefault();
         if (userId && roomId) {

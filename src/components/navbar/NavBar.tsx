@@ -181,7 +181,7 @@ const NavBar = observer(() => {
 
     return (
         <>
-            <nav className={`fixed w-screen h-16 md:h-20 card transition-300 rounded-none
+            <nav className={`fixed w-screen h-16 md:h-20 card transition-300 rounded-none shadow-2xl shadow-black/[0.07]
             flex-center z-999 ${navStore.head ? 'translate-y-0' : '-translate-y-16 sm:-translate-y-20' }`}>
                 <div className={`w-full mx-4 xl:w-[90%] flex-y-center justify-between`}>
                     <div className='w-12 min-w-12 lg:w-auto lg:min-w-auto lg:hidden'>

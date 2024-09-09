@@ -15,7 +15,7 @@ function LastId(objects: any[]) {
 }
 
 class RegisterEntrepreneur {
-    progress: number = 0;
+    progress: boolean = false;
     buffer: number = 10;
     name: string = '';
     engname: string = '';
@@ -106,31 +106,35 @@ class RegisterEntrepreneur {
 
     setImageSelect (event: ChangeEvent<HTMLInputElement>) {
         const file = event.target.files ? event.target.files[0] : null;
-        if (file && file.size <= 1024 * 1024) {
-            this.imageSelect = file;
-        } else {
-            this.setAlert({
-                open: true,
-                state: 'warning',
-                text: 'ไฟล์รูปภาพต้องมีขนาดไม่เกิน 1MB',
-                link: null
-            });
-            return false;
-        }
+        if (file) {
+            if (file.size <= 5120 * 5120) {
+                this.imageSelect = file;
+            } else {
+                this.setAlert({
+                    open: true,
+                    state: 'warning',
+                    text: 'ไฟล์รูปภาพต้องมีขนาดไม่เกิน 5MB',
+                    link: null
+                });
+                return false;
+            }
+        } 
     }
 
     setImageTypeRoom (event: ChangeEvent<HTMLInputElement>, id: number) {
         const file = event.target.files ? event.target.files[0] : null;
-        if (file && file.size <= 1024 * 1024) {
-            this.typeRoomList[id].imageSelect = file;
-        } else {
-            this.setAlert({
-                open: true,
-                state: 'warning',
-                text: 'ไฟล์รูปภาพต้องมีขนาดไม่เกิน 1MB',
-                link: null
-            });
-            return false;
+        if (file) {
+            if (file.size <= 5120 * 5120) {
+                this.typeRoomList[id].imageSelect = file;
+            } else {
+                this.setAlert({
+                    open: true,
+                    state: 'warning',
+                    text: 'ไฟล์รูปภาพต้องมีขนาดไม่เกิน 5MB',
+                    link: null
+                });
+                return false;
+            }
         }
     }
 
@@ -291,28 +295,18 @@ class RegisterEntrepreneur {
                 });
             }
             try {
-                const self = this;
+                this.setProgress(true)
                 const response = await axios.post(`/api/entrepreneur/register`, formData, {
-                    onUploadProgress(progressEvent) {
-                        if (progressEvent.total) {
-                            // const percentCompleted = (progressEvent.progress)*100;
-                            const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-                            self.setProgress(percentCompleted);
-                            self.setBuffer(percentCompleted + 10);
-                            console.log(percentCompleted);
-                        }
-                    },
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     }
                 });
-                this.setProgress(0)
-                this.setBuffer(10);
+                this.setProgress(false)
                 this.setAlert({
                     open: true,
                     state: 'success',
                     text: 'ลงทะเบียนสำเร็จทางทีมงานจะเดินทางไปที่หอพักของทาน เพื่อตรวจสอบที่พักภายใน 7 วัน',
-                    link: '/'
+                    link: '/menage'
                 });
                 runInAction(() => {
                     this.name = '';
@@ -349,7 +343,7 @@ class RegisterEntrepreneur {
         this.buffer = value;
     }
 
-    setProgress (value: number) {
+    setProgress (value: boolean) {
         this.progress = value;
     }
 

@@ -10,10 +10,12 @@ type OpjDate = {
 
 class dormitoryOnly {
     loadingState: string | number | null = null;
+    loadingUpload: boolean = false;
     data: Dormitory = {} as Dormitory;
-    lastImg: number = 0;
-    previewImg: Dormitory_img | null = null;
-    previewImgList: Dormitory_img[] = [];
+    imageSubmitState: string = '';
+    imageSelectEdit: File | null = null;
+    imageSelectid: number | null = null;
+    previewImg: number | null = null;
     open: boolean = false;
     dmtId: number = 0;
     FavoriteState: boolean = false;
@@ -38,19 +40,145 @@ class dormitoryOnly {
         makeAutoObservable(this, {
             setFavoriteList: action.bound,  // Ensure favoriteList is updated through an action
         });
+        this.removeImage = this.removeImage.bind(this);
+        this.updateImage = this.updateImage.bind(this);
+        this.addImage = this.addImage.bind(this);
+        this.imageSelectEdit = null;
+        this.imageSelectid = null;
+        this.previewImg = null;
     }
 
     // Menage
-    setLastImg(count: number) {
-        this.lastImg = count;
+    async removeImage() {
+        if (this.previewImg !== null && typeof this.previewImg === 'number') {
+            this.loadingUpload = true;
+            try {
+                await axios.delete(`/api/dormitory/img/${this.data.dormitory_img[this.previewImg].id}`);
+                runInAction(() => {
+                    if (typeof this.previewImg === 'number') {
+                        this.data.dormitory_img.splice(this.previewImg, 1);
+                        this.previewImg = 0; // Reset previewImg
+                    }
+                });
+            } catch (error) {
+                console.error("Error uploading image:", error);
+                return false;
+            } finally {
+                runInAction(() => {
+                    this.loadingUpload = false;
+                });
+            }
+        }
     }
 
-    setPreviewImg(data: Dormitory_img) {
-        this.previewImg = data;
+    async updateImage() {
+        if (!this.imageSelectEdit || !this.imageSelectid) {
+            console.warn("No image selected or image ID is missing.");
+            return false;
+        }
+    
+        const formData = new FormData();
+        formData.append("id", this.imageSelectid.toString());
+        formData.append("file", this.imageSelectEdit);
+        this.loadingUpload = true;
+    
+        try {
+            const result = await axios.put('/api/dormitory/img', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                }
+            });
+    
+            runInAction(() => {
+                const index = this.data.dormitory_img.findIndex(item => item.id === this.imageSelectid);
+    
+                if (index !== -1) {
+                    // ถ้าเจอ ID ใน array ให้แทนที่ข้อมูลเดิม
+                    this.data.dormitory_img[index] = result.data;
+                } else {
+                    // ถ้าไม่เจอให้เพิ่มข้อมูลใหม่เข้าไปใน array
+                    this.data.dormitory_img.push(result.data);
+                }
+    
+                // กำหนดภาพตัวอย่างตาม index ที่เจอหรือที่เพิ่มใหม่
+                this.previewImg = index !== -1 ? index : this.data.dormitory_img.length - 1;
+            });
+        } catch (error) {
+            console.error("Error uploading image:", error);
+            return false;
+        } finally {
+            runInAction(() => {
+                // รีเซ็ตสถานะการโหลดและค่าการเลือกภาพหลังจากทำงานเสร็จไม่ว่าจะสำเร็จหรือผิดพลาด
+                this.loadingUpload = false;
+                this.imageSelectEdit = null;
+                this.imageSelectid = null;
+                this.imageSubmitState = '';
+            });
+        }
     }
 
-    setPreviewImgList(data: Dormitory_img[]) {
-        this.previewImgList = data;
+    async addImage() {
+        if (!this.imageSelectEdit) {
+            console.warn("No image selected or image ID is missing.");
+            return false;
+        }
+    
+        const formData = new FormData();
+        formData.append("id", this.data.id.toString());
+        formData.append("file", this.imageSelectEdit);
+        this.loadingUpload = true;
+    
+        try {
+            const result = await axios.post('/api/dormitory/img', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                }
+            });
+    
+            runInAction(() => {
+                this.data.dormitory_img.push(result.data);
+                this.previewImg = this.data.dormitory_img.length - 1;
+            });
+        } catch (error) {
+            console.error("Error uploading image:", error);
+            return false;
+        } finally {
+            runInAction(() => {
+                // รีเซ็ตสถานะการโหลดและค่าการเลือกภาพหลังจากทำงานเสร็จไม่ว่าจะสำเร็จหรือผิดพลาด
+                this.loadingUpload = false;
+                this.imageSelectEdit = null;
+                this.imageSubmitState = '';
+            });
+        }
+    }
+
+    handleEditImage = (e: React.ChangeEvent<HTMLInputElement>, state: string) => {
+        const file = e.target.files ? e.target.files[0] : null;
+        if (file) {
+            if (file.size <= 5120 * 5120) {
+                this.imageSelectEdit = file;
+                this.imageSubmitState = state;
+                if (this.previewImg !== null) {
+                    this.imageSelectid = this.data.dormitory_img[this.previewImg].id;
+                    this.previewImg = null;
+                }
+                console.log('test');
+            } else {
+                this.setAlert({
+                    open: true,
+                    state: 'warning',
+                    text: 'ไฟล์รูปภาพต้องมีขนาดไม่เกิน 5MB',
+                    link: null
+                });
+            }
+        }
+    };
+
+    setPreviewImg(id: number | null) {
+        this.previewImg = id;
+        this.imageSelectid = null;
+        this.imageSelectEdit = null;
+        this.imageSubmitState = '';
     }
 
     setDmtId(id: string | null | undefined) {

@@ -28,7 +28,7 @@ const FormImage = observer((props: Props) => {
                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
                         <FiUploadCloud className='w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"'/>
                         <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">คลิกเพื่ออัพโหลดรูปภาพ</span></p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or webp (MAX. 1MB)</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">PNG, JPG or webp (MAX. 1MB)</p>
                     </div>
                     <input id="dropzone-file" accept="image/*" type="file" className="hidden" onChange={(e) => registerEntrepreneur.setImageSelect(e)}/>
                 </label>

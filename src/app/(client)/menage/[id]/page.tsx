@@ -23,7 +23,7 @@ import { RiFingerprintFill, RiRestaurantLine, RiImageEditFill, RiImageEditLine }
 import { GrUserPolice } from "react-icons/gr";
 import { MdStorefront, MdDelete, MdDeleteOutline } from "react-icons/md";
 import { AiOutlinePlusCircle } from "react-icons/ai";
-import { FiPlusSquare } from "react-icons/fi";
+import { FiPlusSquare, FiUploadCloud } from "react-icons/fi";
 
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -90,19 +90,19 @@ const page = observer(({ params }: { params: { id: string } }) => {
             try {
                 const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/getDormitory/${params.id}`);
                 dormitoryOnly.setData(result.data)
-                dormitoryOnly.setPreviewImg(result.data?.dormitory_img.length > 0 ? result.data?.dormitory_img[0] : null)
-                dormitoryOnly.setPreviewImgList(result.data?.dormitory_img.slice(0, 8));
-                dormitoryOnly.setLastImg(result.data?.dormitory_img.length - 1);
+                dormitoryOnly.setPreviewImg(result.data?.dormitory_img.length > 0 ? 0 : null)
 
-                const quantitySum = result.data?.dormitory_type.reduce((sum: number, dormitory: any) => sum + dormitory.quantity, 0);
-                const occupiedSum = result.data?.dormitory_type.reduce((sum: number, dormitory: any) => sum + dormitory.occupied, 0);
+                const quantitySum = result.data?.dormitory_type?.reduce((sum: number, { quantity }: any) => sum + quantity, 0) || 0;
+                const occupiedSum = result.data?.dormitory_type?.reduce((sum: number, { occupied }: any) => sum + occupied, 0) || 0;
                 setTotalQuantity(quantitySum);
                 setTotalOccupied(occupiedSum);
                 setPercentage((occupiedSum / quantitySum) * 100);
+                setPercentage(quantitySum > 0 ? (occupiedSum / quantitySum) * 100 : 0);
 
                 setLoading(false);
             } catch (err) {
                 setError('Failed to fetch dormitory data. Please try again later.');
+                setLoading(false);
             }
         };
 
@@ -111,12 +111,14 @@ const page = observer(({ params }: { params: { id: string } }) => {
         }
     }, [params.id]);
 
+
+
     if (loading) {
         return <p className='fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>Loading...</p>;  // Show loader while fetching data
     }
 
     if (error) {
-        return <p>{error}</p>;  // Display error message if any
+        return <p className='fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>{error}</p>;  // Display error message if any
     }
 
     return (
@@ -165,8 +167,8 @@ const page = observer(({ params }: { params: { id: string } }) => {
                                 className="border-none outline-none bg-transparent text-xl font-semibold text-center"
                             />
                             :
-                            <h1 onClick={()=>setIsEditName(true)} className='text-xl font-semibold text-center max-w-[90%] flex gap-2 cursor-pointer'>
-                                {dormitoryOnly?.data?.name} <FaRegEdit className='text-xs opacity-50'/>
+                            <h1 onClick={()=>setIsEditName(true)} className='text-xl font-semibold text-center max-w-[90%] flex gap-2 cursor-pointer relative'>
+                                {dormitoryOnly?.data?.name} <FaRegEdit className='text-xs opacity-50 absolute top-0 -right-4'/>
                             </h1>
                         }
                         {isEditEngName ? 
@@ -191,8 +193,44 @@ const page = observer(({ params }: { params: { id: string } }) => {
                         }
                     </div>
                     <div className='relative overflow-hidden mt-4 rounded-xl'>
-                        <div onClick={() => setImgModal(true)} className='cursor-pointer h-96'>
-                            <Carousel data={dormitoryOnly?.data?.dormitory_img} path='dormitoryImages'/>
+                        <div className='h-96'>
+                            {dormitoryOnly?.data?.dormitory_img?.length > 0 ?
+                                <div onClick={() => setImgModal(true)} className='w-full h-full cursor-pointer'>
+                                    <Carousel data={dormitoryOnly?.data?.dormitory_img} path='dormitoryImages'/>
+                                </div>
+                                :
+                                <>
+                                <label htmlFor="dropzone-file" className="relative overflow-hidden flex h-full flex-col items-center justify-center w-full border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50/40 dark:bg-gray-700/40 hover:bg-sky-100/40 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-700/80 transition-300">
+                                    {dormitoryOnly.imageSelectEdit && (
+                                        <div className="overflow-hidden h-full w-full absolute">
+                                            <img 
+                                                src={URL.createObjectURL(dormitoryOnly.imageSelectEdit)} 
+                                                alt='Preview' 
+                                                className='h-full w-full
+                                                object-cover object-center'
+                                            />
+                                        </div>
+                                    )}
+                                    {dormitoryOnly.loadingUpload &&
+                                        <span className='h-full w-full flex-center bg-black/50 absolute top-0 left-0'>
+                                            <CircularProgress size={40}/>
+                                        </span>
+                                    }
+                                    <div className="flex flex-col items-center justify-center pt-5 pb-6 relative">
+                                        <FiUploadCloud className='w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"'/>
+                                        <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">คลิกเพื่ออัพโหลดรูปภาพ</span></p>
+                                        <p className="text-xs text-gray-500 dark:text-gray-400">PNG, JPG or webp (MAX. 1MB)</p>
+                                    </div>
+                                    <input id="dropzone-file" accept="image/*" type="file" className="hidden" onChange={(e) => dormitoryOnly.handleEditImage(e, 'add')}/>
+                                </label>
+                                {!dormitoryOnly.loadingUpload && dormitoryOnly.imageSelectEdit &&
+                                    <Button onClick={dormitoryOnly.addImage} 
+                                    variant='contained' className='rounded-full text-whit text-nowrap text-white absolute -translate-x-1/2 left-1/2 bottom-4 flex gap-4'>
+                                        ยืนยันการเพิ่มรูปภาพ
+                                    </Button>
+                                }
+                                </>
+                            }
                         </div>
 
                         {isEditPrice ? 
@@ -214,47 +252,107 @@ const page = observer(({ params }: { params: { id: string } }) => {
                                 />
                             </div>
                             :
-                            <h1 onClick={()=>setIsEditPrice(true)}  className='cursor-pointer absolute top-0 right-0 py-2 px-4 font-bold bg-blue-400 text-white z-50 rounded-bl-3xl'>
-                                THB {dormitoryOnly?.data?.price}
-                            </h1>
+                            <div onClick={()=>setIsEditPrice(true)} className='absolute top-0 right-0 py-2 px-4 z-50 bg-blue-400 rounded-bl-3xl'>
+                                <h1 className='cursor-pointer font-bold text-white relative me-2'>
+                                    THB {dormitoryOnly?.data?.price} <FaRegEdit className='text-xs absolute top-0 -right-4'/>
+                                </h1>
+                            </div>
                         }
                     </div>
-                    {imgModal &&
+                    {imgModal && dormitoryOnly.data?.dormitory_img?.length > 0 &&
                         <>
                             <div onClick={()=>setImgModal(false)} className='fixed top-0 left-0 z-999 bg-black/70 h-screen w-screen'></div>
                             <div className="w-[90%] lg:w-auto fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-999">
                                 <div className='flex-center mb-10'>
-                                    <div className="relative">
-                                        {dormitoryOnly.previewImg &&
-                                            <img
-                                                src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/dormitoryImages/${dormitoryOnly.previewImg.url}`}
-                                                alt={dormitoryOnly.previewImg.url}
-                                                className='object-center object-contain max-h-[65vh] rounded-2xl'
-                                                loading='lazy'
-                                            />
+                                    <div className="relative rounded-2xl overflow-hidden">
+                                        {dormitoryOnly.previewImg !== null ?
+                                            <>
+                                                <img
+                                                    src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/dormitoryImages/${dormitoryOnly.data?.dormitory_img[dormitoryOnly.previewImg]?.url}`}
+                                                    alt={dormitoryOnly.data?.dormitory_img[dormitoryOnly.previewImg]?.url || '/404.png'}
+                                                    className='object-center object-contain max-h-[65vh]'
+                                                    loading='lazy'
+                                                />
+                                                <span className='w-full h-full bg-gradient-to-t from-black/90 from-5% opacity-0 hover:opacity-100 transition-300 
+                                                flex-center absolute top-0 left-0'>
+                                                    <div className="h-full w-full flex items-end justify-center pb-4 gap-8">
+                                                        <label 
+                                                            className='text-2xl text-black/50 bg-white p-2 rounded-full 
+                                                            transition-300 hover:scale-110 hover:text-black cursor-pointer'
+                                                            onMouseEnter={() => setIsHoveredEdit(true)}
+                                                            onMouseLeave={() => setIsHoveredEdit(false)}
+                                                        >
+                                                            {isHoveredEdit ? <RiImageEditFill /> : <RiImageEditLine />}
+                                                            <input 
+                                                                type="file" 
+                                                                accept="image/*" 
+                                                                className="hidden"
+                                                                onChange={(e) => dormitoryOnly.handleEditImage(e, 'edit')} // ฟังก์ชันอัปโหลดรูปภาพ
+                                                            />
+                                                        </label>
+                                                        <button 
+                                                            onClick={()=>dormitoryOnly.removeImage()}
+                                                            className='text-2xl text-black/50 bg-white p-2 rounded-full 
+                                                            transition-300 hover:scale-110 hover:text-red-500'    
+                                                            onMouseEnter={() => setIsHoveredDelete(true)}
+                                                            onMouseLeave={() => setIsHoveredDelete(false)}
+                                                        >
+                                                            {isHoveredDelete ? <MdDelete /> : <MdDeleteOutline />}
+                                                        </button>
+                                                    </div>
+                                                </span>
+                                                {dormitoryOnly.loadingUpload &&
+                                                    <span className='h-full w-full flex-center bg-black/50 absolute top-0 left-0'>
+                                                        <CircularProgress size={40}/>
+                                                    </span>
+                                                }
+                                            </>
+                                            : dormitoryOnly.imageSelectEdit &&
+                                            <>
+                                                {dormitoryOnly.loadingUpload &&
+                                                    <span className='h-full w-full flex-center bg-black/50 absolute top-0 left-0'>
+                                                        <CircularProgress size={40}/>
+                                                    </span>
+                                                }
+                                                <img
+                                                    src={URL.createObjectURL(dormitoryOnly.imageSelectEdit)}
+                                                    alt={dormitoryOnly.imageSelectEdit?.name || '/404.png'}
+                                                    className='object-center object-contain max-h-[65vh] rounded-2xl'
+                                                    loading='lazy'
+                                                />
+                                                {!dormitoryOnly.loadingUpload &&
+                                                    <div className='absolute -translate-x-1/2 left-1/2 bottom-4 flex gap-4'>
+                                                        <Button onClick={dormitoryOnly.imageSubmitState === 'add' ? dormitoryOnly.addImage : dormitoryOnly.updateImage} 
+                                                        variant='contained' className='rounded-full text-whit text-nowrap text-white'>
+                                                            ยืนยัน{dormitoryOnly.imageSubmitState === 'add' ? 'การเพิ่มรูปภาพ' : 'การแก้ไขรูปภาพ'}
+                                                        </Button>
+                                                        {dormitoryOnly.imageSubmitState === 'edit' &&
+                                                            <label 
+                                                                className='text-2xl text-black/50 bg-white p-2 rounded-full 
+                                                                transition-300 hover:scale-110 hover:text-black cursor-pointer'
+                                                                onMouseEnter={() => setIsHoveredEdit(true)}
+                                                                onMouseLeave={() => setIsHoveredEdit(false)}
+                                                            >
+                                                                {isHoveredEdit ? <RiImageEditFill /> : <RiImageEditLine />}
+                                                                <input 
+                                                                    type="file" 
+                                                                    accept="image/*" 
+                                                                    className="hidden"
+                                                                    onChange={(e) => dormitoryOnly.handleEditImage(e, 'edit')} // ฟังก์ชันอัปโหลดรูปภาพ
+                                                                />
+                                                            </label>
+                                                        }
+                                                    </div>
+                                                }
+                                            </>
                                         }
-                                        <span className='w-full h-full bg-black/50 opacity-0 hover:opacity-100 transition-300 
-                                        flex-center absolute top-0 left-0 gap-4'>
-                                            <button 
-                                                className='text-2xl text-white hover:bg-slate-100/20 p-2 rounded-full transition-300'
-                                                onMouseEnter={() => setIsHoveredEdit(true)}
-                                                onMouseLeave={() => setIsHoveredEdit(false)}
-                                            >
-                                                {isHoveredEdit ? <RiImageEditFill /> : <RiImageEditLine />}
-                                            </button>
-                                            <button 
-                                                className='text-2xl text-white hover:bg-red-200/20 p-2 rounded-full hover:text-red-600 transition-300'    
-                                                onMouseEnter={() => setIsHoveredDelete(true)}
-                                                onMouseLeave={() => setIsHoveredDelete(false)}
-                                            >
-                                                {isHoveredDelete ? <MdDelete /> : <MdDeleteOutline />}
-                                            </button>
-                                        </span>
                                     </div>
                                 </div>
                                 <div className="flex md:justify-center gap-2 h-16 overflow-x-auto rounded-md">
-                                    {dormitoryOnly?.previewImgList?.map((item, index) => (
-                                        <button onClick={()=>dormitoryOnly.setPreviewImg(item)} key={index} className='h-full aspect-square rounded-md bg-base overflow-hidden min-w-16'>
+                                    {dormitoryOnly?.data?.dormitory_img.slice(0, dormitoryOnly?.data?.dormitory_img.length > 8 ? 7 : dormitoryOnly?.data?.dormitory_img.length - 1).map((item, index) => (
+                                        <button onClick={()=>dormitoryOnly.setPreviewImg(index)} key={index} 
+                                        className={`h-full aspect-square rounded-md bg-base overflow-hidden min-w-16
+                                        ${dormitoryOnly.previewImg === index && 'border-[3px] border-blue-400'}`}>
                                             <Image
                                                 src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/dormitoryImages/${item.url}`}
                                                 alt={item.url}
@@ -265,7 +363,7 @@ const page = observer(({ params }: { params: { id: string } }) => {
                                             />
                                         </button>
                                     ))}
-                                    {dormitoryOnly?.lastImg >= 0 && dormitoryOnly?.data?.dormitory_img && (
+                                    {dormitoryOnly?.data?.dormitory_img.length > 0 && (
                                         <div className='h-full aspect-square bg-base overflow-hidden relative min-w-16 rounded-md'>
                                             <button
                                                 onClick={()=>setAllImg(true)}
@@ -274,8 +372,8 @@ const page = observer(({ params }: { params: { id: string } }) => {
                                                 ดูเพิ่มเติม
                                             </button>
                                             <Image
-                                                src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/dormitoryImages/${dormitoryOnly?.data?.dormitory_img[dormitoryOnly?.lastImg]?.url}`}
-                                                alt={dormitoryOnly?.data?.dormitory_img?.[dormitoryOnly?.lastImg]?.url || '/404.png'}
+                                                src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/dormitoryImages/${dormitoryOnly?.data?.dormitory_img[dormitoryOnly?.data?.dormitory_img.length > 8 ? 7 : dormitoryOnly?.data?.dormitory_img.length - 1]?.url}`}
+                                                alt={dormitoryOnly?.data?.dormitory_img?.[dormitoryOnly?.data?.dormitory_img.length > 8 ? 7 : dormitoryOnly?.data?.dormitory_img.length - 1]?.url || '/404.png'}
                                                 width={100}
                                                 height={100}
                                                 className='object-center object-cover w-full h-full'
@@ -299,16 +397,13 @@ const page = observer(({ params }: { params: { id: string } }) => {
                                             },
                                         }}
                                     >
-                                        <Box 
-                                            className="bg-base max-h-[80vh] overflow-y-auto lg:h-auto py-4"
-                                            onClick={()=>setAllImg(false)}
-                                        >
+                                        <Box className="bg-base max-h-[80vh] overflow-y-auto lg:h-auto py-4">
                                             <div className='flex-x-center'>
                                                 <button onClick={()=>setAllImg(false)} className="w-12 h-1 mb-4 rounded-full bg-blue-300/40"></button>
                                             </div>
                                             <div className='container flex-x-center flex-wrap gap-2 md:gap-4'>
                                                 {dormitoryOnly?.data?.dormitory_img?.map((item, index) => (
-                                                    <button onClick={()=>dormitoryOnly.setPreviewImg(item)} key={index} className='rounded-md h-16 aspect-square bg-base overflow-hidden min-w-16'>
+                                                    <button onClick={()=>dormitoryOnly.setPreviewImg(index)} key={index} className='rounded-md h-16 aspect-square bg-base overflow-hidden min-w-16'>
                                                         <Image
                                                             src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/dormitoryImages/${item.url}`}
                                                             alt={item.url}
@@ -319,10 +414,16 @@ const page = observer(({ params }: { params: { id: string } }) => {
                                                         />
                                                     </button>
                                                 ))}
-                                                <button className='h-16 aspect-square border-dashed border-2 border-slate-500/40 min-w-16 rounded-md
-                                                flex-center text-4xl bg-slate-500/30 text-slate-500/40 opacity-60 hover:opacity-100 transition-300'>
-                                                    <AiOutlinePlusCircle/>
-                                                </button>
+                                                <label className='h-16 aspect-square border-dashed border-2 border-slate-500/40 min-w-16 rounded-md
+                                                flex-center text-4xl bg-slate-500/30 text-slate-500/40 opacity-60 hover:opacity-100 transition-300 cursor-pointer'>
+                                                    <input
+                                                        type='file'
+                                                        accept="image/*" 
+                                                        className="hidden"
+                                                        onChange={(e) => dormitoryOnly.handleEditImage(e, 'add')}
+                                                    />
+                                                    <AiOutlinePlusCircle />
+                                                </label>
                                             </div>
                                         </Box>
                                     </Drawer>
@@ -464,8 +565,8 @@ const page = observer(({ params }: { params: { id: string } }) => {
                                     </TableCell>
                                     <TableCell align="right" className="w-12 py-3 pe-0">
                                         {dormitoryOnly.loadingState === v.id ?
-                                            <div className='flex-center aspect-square'>
-                                                <CircularProgress size={20} sx={{ color: 'red' }}/>
+                                            <div className='flex-center aspect-square pe-2'>
+                                                <CircularProgress size={20} sx={{ color: 'red' }} className=""/>
                                             </div>
                                             :
                                             <button onClick={()=>dormitoryOnly.deleteLocation(v.id)} type='submit' className='aspect-square rounded-sm flex-center h-full 
@@ -500,7 +601,7 @@ const page = observer(({ params }: { params: { id: string } }) => {
                                 defaultValue='0'
                                 InputProps={{
                                     endAdornment: <InputAdornment position="end">กม.</InputAdornment>,
-                                    inputProps: { step: 0.01 }
+                                    inputProps: { step: 0.1 }
                                 }}
                             />
                         </div>

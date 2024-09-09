@@ -13,9 +13,9 @@ const FormSubmit = observer(() => {
     const { data: session, status } = useSession()
     return (
         <>
-            { registerEntrepreneur.progress > 0 &&
+            { registerEntrepreneur.progress &&
                 <Box sx={{ width: '100%', marginBottom: '1rem' }}>
-                    <LinearProgress variant="buffer" value={registerEntrepreneur.progress} valueBuffer={registerEntrepreneur.buffer} />
+                    <LinearProgress />
                 </Box>
             }
             <Alert open={registerEntrepreneur.alert.open} state={registerEntrepreneur.alert.state} link={registerEntrepreneur.alert.link}

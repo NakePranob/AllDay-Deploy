@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { cloneElement } from 'react';
 import { observer } from 'mobx-react';
 import dormitoryRoom from '@/stores/dormitoryRoom';
-import Loader from '@/components/Loader'
 import Link from "next/link";
 import axios from "axios";
 import { useSession } from 'next-auth/react';
@@ -26,19 +25,13 @@ import { FaShower  } from "react-icons/fa6";
 import { LuAirVent } from "react-icons/lu";
 import { TbFridge, TbTableAlias } from "react-icons/tb";
 import { TfiRulerPencil } from "react-icons/tfi";
+import { RiArrowLeftWideFill } from "react-icons/ri";
 
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
 
 // Mui
-import TextField from '@mui/material/TextField';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import InputAdornment from '@mui/material/InputAdornment';
 import CircularProgress from '@mui/material/CircularProgress';
 
 // Type
@@ -50,7 +43,6 @@ const page = observer(({ params }: { params: { id: string } }) => {
     const [allImg, setAllImg] = useState(false);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-    const [percentage, setPercentage] = useState<number>(0);
     const [isHoveredEdit, setIsHoveredEdit] = useState<boolean>(false);
     const [isHoveredDelete, setIsHoveredDelete] = useState<boolean>(false);
 
@@ -58,24 +50,37 @@ const page = observer(({ params }: { params: { id: string } }) => {
     const [isEditWidth, setIsEditWidth] = useState(false);
     const [isEditLength, setIsEditLength] = useState(false);
     const [isEditPrice, setIsEditPrice] = useState(false);
+    const [isEditQuantity, setIsEditQuantity] = useState(false);
+    const [isEditOccupied, setIsEditOccupied] = useState(false);
 
     const handleNameBlur = () => {
         setIsEditName(false); // หยุดการแก้ไขเมื่อกดออกจาก input
-        // dormitoryRoom.updateDormitory(dormitoryRoom.data.id, 'name', dormitoryRoom.data.name);
+        dormitoryRoom.updateRoom(dormitoryRoom.data.id, 'name', dormitoryRoom.data.name);
     };
 
     const handleWidthBlur = () => {
         setIsEditWidth(false); // หยุดการแก้ไขเมื่อกดออกจาก input
-        // dormitoryRoom.updateDormitory(dormitoryRoom.data.id, 'engname', dormitoryRoom.data.engname);
+        dormitoryRoom.updateRoom(dormitoryRoom.data.id, 'width', dormitoryRoom.data.width);
     };
 
     const handleLengthBlur = () => {
         setIsEditLength(false);
-    }
+        dormitoryRoom.updateRoom(dormitoryRoom.data.id, 'length', dormitoryRoom.data.length);
+    };
 
     const handlePriceBlur = () => {
         setIsEditPrice(false); // หยุดการแก้ไขเมื่อกดออกจาก input
         dormitoryRoom.updateRoom(dormitoryRoom.data.id, 'price', dormitoryRoom.data.price);
+    };
+
+    const handleQuantityBlur = () => {
+        setIsEditLength(false);
+        dormitoryRoom.updateRoom(dormitoryRoom.data.id, 'quantity', dormitoryRoom.data.quantity);
+    };
+
+    const handleOccupiedBlur = () => {
+        setIsEditLength(false);
+        dormitoryRoom.updateRoom(dormitoryRoom.data.id, 'occupied', dormitoryRoom.data.occupied);
     };
 
     useEffect(() => {
@@ -83,9 +88,7 @@ const page = observer(({ params }: { params: { id: string } }) => {
             try {
                 const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/dormitory/room/${params.id}`);
                 dormitoryRoom.setData(result.data)
-                console.log('data:', result.data);
                 dormitoryRoom.setPreviewImg(result.data?.dormitory_typeimg.length > 0 ? 0 : null);
-                setPercentage(result.data.quantity > 0 ? (result.data.occupied / result.data.quantity) * 100 : 0);
 
                 setLoading(false);
             } catch (err) {
@@ -111,13 +114,17 @@ const page = observer(({ params }: { params: { id: string } }) => {
 
     return (
         <div className='pt-16 md:pt-20 sm:pb-10'>
-            <div className='sm:container'>
-                <div className='flex-y-center flex-col lg:flex-row gap-4 pt-8'>
-                    <div className='flex-1 flex flex-col items-center lg:items-start'>
-                        <h1 className='text-2xl md:text-4xl font-bold flex'>
+            <div className='sm:container pt-8 sm:pt-12'>
+                <Link href={`/menage/${dormitoryRoom.data.dmtId}`} 
+                className='flex-y-center font-medium hover:font-semibold md:text-xl gap-2 hover:gap-4 transition-all duration-300 ease-in-out hover:text-blue-500'>
+                    <RiArrowLeftWideFill/>
+                    กลับไปหน้าจัดการหอพัก
+                </Link>
+                <div className='card rounded-3xl rounded-b-none sm:rounded-b-3xl mt-2 sm:mt-8 px-4 md:px-16 pt-8 pb-8 overflow-hidden'>
+                    <div className='lg:flex-y-center lg:justify-between'>
+                        <div className='flex text-xl font-semibold'>
                             {status === 'authenticated' && session?.user ?
                                 <>
-                                    จัดการห้องพักประเภท, 
                                     {isEditName ? 
                                         <input 
                                             type="text"
@@ -131,37 +138,69 @@ const page = observer(({ params }: { params: { id: string } }) => {
                                                 }
                                             }}
                                             autoFocus
-                                            className="border-none outline-none bg-transparent ms-4"
+                                            className="border-none outline-none bg-transparent ms-2"
                                         />
-                                        : dormitoryRoom?.data?.name ?
-                                            <h1 onClick={()=>setIsEditName(true)} className='ms-4 cursor-pointer'>
-                                                {dormitoryRoom?.data?.name}!
-                                            </h1>
-                                            :
-                                            <h1 onClick={()=>setIsEditName(true)} className='ms-4 cursor-pointer'>
-                                                กรุณากรอกชื่อประเภทห้องพัก!
-                                            </h1>
+                                        :
+                                        <h1 onClick={()=>setIsEditName(true)} className='ms-2 cursor-pointer'>
+                                            {dormitoryRoom?.data?.name ? dormitoryRoom?.data?.name : 'ไม่มีชื่อ'}
+                                        </h1>
                                     }
                                 </>
                                 :
                                 'มีบางอย่างผิดพลาด'
                             }
-                        </h1>
-                        <p className='opacity-80 text-sm md:text-base'>คุณสามารถจัดการห้องพักของคุณได้ที่นี่ ได้ตามต้องการ</p>
-                    </div>
-                    <div className='flex-y-center gap-4 md:gap-8'>
-                        <div className='flex flex-col items-end'>
-                            <span>จำนวนผู้เช่าที่ได้รับการยืนยัน</span>
-                            <h1 className='text-5xl italic font-bold relative'>
-                                {dormitoryRoom.data?.occupied}/{dormitoryRoom.data?.quantity}
-                            </h1>
                         </div>
-                        <div className='scale-75 md:scale-100'>
-                            <Loader percentage={percentage} />
+                        <div className='lg:text-right'>
+                            <section className='flex-y-center'>
+                                จำนวนห้อง 
+                                {isEditQuantity ? 
+                                    <input 
+                                        type="text"
+                                        value={dormitoryRoom.data?.quantity ? dormitoryRoom.data?.quantity : ''}
+                                        onBlur={()=>handleQuantityBlur()}
+                                        onChange={(e)=>dormitoryRoom.setEditQuantity(e.target.value)}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') {
+                                                e.preventDefault();
+                                                handleQuantityBlur();
+                                            }
+                                        }}
+                                        autoFocus
+                                        className="border-none outline-none bg-transparent w-6 text-center font-bold"
+                                    />
+                                    :
+                                    <b onClick={()=>setIsEditQuantity(true)} className='cursor-pointer w-6 text-center font-bold'>
+                                        {dormitoryRoom?.data?.quantity ? dormitoryRoom?.data?.quantity : 0}
+                                    </b>
+                                }
+                                ห้อง
+                                เข้าอยู่แล้ว 
+                                {isEditOccupied ? 
+                                    <input 
+                                        type="text"
+                                        value={dormitoryRoom.data?.occupied ? dormitoryRoom.data?.occupied : ''}
+                                        onBlur={()=>handleOccupiedBlur()}
+                                        onChange={(e)=>dormitoryRoom.setEditOccupied(e.target.value)}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') {
+                                                e.preventDefault();
+                                                handleOccupiedBlur();
+                                            }
+                                        }}
+                                        autoFocus
+                                        className="border-none outline-none bg-transparent w-6 text-center font-bold"
+                                    />
+                                    :
+                                    <b onClick={()=>setIsEditOccupied(true)} className='cursor-pointer w-6 text-center font-bold'>
+                                        {dormitoryRoom?.data?.occupied ? dormitoryRoom?.data?.occupied : 0}
+                                    </b>
+                                }
+                                ห้อง
+                                ว่าง <b className='font-bold ms-1'>{dormitoryRoom.data?.quantity - dormitoryRoom.data?.occupied}</b>
+                            </section>
+                            <span className='text-xs opacity-50 font-normal'>(กดที่ตัวเลขเพื่อแก้ไข)</span>
                         </div>
                     </div>
-                </div>
-                <div className='card rounded-3xl rounded-b-none sm:rounded-b-3xl mt-8 px-4 md:px-16 pt-8 pb-8 overflow-hidden'>
                     <div className='relative overflow-hidden mt-4 rounded-xl'>
                         <div className='h-96 lg:h-[27rem]'>
                             {dormitoryRoom?.data?.dormitory_typeimg?.length > 0 ?
@@ -424,72 +463,78 @@ const page = observer(({ params }: { params: { id: string } }) => {
                                     dormitoryRoom?.data?.dormitory_facilitate?.[facility.key as FacilityKey] ? '' : 'opacity-50 grayscale'
                                 }`}
                             >
-                                {facility.key === dormitoryRoom.loadingState 
+                                {dormitoryRoom.loadingState.some(item => item === facility.key)
                                     ? <CircularProgress size={20}/>
                                     : cloneElement(facility.icon, { className: 'text-xl text-blue-500' })
                                 } <p className='text-left'>{facility.label}</p>
                             </button>
                         ))}
                     </section>
-                    <h4 className='text-lg lg:text-xl font-semibold mt-6'>
-                        ขนาดห้องพัก 
-                    </h4>
-                    <section className='p-4 flex-y-center gap-2'>
-                        <TfiRulerPencil className='text-blue-500 text-xl'/>
-                        กว้าง
-                        {isEditWidth ? 
-                            <input 
-                                type="text"
-                                value={dormitoryRoom.data?.width ? dormitoryRoom.data?.width : ''}
-                                onBlur={()=>handleWidthBlur()}
-                                onChange={(e)=>dormitoryRoom.setEditWidth(e.target.value)}
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter') {
-                                        e.preventDefault();
-                                        handleWidthBlur();
-                                    }
-                                }}
-                                autoFocus
-                                className="border-none outline-none bg-transparent w-8 text-center"
-                            />
-                            : dormitoryRoom?.data?.width ?
-                                <p onClick={()=>setIsEditWidth(true)} className='cursor-pointer w-8 text-center'>
-                                    {dormitoryRoom?.data?.width}
-                                </p>
-                                :
-                                <p onClick={()=>setIsEditWidth(true)} className='cursor-pointer w-8 text-center'>
-                                    0
-                                </p>
-                        }
-                        ซม.
-                        <span className='text-xs'>x</span> 
-                        ยาว
-                        {isEditLength ? 
-                            <input 
-                                type="text"
-                                value={dormitoryRoom.data?.length ? dormitoryRoom.data?.length : ''}
-                                onBlur={()=>handleLengthBlur()}
-                                onChange={(e)=>dormitoryRoom.setEditLength(e.target.value)}
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter') {
-                                        e.preventDefault();
-                                        handleLengthBlur();
-                                    }
-                                }}
-                                autoFocus
-                                className="border-none outline-none bg-transparent w-8 text-center"
-                            />
-                            : dormitoryRoom?.data?.length ?
-                                <p onClick={()=>setIsEditLength(true)} className='cursor-pointer w-8 text-center'>
-                                    {dormitoryRoom?.data?.length}
-                                </p>
-                                :
-                                <p onClick={()=>setIsEditLength(true)} className='cursor-pointer w-8 text-center'>
-                                    0
-                                </p>
-                        }
-                        ซม.
-                    </section>
+                    <div>
+                        <h4 className='text-lg lg:text-xl font-semibold mt-6'>
+                            ขนาดห้องพัก 
+                            <span className='text-xs opacity-50 ms-2 font-normal'>(กดที่ตัวเลขเพื่อแก้ไข)</span>
+                        </h4>
+                        <section className='p-4 flex-y-center gap-2 text-sm'>
+                            <TfiRulerPencil className='text-blue-500 text-xl'/>
+                            <div className='flex-y-center bg-blue-400/10 shadow-sm rounded-full py-2 px-4'>
+                                กว้าง
+                                {isEditWidth ? 
+                                    <input 
+                                        type="text"
+                                        value={dormitoryRoom.data?.width ? dormitoryRoom.data?.width : ''}
+                                        onBlur={()=>handleWidthBlur()}
+                                        onChange={(e)=>dormitoryRoom.setEditWidth(e.target.value)}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') {
+                                                e.preventDefault();
+                                                handleWidthBlur();
+                                            }
+                                        }}
+                                        autoFocus
+                                        className="border-none outline-none bg-transparent w-8 text-center"
+                                    />
+                                    :
+                                    <p onClick={()=>setIsEditWidth(true)} className='cursor-pointer w-8 text-center'>
+                                        {dormitoryRoom?.data?.width ? dormitoryRoom?.data?.width : 0}
+                                    </p>
+                                }
+                                ซม.
+                            </div>
+                            <span className='text-sm font-semibold'>x</span> 
+                            <div className='flex-y-center bg-blue-400/10 shadow-sm rounded-full py-2 px-4'>
+                                ยาว
+                                {isEditLength ? 
+                                    <input 
+                                        type="text"
+                                        value={dormitoryRoom.data?.length ? dormitoryRoom.data?.length : ''}
+                                        onBlur={()=>handleLengthBlur()}
+                                        onChange={(e)=>dormitoryRoom.setEditLength(e.target.value)}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') {
+                                                e.preventDefault();
+                                                handleLengthBlur();
+                                            }
+                                        }}
+                                        autoFocus
+                                        className="border-none outline-none bg-transparent w-8 text-center"
+                                    />
+                                    : dormitoryRoom?.data?.length ?
+                                        <p onClick={()=>setIsEditLength(true)} className='cursor-pointer w-8 text-center'>
+                                            {dormitoryRoom?.data?.length}
+                                        </p>
+                                        :
+                                        <p onClick={()=>setIsEditLength(true)} className='cursor-pointer w-8 text-center'>
+                                            0
+                                        </p>
+                                }
+                                ซม.
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                <div className='w-full flex-center py-8 sm:pt-6 sm:pb-0 bg-base sm:bg-black/0 sm:dark:bg-black/0'>
+                    <Button variant='contained' color='error' className='rounded-full bg-red-500 text-white'>ลบประเภทห้องพัก</Button>
                 </div>
             </div>
         </div>

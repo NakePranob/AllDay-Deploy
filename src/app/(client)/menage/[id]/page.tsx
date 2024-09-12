@@ -553,7 +553,7 @@ const page = observer(({ params }: { params: { id: string } }) => {
                                     dormitoryOnly?.data?.dormitory_state?.[facility.key as FacilityKey] ? '' : 'opacity-50 grayscale'
                                 }`}
                             >
-                                {facility.key === dormitoryOnly.loadingState 
+                                {dormitoryOnly.loadingState.some(item => item === facility.key)
                                     ? <CircularProgress size={20}/>
                                     : cloneElement(facility.icon, { className: 'text-xl text-blue-500' })
                                 } <p className='text-left'>{facility.label}</p>
@@ -649,7 +649,7 @@ const page = observer(({ params }: { params: { id: string } }) => {
                                         }
                                     </TableCell>
                                     <TableCell align="right" className="w-12 py-3 pe-0">
-                                        {dormitoryOnly.loadingState === v.id ?
+                                        {dormitoryOnly.loadingState.some(item => item === v.id)?
                                             <div className='flex-center aspect-square pe-2'>
                                                 <CircularProgress size={20} sx={{ color: 'red' }} className=""/>
                                             </div>

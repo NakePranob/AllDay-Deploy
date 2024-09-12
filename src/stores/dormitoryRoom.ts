@@ -5,7 +5,7 @@ import { AlertType } from "@/Types/alert";
 
 class dormitoryRoom {
     data: Dormitory_type = {} as Dormitory_type;
-    loadingState: string | number | null = null;
+    loadingState: (string | number)[] = [];
     loadingUpload: boolean = false;
     imageSubmitState: string = '';
     imageSelectEdit: File | null = null;
@@ -40,6 +40,19 @@ class dormitoryRoom {
             this.data.width = Number(value);
         }
     }
+
+    setEditQuantity(value: string) {
+        if (!isNaN(Number(value))) {
+            this.data.quantity = Number(value);
+        }
+    }
+
+    setEditOccupied(value: string) {
+        if (!isNaN(Number(value))) {
+            this.data.occupied = Number(value);
+        }
+    }
+
 
     setEditLength(value: string) {
         if (!isNaN(Number(value))) {
@@ -208,7 +221,7 @@ class dormitoryRoom {
     }
 
     async setFacilities(where: string) {
-        this.loadingState = where;  // Set loading state for the current facility
+        this.loadingState?.push(where);  // Set loading state for the current facility
         let result: boolean | null = null;
     
         switch(where) {
@@ -216,61 +229,68 @@ class dormitoryRoom {
                 result = await this.updateFacilities(this.data.dormitory_facilitate.id, where, !this.data.dormitory_facilitate.fan);
                 if (result) {
                     this.data.dormitory_facilitate.fan = !this.data.dormitory_facilitate.fan;
+                    this.loadingState = this.loadingState.filter(item => item !== where);
                 }
                 break;
             case "air":
                 result = await this.updateFacilities(this.data.dormitory_facilitate.id, where, !this.data.dormitory_facilitate.air);
                 if (result) {
                     this.data.dormitory_facilitate.air = !this.data.dormitory_facilitate.air;
+                    this.loadingState = this.loadingState.filter(item => item !== where);
                 }
                 break;
             case "closet":
                 result = await this.updateFacilities(this.data.dormitory_facilitate.id, where, !this.data.dormitory_facilitate.closet);
                 if (result) {
                     this.data.dormitory_facilitate.closet = !this.data.dormitory_facilitate.closet;
+                    this.loadingState = this.loadingState.filter(item => item !== where);
                 }
                 break;
             case "water_heater":
                 result = await this.updateFacilities(this.data.dormitory_facilitate.id, where, !this.data.dormitory_facilitate.water_heater);
                 if (result) {
                     this.data.dormitory_facilitate.water_heater = !this.data.dormitory_facilitate.water_heater;
+                    this.loadingState = this.loadingState.filter(item => item !== where);
                 }
                 break;
             case "table":
                 result = await this.updateFacilities(this.data.dormitory_facilitate.id, where, !this.data.dormitory_facilitate.table);
                 if (result) {
                     this.data.dormitory_facilitate.table = !this.data.dormitory_facilitate.table;
+                    this.loadingState = this.loadingState.filter(item => item !== where);
                 }
                 break;
             case "dressing_table":
                 result = await this.updateFacilities(this.data.dormitory_facilitate.id, where, !this.data.dormitory_facilitate.dressing_table);
                 if (result) {
                     this.data.dormitory_facilitate.dressing_table = !this.data.dormitory_facilitate.dressing_table;
+                    this.loadingState = this.loadingState.filter(item => item !== where);
                 }
                 break;
             case "fridge":
                 result = await this.updateFacilities(this.data.dormitory_facilitate.id, where, !this.data.dormitory_facilitate.fridge);
                 if (result) {
                     this.data.dormitory_facilitate.fridge = !this.data.dormitory_facilitate.fridge;
+                    this.loadingState = this.loadingState.filter(item => item !== where);
                 }
                 break;
             case "bed":
                 result = await this.updateFacilities(this.data.dormitory_facilitate.id, where, !this.data.dormitory_facilitate.bed);
                 if (result) {
                     this.data.dormitory_facilitate.bed = !this.data.dormitory_facilitate.bed;
+                    this.loadingState = this.loadingState.filter(item => item !== where);
                 }
                 break;
             case "tv":
                 result = await this.updateFacilities(this.data.dormitory_facilitate.id, where, !this.data.dormitory_facilitate.tv);
                 if (result) {
                     this.data.dormitory_facilitate.tv = !this.data.dormitory_facilitate.tv;
+                    this.loadingState = this.loadingState.filter(item => item !== where);
                 }
                 break;
             default:
                 break;
         }
-    
-        this.loadingState = null;  // Reset loading state after the operation completes
     }
 
     setPreviewImg(id: number | null) {

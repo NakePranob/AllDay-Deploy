@@ -11,7 +11,7 @@ export type Dormitory = {
     doc: string | null;
     facebook: string | null;
     line: string | null;
-    phone: string | null;
+    phone: number | null;
     occupied: Boolean;
     view: number;
     reviewScore: number;

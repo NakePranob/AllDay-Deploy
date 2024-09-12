@@ -16,22 +16,15 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
 // import required modules
-import { Autoplay, Pagination, Navigation } from 'swiper/modules';
+import { Autoplay } from 'swiper/modules';
 
-import { MdBookmarkBorder, MdOutlineMeetingRoom } from "react-icons/md";
-import { IoMdBookmark, IoIosFitness } from "react-icons/io";
-import { BiChat, BiCctv, BiGitCompare, BiCloset } from "react-icons/bi";
-import { FaFacebookSquare, FaWifi, FaSmoking, FaCarSide, FaMotorcycle, FaTable  } from "react-icons/fa";
-import { PiPhoneCallFill, PiDogFill, PiGenderIntersex, PiPicnicTableBold, PiFan, PiTelevisionSimple } from "react-icons/pi";
-import { FaLine, FaShower  } from "react-icons/fa6";
-import { GiLift, GiSecurityGate, GiKeyCard, GiWashingMachine } from "react-icons/gi";
-import { RiFingerprintFill, RiRestaurantLine, RiStore3Line } from "react-icons/ri";
-import { GrUserPolice } from "react-icons/gr";
-import { HiOutlineDocumentText, HiOutlineLocationMarker } from "react-icons/hi";
-import { AiOutlineMan, AiOutlineWoman } from "react-icons/ai";
+import { BiCloset } from "react-icons/bi";
+import { PiFan, PiTelevisionSimple } from "react-icons/pi";
+import { FaShower  } from "react-icons/fa6";
 import { LuAirVent } from "react-icons/lu";
-import { TbFridge } from "react-icons/tb";
-import { IoBed } from "react-icons/io5";
+import { GiTable } from "react-icons/gi";
+import { MdOutlineKingBed } from "react-icons/md";
+import { TbTableAlias } from "react-icons/tb";
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -222,11 +215,15 @@ const RoomList = observer(() => {
                                     </span>
                                     <span className={`col-span-2 flex-y-center gap-4 text-sm
                                         ${item.dormitory_facilitate.bed ? '' : 'oopacity-50 grayscale'}`}>
-                                        <IoBed className="text-xl text-blue-500"/> เตียงนอน
+                                        <MdOutlineKingBed className="text-xl text-blue-500"/> เตียงนอน
+                                    </span>
+                                    <span className={`col-span-2 flex-y-center gap-4 text-sm
+                                        ${item.dormitory_facilitate.table ? '' : 'oopacity-50 grayscale'}`}>
+                                        <GiTable className="text-xl text-blue-500"/> โต๊ะทำงาน
                                     </span>
                                     <span className={`col-span-2 flex-y-center gap-4 text-sm
                                         ${item.dormitory_facilitate.dressing_table ? '' : 'oopacity-50 grayscale'}`}>
-                                        <FaTable className="text-xl text-blue-500"/> โต๊ะเครื่องแป้ง
+                                        <TbTableAlias className="text-xl text-blue-500"/> โต๊ะเครื่องแป้ง
                                     </span>
                                     <span className={`col-span-2 flex-y-center gap-4 text-sm
                                         ${item.dormitory_facilitate.closet ? '' : 'oopacity-50 grayscale'}`}>
@@ -238,7 +235,7 @@ const RoomList = observer(() => {
                                     </span>
                                     <span className={`col-span-2 flex-y-center gap-4 text-sm
                                         ${item.dormitory_facilitate.fridge ? '' : 'oopacity-50 grayscale'}`}>
-                                        <TbFridge className="text-xl text-blue-500"/> ตู้เย็น
+                                        <MdOutlineKingBed className="text-xl text-blue-500"/> ตู้เย็น
                                     </span>
                                     <span className={`col-span-2 flex-y-center gap-4 text-sm
                                         ${item.dormitory_facilitate.tv ? '' : 'oopacity-50 grayscale'}`}>

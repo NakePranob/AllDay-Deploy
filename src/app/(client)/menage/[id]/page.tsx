@@ -16,12 +16,12 @@ import Carousel from "@/components/dormitory/Carousel";
 // Icons
 import { IoIosFitness, IoMdClose } from "react-icons/io";
 import { BiCctv } from "react-icons/bi";
-import { FaWifi, FaSmoking, FaCarSide, FaMotorcycle, FaRegEdit } from "react-icons/fa";
+import { FaWifi, FaSmoking, FaCarSide, FaMotorcycle, FaRegEdit, FaFacebookSquare, FaLine } from "react-icons/fa";
 import { PiDogFill } from "react-icons/pi";
 import { GiLift, GiSecurityGate, GiKeyCard, GiWashingMachine } from "react-icons/gi";
 import { RiFingerprintFill, RiRestaurantLine, RiImageEditFill, RiImageEditLine } from "react-icons/ri";
 import { GrUserPolice } from "react-icons/gr";
-import { MdStorefront, MdDelete, MdDeleteOutline } from "react-icons/md";
+import { MdStorefront, MdDelete, MdDeleteOutline, MdLocalPhone } from "react-icons/md";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import { FiPlusSquare, FiUploadCloud } from "react-icons/fi";
 
@@ -58,6 +58,9 @@ const page = observer(({ params }: { params: { id: string } }) => {
     const [isEditDistance, setIsEditDistance] = useState<number | null>(null);
     const [isEditName, setIsEditName] = useState(false);
     const [isEditEngName, setIsEditEngName] = useState(false);
+    const [isEditFacebook, setIsEditFacebook] = useState(false);
+    const [isEditLine, setIsEditLine] = useState(false);
+    const [isEditPhone, setIsEditPhone] = useState(false);
     const [isEditPrice, setIsEditPrice] = useState(false);
 
     const handleLocationBlur = (id: number, key: number) => {
@@ -67,17 +70,34 @@ const page = observer(({ params }: { params: { id: string } }) => {
 
     const handleNameBlur = () => {
         setIsEditName(false); // หยุดการแก้ไขเมื่อกดออกจาก input
-        dormitoryOnly.updateName();
+        dormitoryOnly.updateDormitory(dormitoryOnly.data.id, 'name', dormitoryOnly.data.name);
     };
 
     const handleEngNameBlur = () => {
         setIsEditEngName(false); // หยุดการแก้ไขเมื่อกดออกจาก input
-        dormitoryOnly.updateEngName();
+        dormitoryOnly.updateDormitory(dormitoryOnly.data.id, 'engname', dormitoryOnly.data.engname);
+    };
+
+    const handleFacebookBlur = () => {
+        setIsEditFacebook(false); // หยุดการแก้ไขเมื่อกดออกจาก input
+        dormitoryOnly.updateDormitory(dormitoryOnly.data.id, 'facebook', dormitoryOnly.data.facebook);
+    };
+
+    const handleLineBlur = () => {
+        setIsEditLine(false); // หยุดการแก้ไขเมื่อกดออกจาก input
+
+        dormitoryOnly.updateDormitory(dormitoryOnly.data.id, 'line', dormitoryOnly.data.line);
+    };
+
+    const handlePhoneBlur = () => {
+        setIsEditPhone(false); // หยุดการแก้ไขเมื่อกดออกจาก input
+
+        dormitoryOnly.updateDormitory(dormitoryOnly.data.id, 'phone', dormitoryOnly.data.phone);
     };
 
     const handlePriceBlur = () => {
         setIsEditPrice(false); // หยุดการแก้ไขเมื่อกดออกจาก input
-        dormitoryOnly.updatePrice();
+        dormitoryOnly.updateDormitory(dormitoryOnly.data.id, 'price', dormitoryOnly.data.price);
     };
 
     const handleDistanceBlur = (id: number, key: number) => {
@@ -432,12 +452,77 @@ const page = observer(({ params }: { params: { id: string } }) => {
                         </>
                     }
                     <div className='border-items rounded-xl flex justify-between px-4 py-2 text-sm mt-4'>
-                        <div className=''>
-                            
+                        <div className='flex-y-center h-full gap-4'>
+                            {isEditFacebook ?
+                                <div className='flex-y-center gap-2'>
+                                    <FaFacebookSquare className='text-xl text-blue-400'/>
+                                    <input 
+                                        type="text"
+                                        value={dormitoryOnly.data?.facebook ? dormitoryOnly.data?.facebook : ''}
+                                        onBlur={()=>handleFacebookBlur()}
+                                        onChange={(e)=>dormitoryOnly.setEditFacebook(e.target.value)}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') {
+                                                e.preventDefault();
+                                                handleFacebookBlur();
+                                            }
+                                        }}
+                                        autoFocus
+                                        className="border-none outline-none bg-transparent"
+                                    />
+                                </div>
+                                :
+                                <button onClick={()=>setIsEditFacebook(true)} className={`flex-y-center gap-2 ${!dormitoryOnly?.data?.line && 'opacity-50 grayscale'}`}>
+                                    <FaFacebookSquare className='text-xl text-blue-500'/>
+                                    <span className="mt-[2px]">{dormitoryOnly?.data?.facebook ? dormitoryOnly?.data?.facebook : 'ยังไม่กำหนดลงค์เฟสบุ๊ค'}</span>
+                                </button>
+                            }
+                            {isEditLine ?
+                                <div className='flex-y-center gap-2'>
+                                    <FaLine className='text-xl text-green-500'/>
+                                    <input 
+                                        type="text"
+                                        value={dormitoryOnly.data?.line ? dormitoryOnly.data?.line : ''}
+                                        onBlur={()=>handleLineBlur()}
+                                        onChange={(e)=>dormitoryOnly.setEditLine(e.target.value)}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') {
+                                                e.preventDefault();
+                                                handleLineBlur();
+                                            }
+                                        }}
+                                        autoFocus
+                                        className="border-none outline-none bg-transparent"
+                                    />
+                                </div>
+                                :
+                                <button onClick={()=>setIsEditLine(true)} className={`flex-y-center gap-2 ${!dormitoryOnly?.data?.line && 'opacity-50 grayscale'}`}>
+                                    <FaLine className='text-xl text-green-400'/>
+                                    <span className="mt-[2px]">{dormitoryOnly?.data?.line ? dormitoryOnly?.data?.line : 'ยังไม่กำหนดลงค์ไลน์'}</span>
+                                </button>
+                            }
                         </div>
-                        <div>
-                            0904445814
-                        </div>
+                        {isEditPhone ?
+                            <input 
+                                type="text"
+                                value={dormitoryOnly.data?.phone ? '0'+dormitoryOnly.data?.phone : ''}
+                                onBlur={()=>handlePhoneBlur()}
+                                onChange={(e)=>dormitoryOnly.setEditPhone(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        e.preventDefault();
+                                        handlePhoneBlur();
+                                    }
+                                }}
+                                autoFocus
+                                className="border-none outline-none bg-transparent text-right"
+                            />
+                            :
+                            <button onClick={()=>setIsEditPhone(true)} className={`flex-y-center gap-2 ${!dormitoryOnly?.data?.phone && 'opacity-50 grayscale'}`}>
+                                <MdLocalPhone className='text-xl'/>
+                                <span className="mt-[2px]">{dormitoryOnly?.data?.phone ? '0'+dormitoryOnly?.data?.phone : 'ยังไม่กำหนดเบอร์โทร'}</span>
+                            </button>
+                        }
                     </div>
                     <h4 className='text-lg lg:text-xl font-semibold mt-6'>
                         สิ่งอำนวยความสะดวก 
@@ -471,7 +556,7 @@ const page = observer(({ params }: { params: { id: string } }) => {
                                 {facility.key === dormitoryOnly.loadingState 
                                     ? <CircularProgress size={20}/>
                                     : cloneElement(facility.icon, { className: 'text-xl text-blue-500' })
-                                } {facility.label}
+                                } <p className='text-left'>{facility.label}</p>
                             </button>
                         ))}
                     </section>

@@ -2,7 +2,6 @@ import { makeAutoObservable, runInAction, action } from "mobx";
 import axios from "axios";
 import type { Dormitory, Favorites, Dormitory_img, Dormitory_state } from "@/Types/dormitory";
 import { AlertType } from "@/Types/alert";
-import { format } from "path";
 
 type OpjDate = {
     date: string
@@ -307,35 +306,25 @@ class dormitoryOnly {
         }
     }
 
-    async updateName() {
-        try {
-            await axios.put('/api/dormitory', 
-                {
-                    id: this.data.id, 
-                    where:'name', 
-                    value: this.data.name
-                }
-            )
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
     setEditEngName(value: string) {
         this.data.engname = value;
     }
 
-    async updateEngName() {
-        try {
-            await axios.put('/api/dormitory', 
-                {
-                    id: this.data.id,
-                    where:'engname', 
-                    value: this.data.engname
-                }
-            )
-        } catch (error) {
-            console.log(error);
+    setEditFacebook(value: string) {
+        if (value !== "" && value.length <= 100) {
+            this.data.facebook = value;
+        }
+    }
+
+    setEditLine(value: string) {
+        if (value !== "" && value.length <= 100) {
+            this.data.line = value;
+        }
+    }
+
+    setEditPhone(value: string) {
+        if (value.length <= 10) {
+            this.data.phone = Number(value);
         }
     }
 
@@ -350,13 +339,13 @@ class dormitoryOnly {
         }
     }
 
-    async updatePrice() {
+    async updateDormitory(id:number, where: string, value: string | number | null | undefined) {
         try {
             await axios.put('/api/dormitory', 
                 {
-                    id: this.data.id,
-                    where:'price', 
-                    value: this.data.price
+                    id,
+                    where, 
+                    value
                 }
             )
         } catch (error) {

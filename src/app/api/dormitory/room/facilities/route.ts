@@ -3,15 +3,15 @@ const prisma = new PrismaClient();
 
 export async function PUT(req: Request, res: Response) {
     try {
-        const {id, where, value}: {id: number, where: string, value: string | number} = await req.json();
-        const result = await prisma.dormitory.update({
+        const {key, where, state} = await req.json();
+        const result = await prisma.dormitory_facilitate.update({
             where: {
-                id
+                id: key
             },
             data: {
-                [where]: value
+                [where]: state
             }
-        });
+        })
         return Response.json(result);
     } catch (error) {
         return new Response('Internal server error', { status: 500 });

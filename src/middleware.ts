@@ -62,10 +62,21 @@ export async function middleware(request: NextRequest) {
         });
     }
 
+    if (url.startsWith('/dormitory')) {
+        const requestHeaders = new Headers(request.headers);
+        requestHeaders.set('userId', userId as string);
+        
+        return NextResponse.next({
+            request: {
+                headers: requestHeaders,
+            },
+        });
+    }
+
     // Default action if no routes are matched
     return NextResponse.next();
 }
 
 export const config = {
-    matcher: ['/menage/:path*', '/admin/:path*', '/favorites/:path*', '/reservations/:path*'],
+    matcher: ['/menage/:path*', '/admin/:path*', '/favorites/:path*', '/reservations/:path*', '/dormitory/:path*'],
 };

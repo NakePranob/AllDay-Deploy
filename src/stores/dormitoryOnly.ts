@@ -589,12 +589,14 @@ class dormitoryOnly {
                 if (!existingFavorite) {
                     // เพิ่ม favorite
                     const formData = { dmtId, userId };
+                    this.loadingState?.push('favorite');
                     const result = await axios.post(`/api/favorite`, formData);
 
                     runInAction(() => {
                         console.log(result.data);
                         this.favoriteList.push(result.data);  // อัพเดทรายการโปรดหลังจากเพิ่ม
                         this.setFavoriteState(true);  // ตั้งสถานะ FavoriteState เป็น true
+                        this.loadingState = this.loadingState.filter(item => item !== 'favorite');
                     });
 
                     this.setAlert({
@@ -605,12 +607,14 @@ class dormitoryOnly {
                     });
                 } else {
                     // ลบ favorite
+                    this.loadingState?.push('favorite');
                     const result = await axios.delete(`/api/favorite/${existingFavorite.id}`);
 
                     runInAction(() => {
                         console.log(result.data);
                         this.favoriteList = this.favoriteList.filter(item => item.dmtId !== 2); // อัพเดทรายการโปรดหลังจากลบ
                         this.setFavoriteState(false);  // ตั้งสถานะ FavoriteState เป็น false
+                        this.loadingState = this.loadingState.filter(item => item !== 'favorite');
                     });
 
                     this.setAlert({

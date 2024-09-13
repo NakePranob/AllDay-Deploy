@@ -4,7 +4,6 @@ import dormitoryOnly from '@/stores/dormitoryOnly';
 import { useRef, useEffect, createRef } from 'react';
 import Image from 'next/image';
 import { DayOption, months, YearPlus } from '@/function/dateTime';
-import { useSession } from 'next-auth/react';
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -34,9 +33,7 @@ import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 
-const RoomList = observer(() => {
-    const { data: session, status } = useSession();
-
+const RoomList = observer(({userId}:{userId: string | null}) => {
     const style = {
         position: 'absolute' as 'absolute',
         boxShadow: 24,
@@ -92,8 +89,8 @@ const RoomList = observer(() => {
                     </Typography>
                     <form 
                         onSubmit={(e)=>dormitoryOnly.addReserve(e, 
-                            status === 'authenticated' && session?.user 
-                                ? session?.user?.id 
+                            userId
+                                ? Number(userId)
                                 : null,
                             dormitoryOnly?.data?.dormitory_type?.length > 0 
                                 ? dormitoryOnly.data.dormitory_type[dormitoryOnly.formReserve.id].id 

@@ -1,4 +1,5 @@
 import { makeAutoObservable, runInAction, action } from "mobx";
+import alerts from "./alerts";
 import axios from "axios";
 import type { Dormitory_type } from "@/Types/dormitory";
 import { AlertType } from "@/Types/alert";
@@ -306,6 +307,20 @@ class dormitoryRoom {
         this.imageSelectid = null;
         this.imageSelectEdit = null;
         this.imageSubmitState = '';
+    }
+
+    async deleteRoom() {
+        alerts.setAlert({
+            open: true,
+            state: 'success',
+            text: 'ลบประเภทห้องเรียบร้อย',
+            link: null
+        })
+        // try {
+        //     await axios.delete(`/api/dormitory/room/${this.data.id}`);
+        // } catch (error) {
+        //     console.log(error);
+        // }
     }
 
     // addroom

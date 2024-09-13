@@ -534,7 +534,10 @@ const page = observer(({ params }: { params: { id: string } }) => {
                     </div>
                 </div>
                 <div className='w-full flex-center py-8 sm:pt-6 sm:pb-0 bg-base sm:bg-black/0 sm:dark:bg-black/0'>
-                    <Button variant='contained' color='error' sx={{ borderRadius: '99999px', color: '#fff' }}>ลบประเภทห้องพัก</Button>
+                    <Button variant='contained' color='error' sx={{ borderRadius: '99999px', color: '#fff' }}
+                    onClick={()=>dormitoryRoom.deleteRoom()}>
+                        ลบประเภทห้องพัก
+                    </Button>
                 </div>
             </div>
         </div>

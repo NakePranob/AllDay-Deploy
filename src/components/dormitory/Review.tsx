@@ -27,22 +27,27 @@ import Alert from "@/components/Alert";
 import { CountPercent, StringDatetimeToDate } from "@/function/maths";
 import { Star } from "@mui/icons-material";
 
-const Review = observer(({ dormitoryId }: { dormitoryId: string }) => {
+type Props = {
+    dormitoryId: string,
+    userId: string | null
+}
+
+
+const Review = observer(({dormitoryId, userId}: Props) => {
     const { data: session, status } = useSession();
     const [liveAt, setLiveAt] = useState<number | null>(null);
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
         const fetchUserDormitory = async () => {
-            if (session?.user?.id) {
-                const dormitoryIdResponse = await dormitoryOnly.getUserState(session.user.id);
+            if (userId) {
+                const dormitoryIdResponse = await dormitoryOnly.getUserState(Number(userId));
                 setLiveAt(dormitoryIdResponse);
             }
         };
-        console.log("session", session);
 
         fetchUserDormitory();
-    }, [session]);
+    }, [userId]);
 
 
     const reviewData = dormitoryOnly.data?.review ?? [];
@@ -74,7 +79,7 @@ const Review = observer(({ dormitoryId }: { dormitoryId: string }) => {
                     <Typography id="review-modal-title" variant="h6" component="h2">
                         คุณคิดยังไงกับหอพักนี้
                     </Typography>
-                    <form onSubmit={(e) => dormitoryOnly.review(e, session?.user?.id)} noValidate autoComplete="off" className="mt-4">
+                    <form onSubmit={(e) => dormitoryOnly.review(e, Number(userId))} noValidate autoComplete="off" className="mt-4">
                         <Typography className="flex gap-2">
                             <Typography component="legend" className="mt-1">คะแนน:</Typography>
                             <Rating

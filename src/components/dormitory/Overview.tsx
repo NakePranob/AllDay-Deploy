@@ -1,13 +1,12 @@
 'use client'
 import { useState, useEffect, createRef } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { observer } from "mobx-react";
-import { useSession } from 'next-auth/react';
 import dormitoryOnly from "@/stores/dormitoryOnly";
 
 // Material UI
 import { Button } from "@mui/material"
+import CircularProgress from '@mui/material/CircularProgress';
 
 // Components
 import Starscore from "@/components/Starscore"
@@ -34,8 +33,7 @@ import { AiOutlineMan, AiOutlineWoman } from "react-icons/ai";
 import { LuAirVent } from "react-icons/lu";
 import { TbFridge } from "react-icons/tb";
 
-const Overview = observer(({dmtId}: {dmtId: string}) => {
-    const { data: session, status } = useSession();
+const Overview = observer(({dmtId, userId}: {dmtId: string, userId: string | null}) => {
     const [open, setOpen] = useState(false);
 
     function hasTypeRoom(data: any[], has: string): boolean {
@@ -258,8 +256,8 @@ const Overview = observer(({dmtId}: {dmtId: string}) => {
                 </div>
             </section>
             <div className="fixed bottom-4 right-4 flex flex-col items-center gap-4 z-999">
-                { status === 'authenticated' &&
-                    <button onClick={()=>dormitoryOnly.addFavorite(Number(dmtId), session?.user?.id)}
+                { userId && !dormitoryOnly.loadingState.some(item => item === 'favorite') ?
+                    <button onClick={()=>dormitoryOnly.addFavorite(Number(dmtId), Number(userId))}
                     className={`p-4 bg-blue-500 rounded-full text-lg md:text-xl 
                     transition-all duration-300 ease-in-out
                     flex-center text-white shadow-2xl ${!open && 'scale-0 opacity-0'}
@@ -272,6 +270,13 @@ const Overview = observer(({dmtId}: {dmtId: string}) => {
                             )
                         }
                     </button>
+                    :
+                    <div className={`p-4 bg-blue-500 rounded-full text-lg md:text-xl 
+                        transition-all duration-300 ease-in-out
+                        flex-center text-white shadow-2xl ${!open && 'scale-0 opacity-0'}
+                        hover:bg-blue-600 transition-300 hover:outline outline-offset-2 outline-blue-400`}>
+                        <CircularProgress size={20} color="inherit"/>
+                    </div>
                 }
                 <button className={`p-4 bg-blue-500 rounded-full text-lg md:text-xl
                 transition-all duration-150 ease-in-out

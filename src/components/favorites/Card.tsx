@@ -27,8 +27,9 @@ const Card = observer(({ data }: { data: Favorites[] }) => {
     return (
         <>
             {favorite.data.length > 0 ? favorite.data.map((item, i) => (
-                <Link href={`/dormitory/${item.dormitory.id}`} key={i} className="card rounded-md sm:rounded-2xl col-span-6 md:col-span-4 lg:col-span-3 relative transition-300
+                <div key={i} className="card rounded-md sm:rounded-2xl col-span-6 md:col-span-4 lg:col-span-3 relative transition-300
                 hover:shadow-2xl dark:hover:shadow-xl hover:shadow-blue-300/60 dark:hover:shadow-blue-950/60">
+                    <Link href={`/dormitory/${item.dormitory.id}`} className="w-full h-full absolute top-0 left-0"></Link>
                     <div className="w-full aspect-square rounded-t-md sm:rounded-t-2xl overflow-hidden">
                         <Image
                             src={item.dormitory.dormitory_img?.[0]?.url ? imageUrl(item.dormitory.dormitory_img?.[0]?.url) : '/404.png'}
@@ -68,7 +69,7 @@ const Card = observer(({ data }: { data: Favorites[] }) => {
                             {item.dormitory.price}
                         </p>
                     </div>
-                </Link>
+                </div>
             )) : (
                 <h1 className="fixed-center">ไม่พบรายการโปรดของท่าน</h1>
             )}

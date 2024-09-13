@@ -11,6 +11,14 @@ class dormitoryRoom {
     imageSelectEdit: File | null = null;
     imageSelectid: number | null = null;
     previewImg: number | null = null;
+
+    name: string = '';
+    quantity: string = '';
+    price: string = '';
+    width: string = '';
+    length: string = '';
+    selectedFiles: FileList | null = null;
+    previews: string[] = [];
     alert: AlertType = {
         open: false,
         state: '',
@@ -298,6 +306,116 @@ class dormitoryRoom {
         this.imageSelectid = null;
         this.imageSelectEdit = null;
         this.imageSubmitState = '';
+    }
+
+    // addroom
+    setName = (value: string) => {
+        this.name = value;
+    }
+
+    setQuantity = (value: string) => {
+        if (!isNaN(Number(value))) {
+            this.quantity = value;
+        }
+    }
+
+    setPrice = (value: string) => {
+        if (!isNaN(Number(value))) {
+            this.price = value;
+        }
+    }
+
+    setWidth = (value: string) => {
+        if (!isNaN(Number(value))) {
+            this.width = value;
+        }
+    }
+
+    setLength = (value: string) => {
+        if (!isNaN(Number(value))) {
+            this.length = value;
+        }
+    }
+
+    handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files) {
+          this.selectedFiles = event.target.files;
+          const filesArray = Array.from(event.target.files);
+          const filePreviews = filesArray.map((file) => URL.createObjectURL(file));
+          this.previews = filePreviews;
+        }
+    };
+
+    handleAddFiles = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files) {
+            const newFilesArray = Array.from(event.target.files);
+    
+            // แปลง selectedFiles ที่มีอยู่เดิมเป็น array
+            const currentFilesArray = this.selectedFiles ? Array.from(this.selectedFiles) : [];
+    
+            // ฟังก์ชันตรวจสอบว่ามีไฟล์นี้อยู่ใน currentFilesArray หรือไม่
+            const isDuplicate = (file: File) =>
+                currentFilesArray.some(existingFile =>
+                    existingFile.name === file.name && existingFile.size === file.size
+                );
+    
+            // กรองไฟล์ใหม่เพื่อเอาเฉพาะไฟล์ที่ยังไม่เคยมีใน currentFilesArray
+            const uniqueNewFilesArray = newFilesArray.filter(file => !isDuplicate(file));
+    
+            if (uniqueNewFilesArray.length > 0) {
+                // รวมไฟล์ใหม่ที่ไม่ซ้ำกับไฟล์เดิม
+                const updatedFilesArray = [...currentFilesArray, ...uniqueNewFilesArray];
+    
+                // อัปเดต selectedFiles
+                this.selectedFiles = updatedFilesArray as unknown as FileList;
+    
+                // อัปเดต previews ตามไฟล์ทั้งหมด
+                const filePreviews = updatedFilesArray.map(file => URL.createObjectURL(file));
+                this.previews = filePreviews;
+            } else {
+                console.log("All selected files are duplicates.");
+            }
+        }
+    };
+
+    handleRemoveImage = (index: number) => {
+        if (this.selectedFiles) {
+            const filesArray = Array.from(this.selectedFiles); // แปลง FileList เป็น array
+            if (filesArray.length && index >= 0 && index < filesArray.length) {
+                filesArray.splice(index, 1); // ลบไฟล์จาก array
+            }
+            this.selectedFiles = filesArray as unknown as FileList; // เปลี่ยนกลับเป็น FileList (หรือจะใช้ File[] แทนก็ได้)
+        }
+        this.previews.splice(index, 1); // อัปเดตพรีวิวตามลำดับ
+    };
+
+    handleSubmit = async (e: React.FormEvent<HTMLFormElement>, id: string) => {
+        e.preventDefault();
+        if (!this.selectedFiles) return;
+
+        const formData = new FormData();
+    
+        // เพิ่มไฟล์ทั้งหมดลงใน FormData
+        Array.from(this.selectedFiles).forEach((file, index) => {
+          formData.append(`images${index}`, file); // 'images' คือ key ที่คุณจะใช้ใน backend
+        });
+        formData.append('name', this.name);
+        formData.append('quantity', this.quantity);
+        formData.append('price', this.price);
+        formData.append('width', this.width);
+        formData.append('length', this.length);
+        formData.append('dmtId', id);
+    
+        try {
+            const response = await axios.post('/api/dormitory/room', formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+            });
+            console.log('Upload successful:', response.data);
+        } catch (error) {
+        console.error('Error uploading images:', error);
+        }
     }
 
     resetAlert() {

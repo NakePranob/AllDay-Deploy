@@ -22,7 +22,6 @@
     "@vercel/speed-insights": "^1.0.12",
     "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
-    "formidable": "^3.5.1",
     "mobx": "^6.12.5",
     "mobx-react": "^9.1.1",
     "mobx-react-lite": "^4.0.7",

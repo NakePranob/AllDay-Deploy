@@ -2,6 +2,7 @@ import { makeAutoObservable, runInAction, action } from "mobx";
 import axios from "axios";
 import type { Dormitory, Favorites, Dormitory_img, Dormitory_state } from "@/Types/dormitory";
 import { AlertType } from "@/Types/alert";
+import alerts from "./alerts";
 
 type OpjDate = {
     date: string
@@ -163,7 +164,7 @@ class dormitoryOnly {
                 }
                 console.log('test');
             } else {
-                this.setAlert({
+                alerts.setAlert({
                     open: true,
                     state: 'warning',
                     text: 'ไฟล์รูปภาพต้องมีขนาดไม่เกิน 5MB',
@@ -457,14 +458,14 @@ class dormitoryOnly {
             try {
                 console.log(formData);
                 const result = await axios.post(`/api/reserve`, formData);
-                this.setAlert({
+                alerts.setAlert({
                     open: true,
                     state: 'success',
                     text: 'จองสำเร็จ',
                     link: null
                 });
             } catch (error) {
-                this.setAlert({
+                alerts.setAlert({
                     open: true,
                     state: 'error',
                     text: 'คุณได้ทำการจองหอพักไปแล้ว',
@@ -472,7 +473,7 @@ class dormitoryOnly {
                 })
             }
         } else {
-            this.setAlert({
+            alerts.setAlert({
                 open: true,
                 state: 'warning',
                 text: 'กรุณาเข้าสู่ระบบ',
@@ -579,6 +580,34 @@ class dormitoryOnly {
         });
     }
 
+    async removeReview(id: number) {
+        this.loadingState?.push(`review${id}`);
+        try {
+            await axios.delete(`/api/dormitory/review/${id}`);
+            const index = this.data.review.findIndex(item => item.id === id);
+            if (index !== -1) {
+                this.data.review.splice(index, 1);
+            }
+            runInAction(() => {
+                this.loadingState = this.loadingState.filter(item => item !== `review${id}`);    
+            })
+            alerts.setAlert({
+                open: true,
+                state: 'success',
+                text: 'ลบรีวิวสำเร็จ',
+                link: null
+            });
+        } catch (error) {
+            console.log(error);
+            alerts.setAlert({
+                open: true,
+                state: 'error',
+                text: 'มีบางอย่างผิดพลาด',
+                link: null
+            })
+        }
+    }
+
     async addFavorite(dmtId: number | null | undefined, userId: number | null | undefined) {
         try {
             if (dmtId && userId) {
@@ -599,7 +628,7 @@ class dormitoryOnly {
                         this.loadingState = this.loadingState.filter(item => item !== 'favorite');
                     });
 
-                    this.setAlert({
+                    alerts.setAlert({
                         open: true,
                         state: 'success',
                         text: 'ทำการเพิ่มรายการโปรด',
@@ -617,7 +646,7 @@ class dormitoryOnly {
                         this.loadingState = this.loadingState.filter(item => item !== 'favorite');
                     });
 
-                    this.setAlert({
+                    alerts.setAlert({
                         open: true,
                         state: 'success',
                         text: 'ทำการยกเลิกรายการโปรด',
@@ -626,7 +655,7 @@ class dormitoryOnly {
                 }
             } else {
                 // กรณีที่ยังไม่ได้เข้าสู่ระบบ
-                this.setAlert({
+                alerts.setAlert({
                     open: true,
                     state: 'warning',
                     text: 'กรุณาเข้าสู่ระบบ',
@@ -635,7 +664,7 @@ class dormitoryOnly {
             }
         } catch (error) {
             // จัดการข้อผิดพลาด
-            this.setAlert({
+            alerts.setAlert({
                 open: true,
                 state: 'error',
                 text: 'มีบางอย่างผิดพลาด',
@@ -675,14 +704,14 @@ class dormitoryOnly {
                         this.data.reviewScore = result.data.totalScore;
                     });
                     this.setOpen(false);
-                    this.setAlert({
+                    alerts.setAlert({
                         open: true,
                         state: 'success',
                         text: 'รีวิวสำเร็จ',
                         link: null
                     });
                 } else {
-                    this.setAlert({
+                    alerts.setAlert({
                         open: true,
                         state: 'warning',
                         text: 'กรุณากำหนดคะแนน',
@@ -691,7 +720,7 @@ class dormitoryOnly {
                 }
             }
         } catch (error) {
-            this.setAlert({
+            alerts.setAlert({
                 open: true,
                 state: 'error',
                 text: 'มีบางอย่างผิดพลาด',

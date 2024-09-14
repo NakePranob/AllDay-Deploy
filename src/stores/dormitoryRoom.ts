@@ -4,6 +4,18 @@ import axios from "axios";
 import type { Dormitory_type } from "@/Types/dormitory";
 import { AlertType } from "@/Types/alert";
 
+interface Dormitory_facilitate {
+    fan: boolean;
+    air: boolean;
+    closet: boolean;
+    water_heater: boolean;
+    table: boolean;
+    dressing_table: boolean;
+    fridge: boolean;
+    bed: boolean;
+    tv: boolean;
+}
+
 class dormitoryRoom {
     data: Dormitory_type = {} as Dormitory_type;
     loadingState: (string | number)[] = [];
@@ -18,6 +30,17 @@ class dormitoryRoom {
     price: string = '';
     width: string = '';
     length: string = '';
+    addFacilities: Dormitory_facilitate = {
+        fan: false,
+        air: false,
+        closet: false,
+        water_heater: false,
+        table: false,
+        dressing_table: false,
+        fridge: false,
+        bed: false,
+        tv: false
+    };
     selectedFiles: FileList | null = null;
     previews: string[] = [];
     alert: AlertType = {
@@ -92,7 +115,7 @@ class dormitoryRoom {
                 }
                 console.log('test');
             } else {
-                this.setAlert({
+                alerts.setAlert({
                     open: true,
                     state: 'warning',
                     text: 'ไฟล์รูปภาพต้องมีขนาดไม่เกิน 5MB',
@@ -302,6 +325,12 @@ class dormitoryRoom {
         }
     }
 
+    async setAddFacilities(where: string) {
+        if (where) {
+            this.addFacilities[where as keyof Dormitory_facilitate] = !this.addFacilities[where as keyof Dormitory_facilitate];
+        }
+    }
+
     setPreviewImg(id: number | null) {
         this.previewImg = id;
         this.imageSelectid = null;
@@ -310,17 +339,23 @@ class dormitoryRoom {
     }
 
     async deleteRoom() {
-        alerts.setAlert({
-            open: true,
-            state: 'success',
-            text: 'ลบประเภทห้องเรียบร้อย',
-            link: null
-        })
-        // try {
-        //     await axios.delete(`/api/dormitory/room/${this.data.id}`);
-        // } catch (error) {
-        //     console.log(error);
-        // }
+        try {
+            await axios.delete(`/api/dormitory/room/${this.data.id}`);
+            alerts.setAlert({
+                open: true,
+                state: 'success',
+                text: 'ลบประเภทห้องเรียบร้อย',
+                link: `/menage/${this.data.dmtId}`
+            })
+        } catch (error) {
+            console.log(error);
+            alerts.setAlert({
+                open: true,
+                state: 'error',
+                text: 'เกิดข้อผิดพลาดในการลบประเภทห้อง',
+                link: null
+            })
+        }
     }
 
     // addroom
@@ -420,29 +455,34 @@ class dormitoryRoom {
         formData.append('width', this.width);
         formData.append('length', this.length);
         formData.append('dmtId', id);
-    
+        formData.append('facilities', JSON.stringify(this.addFacilities));
+        this.loadingState?.push('addroom');
         try {
             const response = await axios.post('/api/dormitory/room', formData, {
               headers: {
                 'Content-Type': 'multipart/form-data',
               },
             });
-            console.log('Upload successful:', response.data);
+            runInAction(() => {
+                this.loadingState = this.loadingState.filter(item => item !== 'addroom'); 
+            });
+            alerts.setAlert({
+                open: true,
+                state: 'success',
+                text: 'เพิ่มประเภทห้องเรียบร้อย',
+                link: `/menage/${id}`
+            })
         } catch (error) {
-        console.error('Error uploading images:', error);
+            console.error('Error uploading images:', error);
+            alerts.setAlert({
+                open: true,
+                state: 'error',
+                text: 'เกิดข้อผิดพลาดในการเพิ่มประเภทห้อง',
+                link: null
+            })
         }
     }
 
-    resetAlert() {
-        this.alert.open = false;
-        this.alert.state = '';
-        this.alert.text = '';
-        this.alert.link = null;
-    }
-
-    setAlert(alert: AlertType) {
-        this.alert = alert;
-    }
 }
 
 export default new dormitoryRoom();

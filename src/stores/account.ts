@@ -3,8 +3,10 @@ import { validateInput } from "@/function/validateInput";
 import { signIn } from "next-auth/react";
 import axios from "axios";
 import { AlertType } from "@/Types/alert";
+import alerts from "./alerts";
 
 class account {
+    loading: boolean = false;
     email: string = '';
     password: string = '';
     confirmPassword: string = '';
@@ -85,21 +87,23 @@ class account {
     async login(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
         try {
+            this.loading = true;
             const result = await signIn('credentials', {
                 redirect: false,
                 email: this.email,
                 password: this.password
             })
+            this.loading = false;
 
             if (result?.error) {
-                this.setAlert({
+                alerts.setAlert({
                     open: true,
                     state: 'warning',
                     text: result.error,
                     link: null
                 });
             } else {
-                this.setAlert({
+                alerts.setAlert({
                     open: true,
                     state: 'success',
                     text: 'เข้าสู่ระบบสำเร็จ',
@@ -119,17 +123,19 @@ class account {
                 password: this.password,
             }
             try {
+                this.loading = true;
                 await axios.post(`/api/auth/sigup`, formData);
-                this.setAlert({
+                this.loading = false;
+                alerts.setAlert({
                     open: true,
                     state: 'success',
                     text: 'สมัครสมาชิกสำเร็จ',
                     link: '/login'
                 });
             } catch (error) {
-                this.setAlert({
+                alerts.setAlert({
                     open: true,
-                    state: 'error',
+                    state: 'warning',
                     text: 'มีอีเมลนี้ในระบบแล้ว',
                     link: null
                 });

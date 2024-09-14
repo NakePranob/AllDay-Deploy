@@ -18,8 +18,6 @@ const FormSubmit = observer(() => {
                     <LinearProgress />
                 </Box>
             }
-            <Alert open={registerEntrepreneur.alert.open} state={registerEntrepreneur.alert.state} link={registerEntrepreneur.alert.link}
-            text={registerEntrepreneur.alert.text} close={()=>registerEntrepreneur.resetAlert()}/>
             <Button variant="contained" sx={{color: 'white', width: '100%', borderRadius: '5rem'}} onClick={()=>registerEntrepreneur.submitForm(session?.user?.id)}>ยืนยันการสมัคร</Button>            
         </>
     )

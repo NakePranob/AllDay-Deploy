@@ -26,6 +26,8 @@ async function Page({ params }: { params: { id: string } }) {
     const data = await getData(params.id);
     const headerRequest = headers();
     const userId = headerRequest.get('userId');
+    const role = headerRequest.get('role');
+
     if (data) {
         return (
             <div className='pt-16 md:pt-20 pb-10'>
@@ -46,7 +48,7 @@ async function Page({ params }: { params: { id: string } }) {
                     <h1 className='text-lg lg:text-xl font-semibold mt-4 py-2 ps-4 sm:ps-0 border-t sm:border-none
                     bg-base sm:bg-white/0 dark:sm:bg-black/0 border-gray-400/30 dark:border-gray-700/20'>ห้องว่างที่ให้ผู้เข้าพักจองที่เปิดให้บริการ</h1>
                     <RoomList userId={userId}/>
-                    <Review dormitoryId={params.id} userId={userId}/>
+                    <Review dormitoryId={params.id} userId={userId} role={role}/>
                 </div>
             </div>
         );

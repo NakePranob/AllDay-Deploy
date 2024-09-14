@@ -13,10 +13,11 @@ import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import Rating from '@mui/material/Rating';
 import TextField from '@mui/material/TextField';
+import CircularProgress from '@mui/material/CircularProgress';
 
 // Icons
 import { BiSolidComment } from "react-icons/bi";    
-import { FaStar } from "react-icons/fa";
+import { MdDelete, MdDeleteOutline  } from "react-icons/md";
 
 // Components
 import Starscore from "@/components/Starscore";
@@ -29,14 +30,14 @@ import { Star } from "@mui/icons-material";
 
 type Props = {
     dormitoryId: string,
-    userId: string | null
+    userId: string | null,
+    role: string | null
 }
 
 
-const Review = observer(({dormitoryId, userId}: Props) => {
-    const { data: session, status } = useSession();
+const Review = observer(({dormitoryId, userId, role}: Props) => {
     const [liveAt, setLiveAt] = useState<number | null>(null);
-    const [open, setOpen] = useState(false);
+    const [isHoveredDelete, setIsHoveredDelete] = useState<boolean>(false);
 
     useEffect(() => {
         const fetchUserDormitory = async () => {
@@ -95,8 +96,6 @@ const Review = observer(({dormitoryId, userId}: Props) => {
                     </form>
                 </Box>
             </Modal>
-            <Alert open={dormitoryOnly.alert.open} state={dormitoryOnly.alert.state} 
-            text={dormitoryOnly.alert.text} link={dormitoryOnly.alert.link} close={()=>dormitoryOnly.resetAlert()}/>
             <section ref={dormitoryOnly.targetReview} className="card rounded-none sm:rounded-2xl p-4 mt-2 relative overflow-hidden">
                 <span className="absolute w-80 h-80 bg-blue-400/20 -top-24 -left-44 rotate-[50deg] rounded-[2rem]"></span>
                 <span className="absolute w-52 h-52 bg-blue-400/20 -top-10 -left-32 rotate-[50deg] rounded-[1rem]"></span>
@@ -155,7 +154,26 @@ const Review = observer(({dormitoryId, userId}: Props) => {
                 <ul className="mt-8 flex flex-col gap-2">
                     {reviewData.map((item, i) => (
                         item.score && item.content && (
-                            <li className="p-4 border-items rounded-xl" key={i}>
+                            <li className="p-4 border-items relative rounded-xl overflow-hidden" key={i}>
+                                {dormitoryOnly.loadingState.some(loading => loading === `review${item.id}`) ?
+                                    <span className="bg-blue-500/10 transition-300 w-full h-full absolute top-0 left-0 z-50 p-4
+                                    flex-center">
+                                        <CircularProgress size={24}/>
+                                    </span>
+                                    : role === 'admin' &&
+                                    <span className="hover:bg-blue-500/10 transition-300 w-full h-full absolute top-0 left-0 z-50 p-4
+                                    flex justify-end items-start opacity-0 hover:opacity-100">
+                                        <button
+                                            onClick={() => dormitoryOnly.removeReview(item.id)}
+                                            onMouseEnter={() => setIsHoveredDelete(true)}
+                                            onMouseLeave={() => setIsHoveredDelete(false)}
+                                            className='text-2xl text-black/50 bg-white p-2 rounded-full shadow-sm
+                                            transition-300 hover:scale-110 hover:text-red-500 cursor-pointer'
+                                        >
+                                            {isHoveredDelete ? <MdDelete /> : <MdDeleteOutline />}
+                                        </button>
+                                    </span>
+                                }
                                 <div className="flex relative gap-2">
                                     <div className="flex gap-2">
                                         <p className="text-base font-medium">{item.user.firstname ? item.user.firstname : "ผู้ใช้งานไม่ระบุชื่อ"} {item.user?.lastname}</p>

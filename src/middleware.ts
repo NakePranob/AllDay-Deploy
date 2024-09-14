@@ -1,6 +1,17 @@
+import axios from 'axios';
+
 import { getToken } from 'next-auth/jwt';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+
+async function getRole(id: number) {
+    try {
+        const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/user/role/${id}`);
+        return result.data;
+    } catch (error) {
+        return null;
+    }
+}
 
 export async function middleware(request: NextRequest) {
     const user = await getToken({ req: request });
@@ -9,13 +20,14 @@ export async function middleware(request: NextRequest) {
     if (!user) {
         return NextResponse.redirect(new URL('/login', request.url));
     }
-
-    const { id: userId, roleId: userRoleId, name: fullname } = user;
+    
+    const { id: userId } = user;
     const url = request.nextUrl.pathname;
 
     // Admin routes protection
     if (url.startsWith('/admin')) {
-        if (userRoleId === '3') {
+        const role = await getRole(userId as number);
+        if (role && role === 'admin') {
             return NextResponse.next();
         } else {
             return NextResponse.redirect(new URL('/', request.url));
@@ -24,10 +36,13 @@ export async function middleware(request: NextRequest) {
 
     // Management routes protection
     if (url.startsWith('/menage')) {
-        if (userRoleId === '2' || userRoleId === '3') {
+        const role = await getRole(userId as number);
+        if (role && role === 'entrepreneur' || role === 'admin') {
             const requestHeaders = new Headers(request.headers);
             requestHeaders.set('userId', userId as string);
-            requestHeaders.set('name', fullname as string);
+            // const safeFullname = fullname ?? '';
+            // const encodedFullname = Buffer.from(safeFullname, 'utf-8').toString('base64');
+            // requestHeaders.set('name', encodedFullname);
             return NextResponse.next({
                 request: {
                     headers: requestHeaders,
@@ -63,9 +78,10 @@ export async function middleware(request: NextRequest) {
     }
 
     if (url.startsWith('/dormitory')) {
+        const role = await getRole(userId as number);
         const requestHeaders = new Headers(request.headers);
         requestHeaders.set('userId', userId as string);
-        
+        requestHeaders.set('role', role as string);
         return NextResponse.next({
             request: {
                 headers: requestHeaders,

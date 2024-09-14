@@ -26,10 +26,11 @@ const style = {
 
 const Alerts = observer(() => {
     const onSubmited = () => {
-        alerts.resetAlert()
         if (alerts.state.link !== null) {
             router.push(alerts.state.link)
         }
+        alerts.resetAlert()
+
     }
     const router = useRouter()
     if (alerts.state.open) {

@@ -29,6 +29,8 @@ export async function POST(req: Request, res: Response) {
     const width = formData.get('width')?.toString() || '';
     const length = formData.get('length')?.toString() || '';
     const dmtId = formData.get('dmtId')?.toString() || '';
+    const facilitiesData = formData.get('facilities')?.toString() || '';
+    const facilities = JSON.parse(facilitiesData);
 
     try {
         const result = await prisma.$transaction(async (prisma) => {
@@ -42,6 +44,14 @@ export async function POST(req: Request, res: Response) {
                     dmtId: Number(dmtId)
                 }
             });
+
+            await prisma.dormitory_facilitate.create({
+                data: {
+                    dmt_typeId: dormitoryType.id,
+                    ...facilities
+                }
+            });
+
             const fileKeys = Array.from(formData.keys()).filter(key => key.startsWith('image'));
             await Promise.all(fileKeys.map(async (fileKey) => {
                 const file = formData.get(fileKey);

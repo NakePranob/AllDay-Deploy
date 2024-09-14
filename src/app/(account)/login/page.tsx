@@ -15,6 +15,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
+import CircularProgress from '@mui/material/CircularProgress';
 
 // Components
 import Alert from '@/components/Alert'
@@ -29,6 +30,11 @@ import account from '@/stores/account';
 const page = observer(() => {
     return (
         <>
+            {account.loading &&
+                <span className='fixed left-0 top-0 h-screen w-screen bg-black/70 z-999 flex-center'>
+                    <CircularProgress/>
+                </span>
+            }
             <section className="card rounded-t-3xl rounded-b-none sm:rounded-t-md sm:rounded-b-md w-full h-4/5 sm:h-auto sm:w-auto backdrop-blur-lg flex border-0 rounded-md shadow-2xl relative
             transition-all duration-300 ease-in-out">
                 <div className="w-[22rem] overflow-hidden rounded-l-md hidden md:block">
@@ -46,18 +52,15 @@ const page = observer(() => {
                     <h1 className='text-xl font-bold mb-8 opacity-80'>เข้าสู่ระบบ</h1>
                     <Box sx={{ width: '100%' }} className="flex flex-col gap-2">
                         <TextField id="email" label="อีเมล" variant="outlined"
-                            error={account.helperText.email ? true : false}
-                            helperText={account.helperText.email ? account.helperText.email : ''}
                             value={account.email}
                             onChange={(e)=>account.setEmail(e.target.value)}
                             sx={{ width: '100%', marginBottom: account.helperText.email ? '0' : '22.91px' }}
                         />
-                        <FormControl sx={{ width: '100%' }} variant="outlined" error={account.helperText.password ? true : false}
+                        <FormControl sx={{ width: '100%' }} variant="outlined"
                         className={account.helperText.password ? 'pb-0' : 'pb-[20px]'}>
                             <InputLabel htmlFor="password">รหัสผ่าน</InputLabel>
                             <OutlinedInput
                                 id="password"
-                                error={account.helperText.password ? true : false}
                                 type={account.showPassword ? 'text' : 'password'}
                                 label="รหัสผ่าน"
                                 value={account.password}
@@ -75,12 +78,10 @@ const page = observer(() => {
                                     </InputAdornment>
                                 }
                             />
-                            {account.helperText && <FormHelperText>{account.helperText.password}</FormHelperText>}
                         </FormControl>
                         <hr className={`hr-w`}/>
                         <Button type='submit' variant='contained' className='w-full text-white h-12'
-                            disabled={account.email.length === 0 || account.password.length === 0 || 
-                            Object.keys(account.helperText).length !== 0}
+                            disabled={account.email.length === 0 || account.password.length === 0 }
                         >
                             ยืนยัน
                         </Button>
@@ -95,8 +96,6 @@ const page = observer(() => {
                     </div>
                 </form>
             </section>
-            <Alert open={account.alert.open} state={account.alert.state} text={account.alert.text} 
-            link={account.alert.link} close={()=>account.resetAlert()}/>
         </>
     )
 })

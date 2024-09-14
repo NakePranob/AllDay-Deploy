@@ -6,6 +6,7 @@ import navStore from "@/stores/navStore"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useSession, signOut } from 'next-auth/react';
+import axios from 'axios';
 
 // Material UI
 import Tooltip from '@mui/material/Tooltip';
@@ -39,7 +40,25 @@ const inter = Inter({ subsets: ["latin"] });
 const NavBar = observer(() => {
     const [open, setOpen] = useState(false);
     const pathname = usePathname();
+    const [role, setRole] = useState<string | null>('')
     const { data: session, status } = useSession()
+
+    useEffect(() => {
+        async function getRole(id: number) {
+            try {
+                const result = await axios.get(`/api/user/role/${id}`);
+                setRole(result.data);
+                console.log(`test`);
+            } catch (error) {
+                setRole(null);
+            }
+        }
+        
+        if (status === 'authenticated' && session?.user?.id) {
+            getRole(session.user.id);
+            console.log('sss');
+        }
+    }, [session, status]);
 
     const DrawerList = (
         <Box sx={{ width: 280, height: '100vh' }} role="presentation"
@@ -226,15 +245,26 @@ const NavBar = observer(() => {
                                     hover:bg-blue-500/10 transition-300`}>
                                         กล่องข้อความ
                                     </Link>
-                                    <Link href={'/5'} className={`${pathname === '/s' && 'font-bold text-blue-400'} rounded-md py-1 px-2 mt-1 
-                                    hover:bg-blue-500/10 transition-300`}>
-                                        ติดต่อผู้ดูแลระบบ
-                                    </Link>
+                                    {role === 'admin' &&
+                                        <Link href={'/admin'} className={`${pathname === '/menage' && 'font-bold text-blue-400'} rounded-md py-1 px-2 mt-1 
+                                        hover:bg-blue-500/10 transition-300`}>
+                                            ผู้ดูแลระบบ
+                                        </Link>
+                                    }
                                 </>
                                 :
                                 pathname.startsWith('/admin') 
                                 ?
-                                <></>
+                                <>
+                                    <Link href={'/admin'} className={`${pathname === '/menage' && 'font-bold text-blue-400'} rounded-md py-1 px-2 mt-1 
+                                    hover:bg-blue-500/10 transition-300`}>
+                                        ผู้ดูแลระบบ
+                                    </Link>
+                                    <Link href={'/admin'} className={`${pathname === '/menage' && 'font-bold text-blue-400'} rounded-md py-1 px-2 mt-1 
+                                    hover:bg-blue-500/10 transition-300`}>
+                                        อนุมัติการเพิ่มหอพัก
+                                    </Link>
+                                </>
                                 :
                                 <>
                                     <Link href={'/favorites'} className={`${pathname === '/favorites' && 'font-bold text-blue-400'} rounded-md py-1 px-2 mt-1 
@@ -249,10 +279,17 @@ const NavBar = observer(() => {
                                     hover:bg-blue-500/10 transition-300`}>
                                         กล่องจดหมาย
                                     </Link>
-                                    <Link href={'/menage'} className={`${pathname === '/menage' && 'font-bold text-blue-400'} rounded-md py-1 px-2 mt-1 
-                                    hover:bg-blue-500/10 transition-300`}>
-                                        จัดการหอพัก
-                                    </Link>
+                                    {role === 'admin' ?
+                                        <Link href={'/admin'} className={`${pathname === '/menage' && 'font-bold text-blue-400'} rounded-md py-1 px-2 mt-1 
+                                        hover:bg-blue-500/10 transition-300`}>
+                                            ผู้ดูแลระบบ
+                                        </Link>
+                                    :
+                                        <Link href={'/menage'} className={`${pathname === '/menage' && 'font-bold text-blue-400'} rounded-md py-1 px-2 mt-1 
+                                        hover:bg-blue-500/10 transition-300`}>
+                                            จัดการหอพัก
+                                        </Link>
+                                    }
                                 </> 
                             }
                         </div>

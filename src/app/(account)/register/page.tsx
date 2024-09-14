@@ -18,6 +18,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
+import CircularProgress from '@mui/material/CircularProgress';
 
 // Stores
 import account from '@/stores/account';
@@ -26,6 +27,11 @@ import account from '@/stores/account';
 const page = observer(() => {
     return (
         <>
+            {account.loading &&
+                <span className='fixed left-0 top-0 h-screen w-screen bg-black/70 z-999 flex-center'>
+                    <CircularProgress/>
+                </span>
+            }
             <section className="card rounded-t-3xl rounded-b-none sm:rounded-t-md sm:rounded-b-md w-full h-4/5 sm:h-auto sm:w-auto backdrop-blur-lg flex border-0 rounded-lg shadow-2xl relative
             transition-all duration-300 ease-in-out">
                 <div className="w-[22rem] overflow-hidden rounded-l-lg hidden md:block">
@@ -117,8 +123,6 @@ const page = observer(() => {
                     </div>
                 </form>
             </section>
-            <Alert open={account.alert.open} state={account.alert.state} text={account.alert.text} 
-            link={account.alert.link} close={()=>account.resetAlert()}/>
         </>
     )
 })

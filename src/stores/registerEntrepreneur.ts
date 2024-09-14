@@ -3,7 +3,7 @@ import { ChangeEvent } from "react";
 import axios from "axios";
 import type { Image, TypeRoom, Dormitory_state, Location_distance } from "@/Types/registerEntrepreneur";
 import { AlertType } from "@/Types/alert";
-
+import alerts from "./alerts";
 
 function LastId(objects: any[]) {
     if (objects.length === 0) {
@@ -110,7 +110,7 @@ class RegisterEntrepreneur {
             if (file.size <= 5120 * 5120) {
                 this.imageSelect = file;
             } else {
-                this.setAlert({
+                alerts.setAlert({
                     open: true,
                     state: 'warning',
                     text: 'ไฟล์รูปภาพต้องมีขนาดไม่เกิน 5MB',
@@ -127,7 +127,7 @@ class RegisterEntrepreneur {
             if (file.size <= 5120 * 5120) {
                 this.typeRoomList[id].imageSelect = file;
             } else {
-                this.setAlert({
+                alerts.setAlert({
                     open: true,
                     state: 'warning',
                     text: 'ไฟล์รูปภาพต้องมีขนาดไม่เกิน 5MB',
@@ -302,7 +302,7 @@ class RegisterEntrepreneur {
                     }
                 });
                 this.setProgress(false)
-                this.setAlert({
+                alerts.setAlert({
                     open: true,
                     state: 'success',
                     text: 'ลงทะเบียนสำเร็จทางทีมงานจะเดินทางไปที่หอพักของทาน เพื่อตรวจสอบที่พักภายใน 7 วัน',
@@ -321,7 +321,7 @@ class RegisterEntrepreneur {
                     this.typeRoomList = [];
                 });
             } catch (error) {
-                this.setAlert({
+                alerts.setAlert({
                     open: true,
                     state: 'error',
                     text: 'มีบางอย่างผิดพลาด',
@@ -330,7 +330,7 @@ class RegisterEntrepreneur {
                 // console.error('Error uploading files:', error);
             }
         } else {
-            this.setAlert({
+            alerts.setAlert({
                 open: true,
                 state: 'warning',
                 text: 'กรุณาเข้าสู่ระบบ',

@@ -84,6 +84,10 @@
     @apply border-b border-black/[0.04] dark:border-gray-700/50;
   }
 
+  .border-table {
+    @apply border-y border-black/[0.05] dark:border-gray-700/50;
+  }
+
   .bg-base {
     @apply bg-white dark:bg-dark;
   }

@@ -16,7 +16,6 @@ declare module "next-auth" {
         email:  string 
         name:   string  | null | undefined
         image:  any | null
-        roleId: any | null 
     }
 
     interface JWT {
@@ -24,7 +23,6 @@ declare module "next-auth" {
         email:  string 
         name: string  | null | undefined
         image: string  | null
-        roleId: string 
     }
 }
 
@@ -33,7 +31,6 @@ interface Users {
     email:  string 
     name:   string  | null | undefined
     image:  any | null
-    roleId: any | null
 }
 
 const handler = NextAuth({
@@ -60,7 +57,6 @@ const handler = NextAuth({
                         email: user.email,
                         name: user.firstname+' '+user.lastname,
                         image: user.profile,
-                        roleId: user.roleId.toString()
                     }
                 } else {
                     throw new Error('อีเมลหรือรหัสผ่านไม่ถูกต้อง')
@@ -82,7 +78,6 @@ const handler = NextAuth({
                 token.id = user.id;
                 token.name = user.name;
                 token.image = user.image;
-                token.roleId = user.roleId;
             }
             return token;
         },
@@ -92,7 +87,6 @@ const handler = NextAuth({
                 session.user.id = token.id;
                 session.user.name = token.name;
                 session.user.image = token.image;
-                session.user.roleId = token.roleId;
             }
             return session;
         },

@@ -78,12 +78,12 @@ model Chat {
   dmtId     Int
   dormitory Dormitory  @relation(fields: [dmtId], references: [id])
   user      User       @relation(fields: [userId], references: [id])
-  chat_msg  Chat_msg?
+  chat_msg  Chat_msg[]
 }
 
 model Chat_msg {
   id         Int      @id @default(autoincrement())
-  chatId     Int      @unique
+  chatId     Int      
   content    String   @db.VarChar(255)
   state_chat Boolean
   read_user  Boolean  @default(false)

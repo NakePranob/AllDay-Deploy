@@ -5,7 +5,7 @@ import { headers } from "next/headers";
 
 async function getData(id:number) {
     try {
-        const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/chat/${id}`);
+        const result = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/dmtChat/${id}`);
         return result.data;
     } catch (error) {
         console.error("Error fetching data:", error);
@@ -14,7 +14,7 @@ async function getData(id:number) {
 }
 
 const page = async() => {
-    const headerRequest = headers();
+const headerRequest = headers();
     const userId = headerRequest.get('userId');
     const data = await getData(Number(userId));
     return (
@@ -26,20 +26,20 @@ const page = async() => {
                             <div key={i} className='p-2'>
                                 <Link href={`/chat/${item.id}`} className='flex-y-center gap-2'>
                                     <Avatar 
-                                        alt={item.dormitory.dormitory_img.url 
-                                            ? `${item.dormitory.dormitory_img.url}`
+                                        alt={item.user.profile 
+                                            ? `${item.user.profile}`
                                             : '/404.png'
                                         }
-                                        src={item.dormitory.dormitory_img.url 
-                                            ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/dormitoryImages/${item.dormitory.dormitory_img.url}`
+                                        src={item.user.profile 
+                                            ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/profire/${item.user.profile}`
                                             : '/404.png'
                                         } 
                                         className='shadow-lg'
                                     />
                                     <div>
-                                        <p className='font-semibold -mb-1'>{item.dormitory.name}</p>
+                                        <p className='font-semibold -mb-1'>{item.user.firstname+' '+item.user.lastname}</p>
                                         <p className='text-xs opacity-70 truncate w-40 max-w-40 overflow-hidden'>
-                                            {item.latestMessage} sadsadsdassssssssssadadasdsadsadsadsadsadsadsadsadsadsadsadsadas
+                                            {item.latestMessage ? item.latestMessage : 'ไม่มีข้อความ'}
                                         </p>
                                     </div>
                                 </Link>

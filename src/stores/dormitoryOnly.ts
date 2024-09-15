@@ -580,6 +580,14 @@ class dormitoryOnly {
         });
     }
 
+    addLoadingState(key: number | string) {
+        this.loadingState?.push(key);
+    }
+
+    removeLoadingState(key: number | string) {
+        this.loadingState = this.loadingState.filter(item => item !== key);  
+    }
+
     async removeReview(id: number) {
         this.loadingState?.push(`review${id}`);
         try {

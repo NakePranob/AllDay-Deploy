@@ -1,5 +1,7 @@
 'use client'
 import { useState, useEffect, createRef } from "react";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 import Link from "next/link";
 import { observer } from "mobx-react";
 import dormitoryOnly from "@/stores/dormitoryOnly";
@@ -34,6 +36,7 @@ import { LuAirVent } from "react-icons/lu";
 import { TbFridge } from "react-icons/tb";
 
 const Overview = observer(({dmtId, userId}: {dmtId: string, userId: string | null}) => {
+    const router = useRouter()
     const [open, setOpen] = useState(false);
 
     function hasTypeRoom(data: any[], has: string): boolean {
@@ -45,6 +48,15 @@ const Overview = observer(({dmtId, userId}: {dmtId: string, userId: string | nul
             dormitoryOnly.checkFavoriteList()
         }
     }, [open]);
+
+    async function checkRoomChat(userId: number, dmtId: number) {
+        if (userId && dmtId) {
+            dormitoryOnly.addLoadingState('chat');
+            const { data } = await axios.get(`/api/chat?userId=${userId}&dmtId=${dmtId}`);
+            dormitoryOnly.removeLoadingState('chat');
+            router.push(`/chat/${data.id}`);
+        }
+    }
 
     useEffect(() => {
         dormitoryOnly.targetOverview = dormitoryOnly.targetOverview || createRef<HTMLElement>();
@@ -278,13 +290,25 @@ const Overview = observer(({dmtId, userId}: {dmtId: string, userId: string | nul
                         <CircularProgress size={20} color="inherit"/>
                     </div>
                 }
-                <button className={`p-4 bg-blue-500 rounded-full text-lg md:text-xl
-                transition-all duration-150 ease-in-out
-                flex-center text-white shadow-2xl ${!open && 'scale-0 opacity-0'}
-                hover:bg-blue-600 transition-300 hover:outline outline-offset-2 outline-blue-400`}
-                >
-                    <BiChat/>
-                </button>
+                { userId && dmtId && !dormitoryOnly.loadingState.some(item => item === 'chat') ?
+                    <button 
+                        onClick={()=>checkRoomChat(Number(userId), Number(dmtId))}
+                        className={`p-4 bg-blue-500 rounded-full text-lg md:text-xl
+                        transition-all duration-150 ease-in-out
+                        flex-center text-white shadow-2xl ${!open && 'scale-0 opacity-0'}
+                        hover:bg-blue-600 transition-300 hover:outline outline-offset-2 outline-blue-400`}
+                    >
+                        <BiChat/>
+                    </button>
+                :
+                    <div className={`p-4 bg-blue-500 rounded-full text-lg md:text-xl
+                        transition-all duration-150 ease-in-out
+                        flex-center text-white shadow-2xl ${!open && 'scale-0 opacity-0'}
+                        hover:bg-blue-600 transition-300 hover:outline outline-offset-2 outline-blue-400`}
+                    >
+                        <CircularProgress size={20} color="inherit"/>
+                    </div>
+                }
                 <button onClick={()=>setOpen(!open)} className={`p-4 bg-blue-600 rounded-full text-xl md:text-2xl
                 flex-center text-white shadow-2xl hover:bg-blue-800 transition-300 
                 ${open && 'outline outline-offset-2 outline-blue-400 rotate-[360deg]'}`}>

@@ -230,7 +230,7 @@ const NavBar = observer(() => {
                                 หน้าหลัก
                             </Link>
                             {
-                                pathname.startsWith('/menage') 
+                                pathname.startsWith('/menage') || pathname.startsWith('/chat-dormitory')
                                 ? 
                                 <>
                                     <Link href={'/menage'} className={`${pathname === '/menage' && 'font-bold text-blue-400'} rounded-md py-1 px-2 mt-1 
@@ -241,7 +241,7 @@ const NavBar = observer(() => {
                                     hover:bg-blue-500/10 transition-300`}>
                                         เพิ่มหอพัก
                                     </Link>
-                                    <Link href={'/5'} className={`${pathname === '/s' && 'font-bold text-blue-400'} rounded-md py-1 px-2 mt-1 
+                                    <Link href={'/chat-dormitory'} className={`${pathname === '/chat-dormitory' && 'font-bold text-blue-400'} rounded-md py-1 px-2 mt-1 
                                     hover:bg-blue-500/10 transition-300`}>
                                         กล่องข้อความ
                                     </Link>
@@ -280,12 +280,14 @@ const NavBar = observer(() => {
                                     hover:bg-blue-500/10 transition-300`}>
                                         ห้องพักที่จอง
                                     </Link>
-                                    <Link href={'/menage'} className={`${pathname === '/menage' && 'font-bold text-blue-400'} rounded-md py-1 px-2 mt-1 
-                                    hover:bg-blue-500/10 transition-300`}>
-                                        กล่องจดหมาย
-                                    </Link>
+                                    {!pathname.startsWith('/chat') &&
+                                        <Link href={'/chat'} className={`${pathname === '/chat' && 'font-bold text-blue-400'} rounded-md py-1 px-2 mt-1 
+                                        hover:bg-blue-500/10 transition-300`}>
+                                            กล่องจดหมาย
+                                        </Link>
+                                    }
                                     {role === 'admin' ?
-                                        <Link href={'/admin'} className={`${pathname === '/menage' && 'font-bold text-blue-400'} rounded-md py-1 px-2 mt-1 
+                                        <Link href={'/admin'} className={`${pathname === '/admin' && 'font-bold text-blue-400'} rounded-md py-1 px-2 mt-1 
                                         hover:bg-blue-500/10 transition-300`}>
                                             ผู้ดูแลระบบ
                                         </Link>

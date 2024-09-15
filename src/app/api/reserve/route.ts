@@ -6,7 +6,59 @@ const generateUniqueId = (): string => {
     return uuidv4();
 };
 
+export async function GET(req: Request, res: Response) {
+    const url = new URL(req.url);
+    const userId = url.searchParams.get('userId');
 
+    try {
+        if (userId) {
+            const result = await prisma.reserve.findMany({
+                where: {
+                    dormitory_type: {
+                        dormitory: {
+                            userId: Number(userId)
+                        }
+                    }
+                },
+                select: {
+                    id: true,
+                    date: true,
+                    dormitory_type: {
+                        select: {
+                            name: true,
+                            dormitory: {
+                                select: {
+                                    id: true,
+                                    name: true
+                                }
+                            }
+                        }
+                    },
+                    user: {
+                        select: {
+                            id: true,
+                            firstname: true,
+                            lastname: true,
+                            email: true,
+                            phone: true,
+                            profile: true
+                        }
+                    }
+                }
+            })
+            return Response.json(result)
+        } else {
+            const result = await prisma.reserve.findMany()
+            return Response.json(result)
+        }
+    } catch (error) {
+        return new Response(`error: ${error}`, {
+            status: 400,
+        })
+    } finally {
+        await prisma.$disconnect();
+    }
+}
 
 export async function POST(req: Request, res: Response) {
     try {

@@ -35,16 +35,14 @@ const Page = () => {
     const [limit, setLimit] = useState(5);
     const [currentPage, setCurrentPage] = useState(1);
     const [data, setData] = useState<any[]>([]);
-    const [isHoveredEdit, setIsHoveredEdit] = useState<number | null>(null);
-    const [isHoveredDelete, setIsHoveredDelete] = useState<number | null>(null);
     const [loading, setLoading] = useState(true); // State for loading
-    const [deleteLoading, setDeleteLoading] = useState(false); // State for loading
+    const [updateLoading, setUpdateLoading] = useState(false); // State for loading
 
     useEffect(() => {
         async function fetchData() {
             setLoading(true); // Set loading to true before fetching
             try {
-                const result = await axios.get('/api/dormitory');
+                const result = await axios.get('/api/dormitory?state=false');
                 setData(result.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -55,16 +53,22 @@ const Page = () => {
         fetchData();
     }, []);
 
-    const deleteDormitory = async (id: number | null) => {
-        try {
-            setDeleteLoading(true);
-            setOpen(null);
-            await axios.delete(`/api/dormitory/${id}`);
-            setDeleteLoading(false);
-            setData(prevData => prevData.filter((item) => item.id !== id));
-        } catch (error) {
-            console.error('Error deleting dormitory:', error);
-            alert('เกิดข้อผิดพลาดในการลบข้อมูล');
+    const confirmDomitory = async (id: number | null) => {
+        if (id) {
+            try {
+                setUpdateLoading(true);
+                setOpen(null);
+                await axios.put(`/api/entrepreneur/register/confirm`, {
+                    id: id,
+                    where: 'state',
+                    value: true,
+                });
+                setUpdateLoading(false);
+                setData(prevData => prevData.filter((item) => item.id !== id));
+            } catch (error) {
+                console.error('Error deleting dormitory:', error);
+                alert('เกิดข้อผิดพลาดในการลบข้อมูล');
+            }
         }
     };
 
@@ -95,7 +99,7 @@ const Page = () => {
 
     return (
         <div className='container pt-20 md:pt-28 pb-8'>
-            {deleteLoading &&
+            {updateLoading &&
                 <span className='flex-center fixed top-0 left-0 h-screen w-screen bg-black/50 z-999'>
                     <CircularProgress />
                 </span>
@@ -114,17 +118,17 @@ const Page = () => {
                         Warning
                     </Typography>
                     <Typography id="modal-modal-description" className='text-center mb-4'>
-                        ต้องการลบหอพักนี้หรือไม่?
+                        ต้องการอนุมัติหอพักนี้หรือไม่?
                     </Typography>
                     <Typography id="modal-modal-description" sx={{ mt: 10 }} className='text-center'>
-                        <Button type='submit' variant='contained' sx={{ color: 'white' }} onClick={()=>deleteDormitory(open)}>ดำเนินการต่อ</Button>
+                        <Button type='submit' variant='contained' sx={{ color: 'white' }} onClick={()=>confirmDomitory(open)}>ดำเนินการต่อ</Button>
                     </Typography>
                 </Box>
             </Modal>
             <div className="card py-4 px-6">
                 <div className='flex justify-between items-center'>
                     <h1 className='text-xl font-semibold mb-4'>
-                        รายการหอพัก
+                        อนุมัติคำร้องขอเพิ่มห้อง
                     </h1>
                     <TextField 
                         placeholder="ค้นหา..." variant="outlined" className='mb-4 w-40 sm:w-56'
@@ -158,26 +162,21 @@ const Page = () => {
                                 {currentData.map((item, index) => (
                                     <tr key={item.id} className={`border-table ${!isOdd(index) && 'bg-blue-400/10'}`}>
                                         <td className="p-2 font-bold">{startIndex + index + 1}</td>
-                                        <td className="p-2 text-nowrap text-ellipsis overflow-hidden whitespace-nowrap">{item.name}</td>
+                                        <td className="p-2 text-nowrap text-ellipsis overflow-hidden whitespace-nowrap">
+                                            <Link href={`/dormitory/${item.id}`} className='font-bold hover:bg-blue-600 hover:shadow-none
+                                            transition-300 bg-blue-400 text-white px-4 rounded-full shadow-sm'>
+                                                {item.name}
+                                            </Link>
+                                        </td>
                                         <td className="p-2 text-nowrap text-ellipsis overflow-hidden whitespace-nowrap">{item.price}</td>
                                         <td className="p-2 text-nowrap text-ellipsis overflow-hidden whitespace-nowrap">{item.user.firstname} {item.user.lastname}</td>
                                         <td className="p-2 text-nowrap text-ellipsis overflow-hidden whitespace-nowrap">{item.phone && 0}{item.phone}</td>
-                                        <td className="p-2 pt-[10px] flex justify-end items-center space-x-3">
-                                            <Link 
-                                                href={`/menage/${item.id}`}
-                                                onMouseEnter={() => setIsHoveredEdit(index)}
-                                                onMouseLeave={() => setIsHoveredEdit(null)}
-                                                className='transition-300 hover:scale-110'
-                                            >
-                                                {isHoveredEdit === index ? <RiEdit2Fill className="w-5 h-5"/> : <RiEdit2Line className="w-5 h-5"/>}
-                                            </Link>
+                                        <td className="p-2 pt-[10px] flex justify-end items-center space-x-3 pe-4">
                                             <button
                                                 onClick={()=>setOpen(item.id)}
-                                                onMouseEnter={() => setIsHoveredDelete(index)}
-                                                onMouseLeave={() => setIsHoveredDelete(null)}
-                                                className='transition-300 hover:scale-110 hover:text-red-500 cursor-pointer'
+                                                className='transition-300 font-bold text-blue-400 hover:text-blue-500 cursor-pointer'
                                             >
-                                                {isHoveredDelete === index ? <MdDelete className="w-5 h-5"/> : <MdDeleteOutline className="w-5 h-5"/>}
+                                                อนุมัติเพิ่มหอพัก
                                             </button>
                                         </td>
                                         

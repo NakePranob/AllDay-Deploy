@@ -14,12 +14,14 @@ async function getRole(id: number) {
 }
 
 export async function middleware(request: NextRequest) {
-    const user = await getToken({ req: request });
+    const user = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
     
     // Redirect to login if user is not authenticated
     if (!user) {
         return NextResponse.redirect(new URL('/login', request.url));
     }
+
+    console.log(user);
     
     const { id: userId } = user;
     const url = request.nextUrl.pathname;

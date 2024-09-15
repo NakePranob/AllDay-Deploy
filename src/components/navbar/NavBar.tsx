@@ -158,11 +158,11 @@ const NavBar = observer(() => {
                 <div className='flex-y-center gap-4 px-4 py-2 border-t-items'>
                     <Avatar 
                         alt={status === 'authenticated' && session.user 
-                            ? session.user.image 
-                            : 'profile.webp'
+                            ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/profire/${session.user?.image}`
+                            : '/images/profile/profile.webp'
                         }
                         src={status === 'authenticated' && session.user 
-                            ? session.user.image 
+                            ? `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/profire/${session.user?.image}`
                             : '/images/profile/profile.webp'
                         } 
                     />
@@ -245,10 +245,15 @@ const NavBar = observer(() => {
                                     hover:bg-blue-500/10 transition-300`}>
                                         กล่องข้อความ
                                     </Link>
-                                    {role === 'admin' &&
-                                        <Link href={'/admin'} className={`${pathname === '/menage' && 'font-bold text-blue-400'} rounded-md py-1 px-2 mt-1 
+                                    {role === 'admin' ?
+                                        <Link href={'/admin'} className={`${pathname === '/admin' && 'font-bold text-blue-400'} rounded-md py-1 px-2 mt-1 
                                         hover:bg-blue-500/10 transition-300`}>
                                             ผู้ดูแลระบบ
+                                        </Link>
+                                        :
+                                        <Link href={'/menage/person-reserve'} className={`${pathname === '/menage/person-reserve' && 'font-bold text-blue-400'} rounded-md py-1 px-2 mt-1 
+                                        hover:bg-blue-500/10 transition-300`}>
+                                            รายการผู้ใช้ที่จอง
                                         </Link>
                                     }
                                 </>
@@ -256,11 +261,11 @@ const NavBar = observer(() => {
                                 pathname.startsWith('/admin') 
                                 ?
                                 <>
-                                    <Link href={'/admin'} className={`${pathname === '/menage' && 'font-bold text-blue-400'} rounded-md py-1 px-2 mt-1 
+                                    <Link href={'/admin'} className={`${pathname === '/admin' && 'font-bold text-blue-400'} rounded-md py-1 px-2 mt-1 
                                     hover:bg-blue-500/10 transition-300`}>
                                         ผู้ดูแลระบบ
                                     </Link>
-                                    <Link href={'/admin'} className={`${pathname === '/menage' && 'font-bold text-blue-400'} rounded-md py-1 px-2 mt-1 
+                                    <Link href={'/admin/confirm-add-dormitory'} className={`${pathname === '/admin/confirm-add-dormitory' && 'font-bold text-blue-400'} rounded-md py-1 px-2 mt-1 
                                     hover:bg-blue-500/10 transition-300`}>
                                         อนุมัติการเพิ่มหอพัก
                                     </Link>

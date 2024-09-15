@@ -48,7 +48,6 @@ const handler = NextAuth({
                         email: credentials.email,
                     },
                 });
-                await prisma.$disconnect();
                 if (user && 
                     (await bcrypt.compare(credentials.password, user.password?.toString() || ''))
                 ) {

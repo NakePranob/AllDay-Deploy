@@ -11,7 +11,7 @@ datasource db {
 model User {
   id        Int         @id @default(autoincrement())
   email     String      @unique @db.VarChar(30)
-  profile   String      @default("https://kowbzvvtazxyxyzbfils.supabase.co/storage/v1/object/public/profire/profile.webp")
+  profile   String      @default("profile.webp")
   birthday  String?     @default("2000-01-01") @db.VarChar(10)
   createdAt DateTime    @default(now())
   firstname String?     @db.VarChar(50)

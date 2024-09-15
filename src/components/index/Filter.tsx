@@ -1,5 +1,6 @@
 'use client'
 import { observer } from 'mobx-react'
+import { useEffect } from 'react'
 import Image from 'next/image'
 
 // Material UI
@@ -25,6 +26,11 @@ const Filter = observer(() => {
         value = truncateDecimals(value)
         return `${value}`;
     }
+
+    // useEffect(() => {
+    //     window.location.reload();
+    // }, [])
+
 
     return (
         <>

@@ -2,17 +2,44 @@
 import { useState, useEffect } from 'react';
 import TextField from '@mui/material/TextField';
 import { BsSendFill } from "react-icons/bs";
+import io from 'socket.io-client';
+
+type Message = {
+    // Define the structure of a message here
+    id: number;
+    text: string;
+    sender: number; // Assuming sender is a user ID or similar
+};
 
 type Props = {
-    chatId: number
-    userId: number,
-    dmtId: number,
-    msg: any
-}
+    chatId: number;
+    userId: number;
+    dmtId: number;
+    msg: any; // Define a specific type for msg if possible
+};
 
-const Boxmsg = ({chatId, userId, dmtId, msg}: Props) => {
+const Boxmsg = ({ chatId, userId, dmtId, msg }: Props) => {
     const [message, setMessage] = useState<string>('');
-    const [chatMessages, setChatMessages] = useState<any>([]);
+    const [chatMessages, setChatMessages] = useState<Message[]>([]);
+
+    useEffect(() => {
+        // Create a socket connection
+        const socket = io();
+
+        // Join the room
+        socket.emit("join-room", chatId);
+
+        // Listen for incoming messages
+        socket.on('message', (message: Message) => {
+            setChatMessages((prevMessages) => [...prevMessages, message]);
+        });
+
+        // Clean up the socket connection on unmount
+        return () => {
+            socket.disconnect();
+        };
+    }, [chatId]);
+
 
     return (
         <>

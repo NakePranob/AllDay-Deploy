@@ -54,10 +54,10 @@ const Card = ({ data }: Props) => {
         }
     };
 
-    const confirmLiveAt = async (userId: number, dmtId: number, reserveId: number) => {
+    const confirmLiveAt = async (userId: number, dmtId: number, dmt_typeId: number, reserveId: number) => {
         try {
             setLoading(true);
-            await axios.post(`/api/liveat`, { userId, dmtId });
+            await axios.post(`/api/liveat`, { userId, dmtId, dmt_typeId });
             setItems(items.filter((item: ReserveItem) => item.id !== reserveId)); // Correctly filter out the item by reserveId
             
             setLoading(false);
@@ -121,7 +121,7 @@ const Card = ({ data }: Props) => {
                             {isHoveredDelete ? <MdDelete /> : <MdDeleteOutline />}
                         </button>
                         <Button
-                            onClick={() => confirmLiveAt(item.user.id, item.dormitory_type.dormitory.id, item.id)}
+                            onClick={() => confirmLiveAt(item.user.id, item.dormitory_type.dormitory.id, item.dormitory_type.id, item.id)}
                             variant="contained"
                             className="rounded-full text-white bg-blue-500 hover:bg-blue-600 px-4 py-2 shadow-md"
                         >

@@ -36,3 +36,24 @@ export async function GET(req: Request, res: Response) {
         await prisma.$disconnect();
     }
 }
+
+export async function POST(req: Request, res: Response) {
+    try {
+        const {chatId, msg, sender, read} = await req.json();
+        const result = await prisma.chat_msg.create({
+            data: {
+                chatId: chatId,
+                content: msg,
+                state_chat: sender,
+                [read]: true
+            },
+        })
+        return Response.json(result);
+    } catch (error) {
+        return new Response(`error: ${error}`, {
+            status: 500,
+        })
+    } finally {
+        await prisma.$disconnect();
+    }
+}

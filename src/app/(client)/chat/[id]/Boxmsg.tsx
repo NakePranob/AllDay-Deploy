@@ -1,14 +1,16 @@
 'use client'
-import { useState, useEffect } from 'react';
+import { Inter } from 'next/font/google'
+import { useState, useEffect, useMemo } from 'react';
 import TextField from '@mui/material/TextField';
 import { BsSendFill } from "react-icons/bs";
-import io from 'socket.io-client';
+import { TbMapPinSearch } from "react-icons/tb";
+import {io} from 'socket.io-client'
+
+const inter = Inter({ subsets: ["latin"] });
 
 type Message = {
-    // Define the structure of a message here
-    id: number;
-    text: string;
-    sender: number; // Assuming sender is a user ID or similar
+    content: string;
+    state_chat: boolean;
 };
 
 type Props = {
@@ -22,51 +24,76 @@ const Boxmsg = ({ chatId, userId, dmtId, msg }: Props) => {
     const [message, setMessage] = useState<string>('');
     const [chatMessages, setChatMessages] = useState<Message[]>([]);
 
-    useEffect(() => {
-        // Create a socket connection
-        const socket = io();
+    const socket = useMemo(() => io('http://localhost:4000'), []);
 
-        // Join the room
+    useEffect(() => {
+        socket.on('connect', () => {
+            console.log('Connected to socket.io server');
+        });
+    
         socket.emit("join-room", chatId);
 
-        // Listen for incoming messages
-        socket.on('message', (message: Message) => {
+        socket.on("receive-message", (message) => {
+            console.log(message)
             setChatMessages((prevMessages) => [...prevMessages, message]);
         });
-
-        // Clean up the socket connection on unmount
+    
         return () => {
+            socket.off('connect');
             socket.disconnect();
         };
     }, [chatId]);
 
+    useEffect(() => {
+        setChatMessages(msg);
+    }, [])
+
+    const sendMessage = () => {
+        const form = {
+            chatId,
+            msg: message,
+            sender: true,
+            read: 'read_user',
+        }
+        socket.emit("send-message", chatId, form);
+        setMessage(""); // เคลียร์ข้อความหลังส่ง
+    };
+
 
     return (
         <>
-            <div className='flex-1 overflow-y-auto flex flex-col justify-end gap-1 pb-6'>
-                <section className='xl:px-4 flex'>
-                    <div className='rounded-l-md rounded-r-2xl
-                    px-4 py-2 bg-slate-400 text-white font-medium max-w-[50%]'>
-                        มีหอว่างบ่หำ มีหอว่างบ่หำ มีหอว่างบ่หำมีหอว่างบ่หำมีหอว่างบ่หำ
-                    </div>
-                </section>
-                <section className='xl:px-4 flex'>
-                    <div className='rounded-l-md rounded-r-2xl
-                    px-4 py-2 bg-slate-400 text-white font-medium max-w-[50%]'>
-                        มีหอว่างบ่หำ
-                    </div>
-                </section>
-                <section className='xl:px-4 flex justify-end'>
-                    <div className='rounded-r-md rounded-l-2xl
-                    px-4 py-2 bg-blue-400 text-white font-medium max-w-[50%]'>
-                        มีหอว่างบ่หำ
-                    </div>
-                </section>
+            <div className='flex-1 overflow-y-auto flex flex-col justify-end gap-1 pb-6 relative'>
+                <div className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-20 scale-150 pb-10'>
+                    <h1 className={`text-3xl font-bold text-black dark:text-white relative ${inter.className}`}>
+                        <TbMapPinSearch className="absolute text-xl -right-4 -bottom-1 text-blue-400"/>
+                        ALLDAY
+                        <span className="h-[.2rem] w-20 bg-blue-400 rounded-full absolute right-2 -bottom-1"></span>
+                    </h1>
+                </div>
+                {chatMessages.map((item, i) => (
+                    <section key={i} className={`xl:px-4 flex ${item.state_chat && 'justify-end'}`}>
+                        <div 
+                            className={`${item.state_chat 
+                                ? 'rounded-r-md rounded-l-2xl bg-blue-400 text-white' 
+                                : 'rounded-l-md rounded-r-2xl bg-slate-200 text-black/60 dark:text-white dark:bg-slate-800'}
+                                px-4 py-2 font-medium max-w-[50%]`
+                            }
+                        >
+                            {item.content}
+                        </div>
+                    </section>
+                ))}
             </div>
             <form 
-                className='w-full bg-white dark:bg-white  rounded-full p-1 flex gap-4 shadow-sm'
+                onSubmit={(e) => {
+                    e.preventDefault();
+                    sendMessage();
+                }} 
+                className='w-full bg-white dark:bg-gray-800  rounded-full p-1 flex gap-4 shadow-sm'
             >
                 <TextField 
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
                     variant="outlined" 
                     placeholder='ข้อความ' 
                     size='small' 
@@ -82,9 +109,11 @@ const Boxmsg = ({ chatId, userId, dmtId, msg }: Props) => {
                             },
                         },
                     }}
-                    className='flex-1 bg-slate-100 dark:bg-gray-800'
+                    className='flex-1 bg-slate-100  dark:bg-gray-900'
                 />
-                <button className='h-full aspect-square rounded-full text-blue-400 text-2xl flex-center me-4
+                <button 
+                    type='submit'
+                    className='h-full aspect-square rounded-full text-blue-400 text-2xl flex-center me-4
                     transition-300 hover:text-blue-500 hover:scale-105'>
                     <BsSendFill />
                 </button>

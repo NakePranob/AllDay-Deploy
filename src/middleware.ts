@@ -17,12 +17,30 @@ export async function middleware(request: NextRequest) {
     const user = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
     
     // Redirect to login if user is not authenticated
+    const url = request.nextUrl.pathname;
+
+    if (user) {
+        var { id: userId } = user;
+    }
+
+    if (url.startsWith('/dormitory')) {
+        if (!user) {
+            return NextResponse.next();
+        }
+        const role = await getRole(userId as number);
+        const requestHeaders = new Headers(request.headers);
+        requestHeaders.set('userId', userId as string);
+        requestHeaders.set('role', role as string);
+        return NextResponse.next({
+            request: {
+                headers: requestHeaders,
+            },
+        });
+    }
+
     if (!user) {
         return NextResponse.redirect(new URL('/login', request.url));
     }
-
-    const { id: userId } = user;
-    const url = request.nextUrl.pathname;
     
     // Admin routes protection
     if (url.startsWith('/admin')) {
@@ -70,18 +88,6 @@ export async function middleware(request: NextRequest) {
         const requestHeaders = new Headers(request.headers);
         requestHeaders.set('userId', userId as string);
         
-        return NextResponse.next({
-            request: {
-                headers: requestHeaders,
-            },
-        });
-    }
-
-    if (url.startsWith('/dormitory')) {
-        const role = await getRole(userId as number);
-        const requestHeaders = new Headers(request.headers);
-        requestHeaders.set('userId', userId as string);
-        requestHeaders.set('role', role as string);
         return NextResponse.next({
             request: {
                 headers: requestHeaders,
